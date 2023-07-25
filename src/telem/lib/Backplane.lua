@@ -117,7 +117,7 @@ function Backplane:cycleEvery(seconds)
         while true do
             self:cycle()
 
-            sleep(seconds)
+            t.sleep(seconds)
         end
     end
 end

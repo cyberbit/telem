@@ -1,4 +1,10 @@
-local pretty = require 'cc.pretty'
+-- TODO write my own pretty_print
+local pretty = { pretty_print = print }
+
+local function tsleep(num)
+    local sec = tonumber(os.clock() + num)
+    while (os.clock() < sec) do end
+end
 
 local function log(msg)
     print('TELEM :: '..msg)
@@ -32,4 +38,5 @@ return {
     err = err,
     pprint = pprint,
     skpairs = skpairs,
+    sleep = os.sleep or tsleep
 }
