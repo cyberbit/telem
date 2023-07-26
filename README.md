@@ -15,7 +15,7 @@ local backplane = telem.backplane()                  -- setup the fluent interfa
   :addInput('hello_in', telem.input.helloWorld(123)) -- add a named input
   :addOutput('hello_out', telem.output.helloWorld()) -- add a named output
 
-backplane:cycleEvery(3)()                             -- call a function that runs :cycle() then waits 3 seconds, repeating indefinitely
+backplane:cycleEvery(3)() -- call a function that reads all inputs and writes all outputs, then waits 3 seconds, repeating indefinitely
 
 -- alternative threadable option
 parallel.waitForAny(
