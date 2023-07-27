@@ -2,7 +2,18 @@
 
 [![Build](https://github.com/cyberbit/telem/actions/workflows/build.yml/badge.svg)](https://github.com/cyberbit/telem/actions/workflows/build.yml)
 
+Tired of creating complex logic to monitor inventory or production? Want something more modern, modular, and scalable? Want something that can empower a dashboard like the screenshot below? You have come to the right place.
+
+![image](https://github.com/cyberbit/telem/assets/7350183/22e0862b-a56e-4ec5-ac9d-956c7aa075bb)
+
+## Requirements
+- ComputerCraft (Tweaked and Restiched also supported)
+- `http` access for installer and certain adapters
+
+> **Note:** These docs are being actively written so please excuse my dust! If you have questions, submit an issue and I will respond when possible.
+
 ## Install
+This installs the minified version. For the full combined source you will need to download `telem.lua` from Releases.
 ```
 wget https://get.telem.cc telem.lua
 ```
@@ -51,7 +62,7 @@ telem.input.mekanism.industrialTurbine(valve_peripheral_id)
 ```
 
 ## Output Adapters
-You will need to set up a free account on Grafana Cloud to use the Grafana output. The methodology utilizes [InfluxDB's line protocol](https://grafana.com/docs/grafana-cloud/data-configuration/metrics/metrics-influxdb/push-from-telegraf/).
+You will need to set up a free account on Grafana Cloud to use the Grafana output. The methodology utilizes [InfluxDB's line protocol](https://grafana.com/docs/grafana-cloud/data-configuration/metrics/metrics-influxdb/push-from-telegraf/). A more detailed guide for Grafana is planned once a stable release is ready.
 ```lua
 -- hello world
 telem.output.helloWorld()
