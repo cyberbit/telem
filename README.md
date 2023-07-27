@@ -10,7 +10,7 @@ Tired of creating complex logic to monitor inventory or production? Want somethi
 - ComputerCraft (Tweaked and Restiched also supported)
 - `http` access for installer and certain adapters
 
-> **Note:** These docs are being actively written so please excuse my dust! If you have questions, submit an issue and I will respond when possible.
+> **Note:** These docs are being actively written so please excuse my dust! If you have questions, post them [in this discussion](https://github.com/cyberbit/telem/discussions/12).
 
 ## Install
 This installs the minified version. For the full combined source you will need to download `telem.lua` from Releases.
