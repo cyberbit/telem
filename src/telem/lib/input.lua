@@ -11,5 +11,6 @@ return {
         fissionReactor = require 'telem.lib.input.mekanism.FissionReactorInputAdapter',
         inductionMatrix = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
         industrialTurbine = require 'telem.lib.input.mekanism.IndustrialTurbineInputAdapter',
+        fusionReactor = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
     }
 }

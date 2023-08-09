@@ -15,6 +15,7 @@ luacc telem.init -o ../dist/telem.lua -i telem \
     telem.lib.input.mekanism.FissionReactorInputAdapter \
     telem.lib.input.mekanism.IndustrialTurbineInputAdapter \
     telem.lib.input.mekanism.InductionMatrixInputAdapter \
+    telem.lib.input.mekanism.FusionReactorInputAdapter \
     telem.lib.input.FluidStorageInputAdapter \
     telem.lib.input.HelloWorldInputAdapter \
     telem.lib.output.HelloWorldOutputAdapter \
