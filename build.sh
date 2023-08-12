@@ -1,9 +1,8 @@
 #!/bin/bash
 
 mkdir -p dist
-cd src
 echo 'building...'
-luacc telem.init -o ../dist/telem.lua -i telem \
+luacc telem.init -o dist/telem.lua -i src \
     telem.lib.Backplane \
     telem.lib.Metric \
     telem.lib.util \
@@ -25,6 +24,5 @@ luacc telem.init -o ../dist/telem.lua -i telem \
     telem.lib.InputAdapter \
     telem.lib.OutputAdapter
 
-cd ..
 echo 'squishing...'
 luamin -f dist/telem.lua > dist/telem.min.lua
