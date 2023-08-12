@@ -42,3 +42,10 @@ jobs:
         with:
           name: dist
           path: dist/*.lua
+      
+      - name: Release!
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/telem.lua
+            dist/telem.min.lua
