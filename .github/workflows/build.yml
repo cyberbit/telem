@@ -82,8 +82,8 @@ jobs:
       # - name: luamin
       #   run: luamin
 
-      - name: luamin help
-        run: luamin --help
+      # - name: luamin help
+      #   run: luamin --help
       
       - name: Squish
         run: luamin -f dist/telem.lua
