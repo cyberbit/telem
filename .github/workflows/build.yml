@@ -39,6 +39,9 @@ jobs:
 
       - name: PWD
         run: pwd
+
+      - name: wipe dist
+        run: rm -rf dist/*
       
       - name: pre dist contents
         run: ls -al dist
@@ -67,6 +70,9 @@ jobs:
             telem.lib.InputAdapter \
             telem.lib.OutputAdapter
 
+      - name: build contents
+        run: cat dist/telem.lua
+
       - name: post PWD
         run: pwd
       
@@ -75,6 +81,9 @@ jobs:
       
       - name: Squish
         run: luamin -f "dist/telem.lua" > dist/telem.min.lua
+      
+      - name: squish contents
+        run: cat dist/telem.min.lua
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
