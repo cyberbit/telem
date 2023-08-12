@@ -37,6 +37,12 @@ jobs:
       # - name: Build
       #   run: ./build.sh
 
+      - name: PWD
+        run: pwd
+      
+      - name: pre dist contents
+        run: ls -al dist
+
       - name: Build
         run: |
           luacc telem.init -o dist/telem.lua -i src \
@@ -60,6 +66,12 @@ jobs:
             telem.lib.output.GrafanaOutputAdapter \
             telem.lib.InputAdapter \
             telem.lib.OutputAdapter
+
+      - name: post PWD
+        run: pwd
+      
+      - name: post dist contents
+        run: ls -al dist
       
       - name: Squish
         run: luamin -f "dist/telem.lua" > dist/telem.min.lua
