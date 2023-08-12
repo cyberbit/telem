@@ -34,8 +34,8 @@ jobs:
       - name: Install luamin
         run: npm install -g https://github.com/cyberbit/luamin
 
-      # - name: Build
-      #   run: ./build.sh
+      - name: Build
+        run: ./build.sh
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
