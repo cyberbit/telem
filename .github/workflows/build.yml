@@ -79,8 +79,14 @@ jobs:
       - name: post dist contents
         run: ls -al dist
       
+      - name: luamin
+        run: luamin
+
+      - name: luamin help
+        run: luamin --help
+      
       - name: Squish
-        run: luamin -f "dist/telem.lua" > dist/telem.min.lua
+        run: luamin -f dist/telem.lua
       
       - name: squish contents
         run: cat dist/telem.min.lua
