@@ -1,6 +1,7 @@
 #!/bin/bash
 
 mkdir -p dist
+rm -rf dist/*
 echo 'building...'
 luacc telem.init -o dist/telem.lua -i src \
     telem.lib.Backplane \
