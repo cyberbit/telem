@@ -79,8 +79,8 @@ jobs:
       - name: post dist contents
         run: ls -al dist
       
-      - name: luamin
-        run: luamin
+      # - name: luamin
+      #   run: luamin
 
       - name: luamin help
         run: luamin --help
