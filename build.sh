@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pushd src > /dev/null
+cd src
 echo 'building...'
 luacc telem.init -o ../dist/telem.lua -i telem \
     telem.lib.Backplane \
@@ -26,4 +26,4 @@ luacc telem.init -o ../dist/telem.lua -i telem \
 
 echo 'squishing...'
 luamin -f ../dist/telem.lua > ../dist/telem.min.lua
-popd > /dev/null
+cd ..
