@@ -47,6 +47,7 @@ jobs:
       # via https://github.com/softprops/action-gh-release/issues/270
       - name: Create tag
         id: tag
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           TAG=v0.0.0+$(date -Iseconds | sed 's/[-T:\+]//g')
           echo "$TAG"
