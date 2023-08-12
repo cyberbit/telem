@@ -62,7 +62,7 @@ jobs:
             telem.lib.OutputAdapter
       
       - name: Squish
-        run: luamin -f dist/telem.lua > dist/telem.min.lua
+        run: luamin -f "dist/telem.lua" > dist/telem.min.lua
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
