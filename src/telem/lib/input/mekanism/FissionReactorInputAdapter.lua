@@ -32,10 +32,17 @@ function FissionReactorInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function FissionReactorInputAdapter:read ()
+    self:boot()
+    
     local source, fission = next(self.components)
 
     local metrics = MetricCollection()

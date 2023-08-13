@@ -36,10 +36,17 @@ function IndustrialTurbineInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function IndustrialTurbineInputAdapter:read ()
+    self:boot()
+    
     local source, turbine = next(self.components)
 
     local metrics = MetricCollection()

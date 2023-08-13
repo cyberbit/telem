@@ -14,10 +14,17 @@ function ItemStorageInputAdapter:constructor (peripheralName)
     -- TODO this will be a configurable feature later
     self.prefix = 'storage:'
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function ItemStorageInputAdapter:read ()
+    self:boot()
+    
     local source, itemStorage = next(self.components)
     local items = itemStorage.list()
 

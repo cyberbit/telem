@@ -14,10 +14,17 @@ function FluidStorageInputAdapter:constructor (peripheralName)
     -- TODO this will be a configurable feature later
     self.prefix = 'storage:'
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function FluidStorageInputAdapter:read ()
+    self:boot()
+    
     local source, fluidStorage = next(self.components)
     local tanks = fluidStorage.tanks()
 
