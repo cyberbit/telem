@@ -14,10 +14,17 @@ function RefinedStorageInputAdapter:constructor (peripheralName)
     -- TODO this will be a configurable feature later
     self.prefix = 'storage:'
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function RefinedStorageInputAdapter:read ()
+    self:boot()
+    
     local source, storage = next(self.components)
     local items = storage.listItems()
     local fluids = storage.listFluids()
