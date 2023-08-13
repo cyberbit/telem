@@ -7,8 +7,20 @@ InputAdapter.type = 'InputAdapter'
 function InputAdapter:constructor()
     assert(self.type ~= InputAdapter.type, 'InputAdapter cannot be instantiated')
 
-    self.components = {}
     self.prefix = ''
+
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+    end)()
+end
+
+function InputAdapter:setBoot(proc)
+    assert(type(proc) == 'function', 'proc must be a function')
+
+    self.boot = proc
+
+    return self.boot
 end
 
 function InputAdapter:addComponentByPeripheralID (id)
@@ -30,6 +42,8 @@ function InputAdapter:addComponentByPeripheralType (type)
 end
 
 function InputAdapter:read ()
+    self:boot()
+
     t.err(self.type .. ' has not implemented read()')
 end
 

@@ -31,10 +31,17 @@ function FusionReactorInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    self:addComponentByPeripheralID(peripheralName)
+    -- boot components
+    self:setBoot(function ()
+        self.components = {}
+
+        self:addComponentByPeripheralID(peripheralName)
+    end)()
 end
 
 function FusionReactorInputAdapter:read ()
+    self:boot()
+
     local source, fusion = next(self.components)
 
     local metrics = MetricCollection()
