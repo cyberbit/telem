@@ -50,6 +50,7 @@ function Backplane:cycle()
     local tempMetrics = {}
     local metrics = MetricCollection()
 
+    self.dlog(os.date())
     self:dlog('** cycle START !')
 
     self:dlog('reading inputs...')
