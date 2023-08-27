@@ -7,7 +7,7 @@ Tired of creating complex logic to monitor inventory or production? Want somethi
 ![image](https://github.com/cyberbit/telem/assets/7350183/22e0862b-a56e-4ec5-ac9d-956c7aa075bb)
 
 ## Requirements
-- ComputerCraft (Tweaked and Restiched also supported)
+- ComputerCraft (Tweaked and Restitched also supported)
 - `http` access for installer and certain adapters
 
 > **Note:** These docs are being actively written so please excuse my dust! If you have questions, post them [in this discussion](https://github.com/cyberbit/telem/discussions/12).
