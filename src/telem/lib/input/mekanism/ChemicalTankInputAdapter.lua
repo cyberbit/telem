@@ -62,5 +62,5 @@ function ChemicalTankInputAdapter:read ()
     return metrics
 end
 
-return BioGeneratorInputAdapter
+return ChemicalTankInputAdapter
 
