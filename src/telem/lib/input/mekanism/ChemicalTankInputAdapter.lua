@@ -51,8 +51,8 @@ function ChemicalTankInputAdapter:read ()
 
         -- Literally all we have lmao
         elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = tank.getCapacity(), unit = "mB", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'stored', value = tank.getStored().amount, unit = "mB", source = source }) -- might error might not, no clue!
+            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = (tank.getCapacity() / 1000), unit = "B", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'stored', value = (tank.getStored().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
             metrics:insert(Metric{ name = self.prefix .. 'filled_percentage', value = tank.getFilledPercentage(), unit = nil, source = source })
         end
 

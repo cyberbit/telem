@@ -52,11 +52,11 @@ function DynamicTankInputAdapter:read ()
 
         -- Literally all we have lmao
         elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = tank.getTankCapacity(), unit = "mB", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'stored', value = tank.getStored().amount, unit = "mB", source = source }) -- might error might not, no clue!
+            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = (tank.getTankCapacity() / 1000), unit = "B", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'stored', value = (tank.getStored().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
             metrics:insert(Metric{ name = self.prefix .. 'filled_percentage', value = tank.getFilledPercentage(), unit = nil, source = source })
         elseif v == 'chemical' then -- dunno what this does /shrug
-            metrics:insert(Metric{ name = self.prefix .. 'chemical_capacity', value = tank.getChemicalTankCapacity(), unit = "mB", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'chemical_capacity', value = (tank.getChemicalTankCapacity() / 1000), unit = "B", source = source })
         end
 
         loaded[v] = true

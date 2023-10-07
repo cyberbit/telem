@@ -54,10 +54,10 @@ function GasGeneratorInputAdapter:read ()
             metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(generator.getEnergy()), unit = "FE", source = source })
             metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (generator.getEnergyFilledPercentage()), unit = nil, source = source })
             metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(generator.getProductionRate()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_capacity', value = generator.getFuelCapacity(), unit = "mB", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_amount', value = generator.getFuel().amount, unit = "mB", source = source }) -- might error might not, no clue!
+            metrics:insert(Metric{ name = self.prefix .. 'fuel_capacity', value = (generator.getFuelCapacity() / 1000), unit = "B", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'fuel_amount', value = (generator.getFuel().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
             metrics:insert(Metric{ name = self.prefix .. 'fuel_filled_percentage', value = generator.getFuelFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_needed', value = generator.getFuelNeeded(), unit = 'mB/t', source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'fuel_needed', value = (generator.getFuelNeeded() / 1000), unit = 'B/t', source = source })
         end
 
         loaded[v] = true
