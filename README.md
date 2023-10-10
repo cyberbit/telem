@@ -62,7 +62,7 @@ telem.input.mekanism.industrialTurbine(valve_peripheral_id)
 ```
 
 ## Output Adapters
-You will need to set up a free account on Grafana Cloud to use the Grafana output. The methodology utilizes [InfluxDB's line protocol](https://grafana.com/docs/grafana-cloud/data-configuration/metrics/metrics-influxdb/push-from-telegraf/). A more detailed guide for Grafana is planned once a stable release is ready.
+You will need to set up a free account on Grafana Cloud or provision a self-hosted Grafana + InfluxDB + Telegraf instance to use the Grafana output. The methodology utilizes [InfluxDB's line protocol](https://grafana.com/docs/grafana-cloud/data-configuration/metrics/metrics-influxdb/push-from-telegraf/). A more detailed guide for Grafana is planned once a stable release is ready.
 ```lua
 -- hello world
 telem.output.helloWorld()
