@@ -36,4 +36,27 @@ function MetricCollection:setContext (ctx)
     return self
 end
 
+-- return first metric matching name@adapter
+function MetricCollection:find (filter)
+    local split = {}
+
+    for sv in filter:gmatch('[^@]*') do
+        table.insert(split, sv)
+    end
+
+    local name = split[1]
+    local adapter = split[3] or split[2]
+
+    local nameish = name ~= nil and #name > 0
+    local adapterish = adapter ~= nil and #adapter > 0
+
+    for _,v in pairs(self.metrics) do
+        if (not nameish or v.name == name) and (not adapterish or v.adapter == adapter) then
+            return v
+        end
+    end
+
+    return nil
+end
+
 return MetricCollection
