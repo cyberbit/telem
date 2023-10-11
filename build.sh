@@ -3,27 +3,7 @@
 mkdir -p dist
 rm -rf dist/*
 echo 'building...'
-luacc telem.init -o dist/telem.lua -i src \
-    telem.lib.Backplane \
-    telem.lib.Metric \
-    telem.lib.util \
-    telem.lib.MetricCollection \
-    telem.lib.ObjectModel \
-    telem.lib.input.MEStorageInputAdapter \
-    telem.lib.input.RefinedStorageInputAdapter \
-    telem.lib.input \
-    telem.lib.input.ItemStorageInputAdapter \
-    telem.lib.input.mekanism.FissionReactorInputAdapter \
-    telem.lib.input.mekanism.IndustrialTurbineInputAdapter \
-    telem.lib.input.mekanism.InductionMatrixInputAdapter \
-    telem.lib.input.mekanism.FusionReactorInputAdapter \
-    telem.lib.input.FluidStorageInputAdapter \
-    telem.lib.input.HelloWorldInputAdapter \
-    telem.lib.output.HelloWorldOutputAdapter \
-    telem.lib.output \
-    telem.lib.output.GrafanaOutputAdapter \
-    telem.lib.InputAdapter \
-    telem.lib.OutputAdapter
+luacc telem.init -o dist/telem.lua -i src $(for i in src/telem/lib/**/*.lua; do echo $i; done | sed 'y/\//./;s/^src.//;s/\.lua$//')
 
 echo 'squishing...'
 luamin -f dist/telem.lua > dist/telem.min.lua
