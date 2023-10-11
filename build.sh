@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# glob the star
+shopt -s globstar
+
 mkdir -p dist
 rm -rf dist/*
 echo 'building...'
