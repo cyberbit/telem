@@ -1,6 +1,7 @@
 # Telem - Trivial Extract and Load Engine for Minecraft
 
 [![Build](https://github.com/cyberbit/telem/actions/workflows/build.yml/badge.svg)](https://github.com/cyberbit/telem/actions/workflows/build.yml)
+[![PineStore](https://t.ly/y3cQ1)](https://pinestore.cc/projects/14/telem)
 
 Tired of creating complex logic to monitor inventory or production? Want something more modern, modular, and scalable? Want something that can empower a dashboard like the screenshot below? You have come to the right place.
 
