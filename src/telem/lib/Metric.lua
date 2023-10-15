@@ -13,6 +13,8 @@ function Metric:constructor (data, data2)
         datum = { name = data, value = data2 }
     end
 
+    assert(type(datum.value) == 'number', 'Metric value must be a number')
+
     self.name = assert(datum.name, 'Metric must have a name')
     self.value = assert(datum.value, 'Metric must have a value')
     self.unit = datum.unit or nil
