@@ -1,5 +1,6 @@
 return {
     helloWorld = require 'telem.lib.input.HelloWorldInputAdapter',
+    custom = require 'telem.lib.input.CustomInputAdapter',
 
     -- storage
     itemStorage = require 'telem.lib.input.ItemStorageInputAdapter',
