@@ -20,6 +20,7 @@ wget https://get.telem.cc telem.lua
 ```
 
 ## Usage
+### Please visit [telem.cc](https://telem.cc) for full documentation.
 ```lua
 local telem = require 'telem'
 
@@ -45,31 +46,23 @@ parallel.waitForAny(
 ```
 
 ## Input Adapters
-```lua
--- generic storage adapters
-telem.input.itemStorage(peripheral_id)
-telem.input.fluidStorage(peripheral_id)
-
--- Advanced Peripherals
-telem.input.refinedStorage(RS_Bridge_peripheral_id)
-telem.input.meStorage(ME_Bridge_peripheral_id)
-
--- Mekanism
-telem.input.mekanism.fissionReactor(logic_adapter_peripheral_id)
-telem.input.mekanism.inductionMatrix(port_peripheral_id)
-telem.input.mekanism.industrialTurbine(valve_peripheral_id)
-
--- more to come!
-```
+* Hello World (testing)
+* Item Storage
+* Fluid Storage
+* Refined Storage (RS Bridge)
+* ME Storage (ME Bridge)
+* Mekanism Fission Reactor
+* Mekanism Fusion Reactor
+* Mekanism Induction Matrix
+* Mekanism Industrial Turbine
+* **Custom Inputs ✨**
+* _More to come!_
 
 ## Output Adapters
-You will need to set up a free account on Grafana Cloud or provision a self-hosted Grafana + InfluxDB + Telegraf instance to use the Grafana output. The methodology utilizes [InfluxDB's line protocol](https://grafana.com/docs/grafana-cloud/data-configuration/metrics/metrics-influxdb/push-from-telegraf/). A more detailed guide for Grafana is planned once a stable release is ready.
-```lua
--- hello world
-telem.output.helloWorld()
+* Hello World (testing)
+* Grafana* (Grafana Cloud or self-hosted)
+* **Custom Outputs ✨**
+* _More to come!_
 
--- Grafana (via InfluxDB)
-telem.output.grafana(endpoint, apiKey)
+*You will need to set up a free account on Grafana Cloud or provision a self-hosted Grafana + InfluxDB + Telegraf instance to use the Grafana output. A more detailed guide for Grafana is planned for the future.
 
--- more to come!
-```
