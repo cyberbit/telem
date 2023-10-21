@@ -16,7 +16,7 @@ end
 function CustomOutputAdapter:write (collection)
     assert(o.instanceof(collection, MetricCollection), 'Collection must be a MetricCollection')
 
-    self.writelambda(collection.metrics, collection.context)
+    self.writelambda(collection)
 end
 
 return CustomOutputAdapter
