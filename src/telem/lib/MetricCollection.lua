@@ -40,12 +40,12 @@ end
 function MetricCollection:find (filter)
     local split = {}
 
-    for sv in filter:gmatch('[^@]*') do
+    for sv in (filter .. '@'):gmatch('([^@]*)@') do
         table.insert(split, sv)
     end
 
     local name = split[1]
-    local adapter = split[3] or split[2]
+    local adapter = split[2]
 
     local nameish = name ~= nil and #name > 0
     local adapterish = adapter ~= nil and #adapter > 0
