@@ -61,6 +61,7 @@ parallel.waitForAny(
 ## Output Adapters
 * Hello World (testing)
 * Grafana* (Grafana Cloud or self-hosted)
+* Basalt labels
 * **Custom Outputs ✨**
 * _More to come!_
 
