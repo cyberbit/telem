@@ -13,5 +13,10 @@ return {
         inductionMatrix = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
         industrialTurbine = require 'telem.lib.input.mekanism.IndustrialTurbineInputAdapter',
         fusionReactor = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
+        chemicalTank = require 'telem.lib.input.mekanism.ChemicalTankInputAdapter',
+        bioGenerator = require 'telem.lib.input.mekanism.BioGeneratorInputAdapter',
+        dynamicTank = require 'telem.lib.input.mekanism.DynamicTankInputAdapter',
+        digitalMiner = require 'telem.lib.input.mekanism.DigitalMinerInputAdapter',
+        gasGenerator = require 'telem.lib.input.mekanism.GasGeneratorInputAdapter',
     }
 }
