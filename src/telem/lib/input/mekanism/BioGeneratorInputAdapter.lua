@@ -17,6 +17,8 @@ function BioGeneratorInputAdapter:constructor (peripheralName, categories)
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'fuel',
+        'energy'
     }
 
     if not categories then
@@ -51,13 +53,15 @@ function BioGeneratorInputAdapter:read ()
 
         -- Literally all we have lmao
         elseif v == 'basic' then
+            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (generator.getEnergyFilledPercentage()), unit = "FE", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_filled_percentage', value = generator.getBioFuelFilledPercentage(), unit = "B", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(generator.getProductionRate()), unit = "FE/t", source = source })
+        elseif v == 'energy' then
             metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(generator.getEnergy()), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (generator.getEnergyFilledPercentage()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_capacity', value = (generator.getBioFuelCapacity() / 1000), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_amount', value = (generator.getBioFuel().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_filled_percentage', value = generator.getBioFuelFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_needed', value = (generator.getBioFuelNeeded() / 1000), unit = 'B/t', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(generator.getProductionRate()), unit = nil, source = source })
+        elseif v == 'fuel' then
+            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_capacity', value = (generator.getBioFuelCapacity() / 1000), unit = "B", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel', value = (generator.getBioFuel().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
+            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_needed', value = (generator.getBioFuelNeeded() / 1000), unit = 'B/t', source = source })
         end
 
         loaded[v] = true
