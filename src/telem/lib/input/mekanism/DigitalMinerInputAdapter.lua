@@ -54,7 +54,7 @@ function DigitalMinerInputAdapter:read ()
         elseif v == 'basic' then
             metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (miner.getEnergyFilledPercentage()), unit = nil, source = source })
             metrics:insert(Metric{ name = self.prefix .. 'energy_usage', value = mekanismEnergyHelper.joulesToFE(miner.getEnergyUsage()), unit = "FE/t", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'item', value = miner.getToMine(), unit = "items", source = source })
+            metrics:insert(Metric{ name = self.prefix .. 'to_mine', value = miner.getToMine(), unit = "item", source = source })
             metrics:insert(Metric{ name = self.prefix .. 'running', value = (miner.isRunning() and 1 or 0), unit = nil, source = source })
         elseif v == 'energy'
             metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(miner.getEnergy()), unit = "FE", source = source })
