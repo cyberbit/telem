@@ -1,3 +1,4 @@
+---@diagnostic disable: deprecated
 --
 -- Lua object model implementation
 --
