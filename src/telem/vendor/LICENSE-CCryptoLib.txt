@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 cyberbit
+Copyright (c) 2023 Miguel Oliveira
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,9 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-Portions of this software are copyright of their respective authors and released under the MIT license:
- - lua-object-model, Copyright 2015 Pavel Batečko (Shira). For licensing see src/telem/lib/LICENSE-ObjectModel.txt
- - ECNet2, Copyright 2020 Miguel Oliveira. For licensing see src/telem/vendor/LICENSE-ECNet2.txt
- - CCryptoLib, Copyright 2023 Miguel Oliveira. For licensing see src/telem/vendor/LICENSE-CCryptoLib.txt
- - RedRun, By JackMacWindows. For licensing see src/telem/vendor/redrun.lua
