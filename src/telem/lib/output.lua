@@ -8,5 +8,8 @@ return {
     -- Basalt
     basalt = {
         label = require 'telem.lib.output.basalt.LabelOutputAdapter',
-    }
+    },
+
+    -- Modem
+    secureModem = require 'telem.lib.output.SecureModemOutputAdapter'
 }
