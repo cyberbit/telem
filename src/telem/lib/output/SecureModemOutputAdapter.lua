@@ -56,7 +56,6 @@ function SecureModemOutputAdapter:constructor (peripheralName)
             ecnet2 = vendor.ecnet2
 
             -- TODO fallback initializer when http not available
-            -- Initialize the random generator.
             local postHandle = assert(http.post("https://krist.dev/ws/start", "{}"))
             local data = textutils.unserializeJSON(postHandle.readAll())
             postHandle.close()
@@ -74,11 +73,7 @@ function SecureModemOutputAdapter:constructor (peripheralName)
             self:dlog('SecureModemOutput:boot :: Initializing protocol...')
 
             self.protocol = ecnet2.Protocol {
-                -- Programs will only see packets sent on the same protocol.
-                -- Only one active listener can exist at any time for a given protocol name.
                 name = "telem",
-            
-                -- Objects must be serialized before they are sent over.
                 serialize = textutils.serialize,
                 deserialize = textutils.unserialize,
             }
@@ -119,22 +114,6 @@ function SecureModemOutputAdapter:constructor (peripheralName)
                     t.log('SecureModemOutput: Unknown request: ' .. tostring(p3))
                 end
             end
-            
-            -- if type(message) == 'string' and message:sub(1, #self.REQUEST_PREAMBLE) == self.REQUEST_PREAMBLE then
-            --     self:dlog('SecureModemOutput:asyncCycleHandler :: received request from ' .. sender)
-
-            --     if message == self.REQUESTS.GET_COLLECTION then
-            --         self:dlog('SecureModemOutput:asyncCacheHandler :: request = GET_COLLECTION')
-
-            --         self.secureModem.send(sender, self.collection)
-
-            --         self:dlog('SecureModemOutput:asyncCycleHandler :: response sent')
-            --     else
-            --         t.log('SecureModemOutput: Unknown request: ' .. tostring(message))
-            --     end
-            -- else
-            --     self:dlog('SecureModemOutput:asyncCycleHandler :: Ignoring message with missing preamble')
-            -- end
         end
     end)
 end

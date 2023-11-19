@@ -57,7 +57,6 @@ function SecureModemInputAdapter:constructor (peripheralName, address)
             ecnet2 = vendor.ecnet2
 
             -- TODO fallback initializer when http not available
-            -- Initialize the random generator.
             local postHandle = assert(http.post("https://krist.dev/ws/start", "{}"))
             local data = textutils.unserializeJSON(postHandle.readAll())
             postHandle.close()
@@ -74,11 +73,7 @@ function SecureModemInputAdapter:constructor (peripheralName, address)
         self:dlog('SecureModemInput:boot :: Initializing protocol...')
 
         self.protocol = ecnet2.Protocol {
-            -- Programs will only see packets sent on the same protocol.
-            -- Only one active listener can exist at any time for a given protocol name.
             name = "telem",
-        
-            -- Objects must be serialized before they are sent over.
             serialize = textutils.serialize,
             deserialize = textutils.unserialize,
         }
@@ -130,8 +125,6 @@ function SecureModemInputAdapter:read ()
     local sendResult, errorResult = pcall(self.connection.send, self.connection, self.REQUESTS.GET_COLLECTION)
 
     if not sendResult then
-        -- t.pprint(errorResult)
-        -- self:dlog('SecureModemInput:read :: ')
         self:dlog('SecureModemInput:read :: Connection stale, retrying next cycle')
         self.connection = nil
         return MetricCollection()
