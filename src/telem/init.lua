@@ -1,5 +1,5 @@
 local _Telem = {
-    _VERSION = '0.2.0',
+    _VERSION = '0.3.0',
     util = require 'telem.lib.util',
     input = require 'telem.lib.input',
     output = require 'telem.lib.output',
