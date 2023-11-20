@@ -23,9 +23,6 @@ function SecureModemOutputAdapter:constructor (peripheralName)
     self.protocol = nil
     self.connections = {}
 
-    -- last recorded state
-    self.collection = MetricCollection()
-
     -- TODO test modem disconnect recovery
     -- boot components
     self:setBoot(function ()
@@ -83,7 +80,7 @@ function SecureModemOutputAdapter:constructor (peripheralName)
     end)()
 
     -- register async adapter
-    self:setAsyncCycleHandler(function ()
+    self:setAsyncCycleHandler(function (backplane)
         local listener = self.protocol:listen()
 
         self:dlog('SecureModemOutput:asyncCycleHandler :: Listener started')
@@ -107,7 +104,7 @@ function SecureModemOutputAdapter:constructor (peripheralName)
                 if p3 == self.REQUESTS.GET_COLLECTION then
                     self:dlog('SecureModemOutput:asyncCacheHandler :: request = GET_COLLECTION')
 
-                    self.connections[id]:send(self.collection)
+                    self.connections[id]:send(backplane.collection)
 
                     self:dlog('SecureModemOutput:asyncCycleHandler :: response sent')
                 else
@@ -123,8 +120,7 @@ function SecureModemOutputAdapter:write (collection)
 
     assert(o.instanceof(collection, MetricCollection), 'Collection must be a MetricCollection')
 
-    -- update internal state
-    self.collection = collection
+    -- no op, all async :)
 end
 
 return SecureModemOutputAdapter

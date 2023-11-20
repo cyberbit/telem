@@ -64,7 +64,7 @@ function Backplane:addOutput (name, output)
         self:addAsyncCycleHandler(name, function ()
             self:dlog('Backplane:asyncCycleHandler (closure) :: executing async handler for ' .. name)
                 
-            local results = {pcall(output.asyncCycleHandler, output)}
+            local results = {pcall(output.asyncCycleHandler, self)}
     
             if not table.remove(results, 1) then
                 t.log('Output fault in async handler for "' .. name .. '":')
