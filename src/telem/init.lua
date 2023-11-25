@@ -10,6 +10,11 @@ local _Telem = {
     metricCollection = require 'telem.lib.MetricCollection'
 }
 
--- _Telem.util.log('init')
+local args = {...}
+
+if #args < 1 or type(package.loaded['telem']) ~= 'table' then
+    print('Telem ' .. _Telem._VERSION)
+    print(' * A command-line interface is not yet implemented, please use require()')
+end
 
 return _Telem
