@@ -14,9 +14,9 @@ Tired of creating complex logic to monitor inventory or production? Want somethi
 > **Note:** These docs are being actively written so please excuse my dust! If you have questions, post them [in this discussion](https://github.com/cyberbit/telem/discussions/12).
 
 ## Install
-This installs the minified version. For the full combined source you will need to download `telem.lua` from Releases.
+This runs the installer. You have a choice to install minified, packaged, and source versions.
 ```
-wget https://get.telem.cc telem.lua
+wget run https://get.telem.cc
 ```
 
 ## Usage
@@ -55,14 +55,16 @@ parallel.waitForAny(
 * Mekanism Fusion Reactor
 * Mekanism Induction Matrix
 * Mekanism Industrial Turbine
-* **Custom Inputs ✨**
+* Custom Inputs
+* **Secure Modems ✨**
 * _More to come!_
 
 ## Output Adapters
 * Hello World (testing)
 * Grafana* (Grafana Cloud or self-hosted)
 * Basalt labels
-* **Custom Outputs ✨**
+* Custom Outputs
+* **Secure Modems ✨**
 * _More to come!_
 
 *You will need to set up a free account on Grafana Cloud or provision a self-hosted Grafana + InfluxDB + Telegraf instance to use the Grafana output. A more detailed guide for Grafana is planned for the future.
