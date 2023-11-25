@@ -36,16 +36,20 @@ end)()
 
 -- END PRIME UI D:
 
+local termW, termH = term.getSize()
+
+-- pocket: 27,21
 local boxSizing = {
-    contentBox = 40,
-    borderBox = 39
+    mainPadding = 2
 }
+
+boxSizing.contentBox = termW - boxSizing.mainPadding * 2 + 1
+boxSizing.borderBox = boxSizing.contentBox - 1
 
 local curt = function () return term.current() end
 
 ui.clear()
-
-ui.label(curt(), 3, 2, 'Telem Installer - Select install')
+ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Select install')
 
 local installEntries = {
     "Release (minified)",
@@ -72,7 +76,7 @@ local youWouldntDownloadATree = function (tree, updateProgress, updateBlob)
     for i,v in ipairs(tree.sources) do
         local localPath = v.target or string.gsub(v.path, 'src/', '')
 
-        updateBlob(#localPath > boxSizing.contentBox and (string.sub(localPath, 1, boxSizing.contentBox - 3) .. '...') or localPath)
+        updateBlob(string.gsub(localPath, 'telem/', ''))
         
         if v.type == 'tree' then
             fs.makeDir(localPath)
@@ -118,8 +122,8 @@ end
 local showReleaseSelector = function ()
     ui.clear()
 
-    ui.label(curt(), 3, 2, 'Telem Installer - Reading releases...')
-    ui.borderBox(curt(), 4, 6, boxSizing.borderBox, 8)
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Reading releases...')
+    ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
 
     local releaseUrl = 'https://get.telem.cc/blob/releases'
 
@@ -148,11 +152,11 @@ local showReleaseSelector = function ()
     end
 
     ui.clear()
-    ui.label(curt(), 3, 2, 'Telem Installer - Select a release')
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Select a release')
 
-    ui.borderBox(curt(), 4, 6, boxSizing.borderBox, 8)
-    local descriptionBox = ui.textBox(curt(), 3, 15, boxSizing.contentBox, 3, releaseDescriptions[1])
-    ui.selectionBox(curt(), 4, 6, boxSizing.contentBox, 8, releaseLabels, 'done', function (opt) descriptionBox(releaseDescriptions[opt]) end)
+    ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
+    local descriptionBox = ui.textBox(curt(), boxSizing.mainPadding, 15, boxSizing.contentBox, 5, releaseDescriptions[1])
+    ui.selectionBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.contentBox, 8, releaseLabels, 'done', function (opt) descriptionBox(releaseDescriptions[opt]) end)
 
     local _, _, selection = ui.run()
 
@@ -172,10 +176,10 @@ end
 local showComplete = function (installName)
     ui.clear()
     
-    ui.label(curt(), 3, 2, 'Telem Installer - Complete')
-    ui.textBox(curt(), 3, 6, boxSizing.contentBox, 8, ('%s has been installed. You may now close this installer.'):format(installName))
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Complete')
+    ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, ('%s has been installed. You may now close this installer.'):format(installName))
 
-    ui.button(curt(), 3, 18, "Finish", "done")
+    ui.button(curt(), boxSizing.mainPadding, 18, "Finish", "done")
     ui.keyAction(keys.enter, "done")
 
     ui.run()
@@ -188,10 +192,10 @@ local installActions = {
 
         ui.clear()
     
-        ui.label(curt(), 3, 2, 'Telem Installer - Installing...')
-        ui.textBox(curt(), 3, 6, boxSizing.contentBox, 8, 'Downloading minified release ' .. releaseName)
-        local progress = ui.progressBar(curt(), 4, 7, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), 3, 10, boxSizing.contentBox, 2, '-----')
+        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
+        ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, 'Downloading minified release ' .. releaseName)
+        local progress = ui.progressBar(curt(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
+        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, '-----')
 
         local fakeTree = {
             sha = releaseName,
@@ -226,10 +230,10 @@ local installActions = {
 
         ui.clear()
     
-        ui.label(curt(), 3, 2, 'Telem Installer - Installing...')
-        ui.textBox(curt(), 3, 6, boxSizing.contentBox, 8, 'Downloading release ' .. releaseName)
-        local progress = ui.progressBar(curt(), 4, 7, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), 3, 10, boxSizing.contentBox, 2, '-----')
+        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
+        ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, 'Downloading release ' .. releaseName)
+        local progress = ui.progressBar(curt(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
+        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, '-----')
 
         local fakeTree = {
             sha = releaseName,
@@ -262,13 +266,13 @@ local installActions = {
     function ()
         ui.clear()
 
-        ui.label(curt(), 3, 2, 'Telem Installer - Installing...')
-        local currentStep = ui.textBox(curt(), 3, 6, boxSizing.contentBox, 8, '')
-        local progress = ui.progressBar(term.current(), 4, 7, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), 3, 10, boxSizing.contentBox, 2, 'reading source tree...')
+        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
+        local currentStep = ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, '')
+        local progress = ui.progressBar(term.current(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
+        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, 'reading source tree...')
     
         ui.addTask(function ()
-            currentStep('Step 1 of 2: Module sources')
+            currentStep('Step 1 of 2: Modules')
 
             local treeUrl = 'https://get.telem.cc/blob/lib/main'
     
@@ -277,7 +281,7 @@ local installActions = {
 
             youWouldntDownloadATree(res, progress, currentBlob)
 
-            currentStep('Step 2 of 2: Vendor sources')
+            currentStep('Step 2 of 2: Vendors')
 
             treeUrl = 'https://get.telem.cc/blob/vendor/main'
     
@@ -305,10 +309,10 @@ local runInstallAction = function (releaseEntry)
     error('undefined release, aborting')
 end
 
-local descriptionBox = ui.textBox(curt(), 3, 15, boxSizing.contentBox, 3, installDescriptions[1])
+local descriptionBox = ui.textBox(curt(), boxSizing.mainPadding, 15, boxSizing.contentBox, 5, installDescriptions[1])
 
-ui.borderBox(curt(), 4, 6, boxSizing.borderBox, 8)
-ui.selectionBox(curt(), 4, 6, boxSizing.contentBox, 8, installEntries, 'done', function (opt) descriptionBox(installDescriptions[opt]) end)
+ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
+ui.selectionBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.contentBox, 8, installEntries, 'done', function (opt) descriptionBox(installDescriptions[opt]) end)
 
 local _, _, selection = ui.run()
 
