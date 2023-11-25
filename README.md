@@ -16,7 +16,7 @@ Tired of creating complex logic to monitor inventory or production? Want somethi
 ## Install
 This runs the installer. You have a choice to install minified, packaged, and source versions.
 ```
-wget run https://get.telem.cc
+wget run https://pinestore.cc/d/14
 ```
 
 ## Usage
