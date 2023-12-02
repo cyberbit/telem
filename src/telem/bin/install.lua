@@ -1,10 +1,12 @@
--- BEGIN PRIME UI :D
-
--- PrimeUI by JackMacWindows
--- Public domain/CC0
--- Packaged from https://github.com/MCJack123/PrimeUI
+-- Telem Installer by cyberbit
+-- MIT License
+-- Version 2023-12-02
 
 local ui = (function ()
+    -- PrimeUI by JackMacWindows
+    -- Public domain/CC0
+    -- Packaged from https://github.com/MCJack123/PrimeUI
+
     local a=require"cc.expect".expect;local b={}
     do local c={}local d;
         function b.addTask(e)a(1,e,"function")local f={coro=coroutine.create(e)}c[#c+1]=f;_,f.filter=coroutine.resume(f.coro)end;
@@ -34,11 +36,8 @@ local ui = (function ()
     return b
 end)()
 
--- END PRIME UI D:
-
 local termW, termH = term.getSize()
 
--- pocket: 27,21
 local boxSizing = {
     mainPadding = 2
 }
