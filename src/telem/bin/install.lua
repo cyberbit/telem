@@ -74,19 +74,20 @@ local youWouldntDownloadATree = function (tree, updateProgress, updateBlob)
     updateProgress(0)
 
     for i,v in ipairs(tree.sources) do
-        local localPath = v.target or string.gsub(v.path, 'src/', '')
+        local logicalPath = v.target or string.gsub(v.path, 'src/', '')
+        local physicalPath = shell.resolve(logicalPath)
 
-        updateBlob(string.gsub(localPath, 'telem/', ''))
+        updateBlob(string.gsub(logicalPath, 'telem/', ''))
         
         if v.type == 'tree' then
-            fs.makeDir(localPath)
+            fs.makeDir(physicalPath)
         elseif v.type == 'blob' then
             local bloburl = string.gsub(tree.url, '{sha}', tree.sha)
             bloburl = string.gsub(bloburl, '{path}', v.path)
 
             local blobreq = http.get(bloburl)
             
-            local fout = fs.open(localPath, 'w')
+            local fout = fs.open(physicalPath, 'w')
             fout.write(blobreq.readAll())
             fout.flush()
             fout.close()
