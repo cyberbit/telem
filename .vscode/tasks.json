@@ -9,6 +9,8 @@
             "command": "./build.sh",
             "presentation": {
                 "close": true,
+                "focus": false,
+                "reveal": "silent",
                 "panel": "shared"
             }
         }
