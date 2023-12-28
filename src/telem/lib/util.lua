@@ -61,6 +61,19 @@ local function shortnum(n)
     end
 end
 
+local function constrainAppend (data, value, width)
+    local removed = 0
+
+    table.insert(data, value)
+
+    while #data > width do
+        table.remove(data, 1)
+        removed = removed + 1
+    end
+
+    return removed
+end
+
 return {
     log = log,
     err = err,
@@ -68,4 +81,5 @@ return {
     skpairs = skpairs,
     sleep = os.sleep or tsleep,
     shortnum = shortnum,
+    constrainAppend = constrainAppend,
 }
