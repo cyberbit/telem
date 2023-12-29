@@ -95,7 +95,7 @@ function ChartLineOutputAdapter:write (collection)
         local minrange = 0.000001
 
         if not flatlabel then
-            flatlabel = tostring(actualmin)
+            flatlabel = t.shortnum2(actualmin)
         end
 
         actualmin = actualmin - minrange / 2
@@ -113,19 +113,21 @@ function ChartLineOutputAdapter:write (collection)
 
     self.plotter:chartLine(self.plotData, self.MAX_ENTRIES, actualmin, actualmax, self.fg)
 
-    local maxString = tostring(actualmax)
-    local minString = tostring(actualmin)
+    local maxString = t.shortnum2(actualmax)
+    local minString = t.shortnum2(actualmin)
 
     self.win.setVisible(false)
 
     self.plotter:render()
 
+    self.win.setTextColor(self.fg)
+    self.win.setBackgroundColor(self.bg)
     if not flatlabel then
         self.win.setCursorPos(self.plotter.box.term_width - #maxString + 1, 1)
-        self.win.write(actualmax)
+        self.win.write(maxString)
 
         self.win.setCursorPos(self.plotter.box.term_width - #minString + 1, self.plotter.box.term_height)
-        self.win.write(actualmin)
+        self.win.write(minString)
     else
         self.win.setCursorPos(self.plotter.box.term_width - #flatlabel + 1, self.plotter.math.round(self.plotter.box.term_height / 2))
         self.win.write(flatlabel)

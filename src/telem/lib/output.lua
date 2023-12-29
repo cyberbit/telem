@@ -8,6 +8,7 @@ return {
     -- Basalt
     basalt = {
         label = require 'telem.lib.output.basalt.LabelOutputAdapter',
+        graph = require 'telem.lib.output.basalt.GraphOutputAdapter',
     },
 
     -- Plotter

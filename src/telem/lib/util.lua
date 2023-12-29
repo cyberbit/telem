@@ -61,6 +61,44 @@ local function shortnum(n)
     end
 end
 
+-- based on https://rosettacode.org/wiki/Suffixation_of_decimal_numbers#Python
+local function shortnum2(num, digits, base)
+    if not base then base = 10 end
+
+    local suffixes = {'', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y', 'X', 'W', 'V', 'U', 'googol'}
+
+    local exponent_distance = 10
+    if base == 2 then
+        exponent_distance = 10
+    else
+        exponent_distance = 3
+    end
+
+    num = string.gsub(num, ',', '')
+    local num_sign = string.sub(num, 1, 1) == '+' or string.sub(num, 1, 1) == '-' and string.sub(num, 1, 1) or ''
+
+    num = math.abs(tonumber(num))
+
+    local suffix_index = 0
+    if base == 10 and num >= 1e100 then
+        suffix_index = 13
+        num = num / 1e100
+    elseif num > 1 then
+        local magnitude = math.floor(math.log(num, base))
+        suffix_index = math.min(math.floor(magnitude / exponent_distance), 12)
+        num = num / (base ^ (exponent_distance * suffix_index))
+    end
+
+    local num_str = ''
+    if digits then
+        num_str = string.format('%.' .. digits .. 'f', num)
+    else
+        num_str = string.format('%.3f', num):gsub('0+$', ''):gsub('%.$', '')
+    end
+
+    return num_sign .. num_str .. suffixes[suffix_index + 1] .. (base == 2 and 'i' or '')
+end
+
 local function constrainAppend (data, value, width)
     local removed = 0
 
@@ -81,5 +119,6 @@ return {
     skpairs = skpairs,
     sleep = os.sleep or tsleep,
     shortnum = shortnum,
+    shortnum2 = shortnum2,
     constrainAppend = constrainAppend,
 }
