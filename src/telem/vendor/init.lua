@@ -2,10 +2,12 @@ if package.path:find('telem/vendor') == nil then package.path = package.path .. 
 
 local ecnet2 = require 'ecnet2'
 local random = require 'ccryptolib.random'
+local plotter = require 'plotter'
 
 return {
-    ecnet2 = ecnet2,
     ccryptolib = {
         random = random
-    }
+    },
+    ecnet2 = ecnet2,
+    plotter = plotter
 }

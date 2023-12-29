@@ -30,5 +30,9 @@ mkdir -p dist/release
 luamin -f dist/telem.lua > dist/release/telem.min.lua
 luamin -f dist/vendor.lua > dist/release/vendor.min.lua
 
+# echo 'publishing to computer #0...'
+# cp dist/telem.lua /home/codespace/.local/share/craftos-pc/computer/0/telem/init.lua
+# cp dist/vendor.lua /home/codespace/.local/share/craftos-pc/computer/0/telem/vendor.lua
+
 # echo 'tarring...'
 # tar -cf src.tar src
