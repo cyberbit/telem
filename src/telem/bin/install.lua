@@ -1,6 +1,6 @@
 -- Telem Installer by cyberbit
 -- MIT License
--- Version 2023-12-02
+-- Version 2023-12-28
 
 local ui = (function ()
     -- PrimeUI by JackMacWindows
@@ -129,7 +129,7 @@ local showReleaseSelector = function ()
 
     local req = http.get(releaseUrl)
     local jres = textutils.unserialiseJSON(req.readAll())
-    
+
     local nonPreReleases = {}
     for i,v in ipairs(jres.releases) do
         if not v.prerelease then
