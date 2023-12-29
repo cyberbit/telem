@@ -129,12 +129,19 @@ local showReleaseSelector = function ()
 
     local req = http.get(releaseUrl)
     local jres = textutils.unserialiseJSON(req.readAll())
+    
+    local nonPreReleases = {}
+    for i,v in ipairs(jres.releases) do
+        if not v.prerelease then
+            table.insert(nonPreReleases, v)
+        end
+    end
 
     local releaseLabels = {}
     local releaseNames = {}
     local releaseAssets = {}
     local releaseDescriptions = {}
-    for i,v in ipairs(jres.releases) do
+    for i,v in ipairs(nonPreReleases) do
         local annotation = ''
 
         if v.latest then
