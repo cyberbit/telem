@@ -22,7 +22,7 @@ local function graphtrackrange (self)
     return min,max
 end
 
-function GraphOutputAdapter:constructor (frame, filter, bg, fg, fontSize)
+function GraphOutputAdapter:constructor (frame, filter, bg, fg)
     self:super('constructor')
 
     self.bBaseFrame = assert(frame, 'Frame is required')
@@ -30,10 +30,10 @@ function GraphOutputAdapter:constructor (frame, filter, bg, fg, fontSize)
     
     self.graphdata = {}
 
-    self:register(bg, fg, fontSize)
+    self:register(bg, fg)
 end
 
-function GraphOutputAdapter:register (bg, fg, fontSize)
+function GraphOutputAdapter:register (bg, fg)
     local currentmin = 0
     local currentmax = 1000
 
@@ -43,35 +43,35 @@ function GraphOutputAdapter:register (bg, fg, fontSize)
         :setBackground(bg)
         :setSize('{parent.w}', '{parent.h}')
 
-    local fGraph = self.bInnerFrame:addFrame('fGraph'):setBackground(colors.black)
+    local fGraph = self.bInnerFrame:addFrame('fGraph'):setBackground(bg)
         :setPosition(1,1)
         :setSize('{parent.w - 2}', '{parent.h - 6}')
 
-    local fLabel = self.bInnerFrame:addFrame('fLabel'):setBackground(colors.black)
+    local fLabel = self.bInnerFrame:addFrame('fLabel'):setBackground(bg)
         :setSize('{parent.w - 2}', 4)
         :setPosition(1,'{parent.h - 5}')
 
-    local fLabelMax = self.bInnerFrame:addFrame('fLabelMax'):setBackground(colors.black)
+    local fLabelMax = self.bInnerFrame:addFrame('fLabelMax'):setBackground(bg)
         :setSize(6, 1)
         :setPosition('{parent.w - 7}',1)
 
-    local fLabelMin = self.bInnerFrame:addFrame('fLabelMin'):setBackground(colors.black)
+    local fLabelMin = self.bInnerFrame:addFrame('fLabelMin'):setBackground(bg)
         :setSize(6, 1)
         :setPosition('{parent.w - 7}','{fLabel.y - 2}')
 
     self.label = fLabel:addLabel()
         :setText("-----")
         :setPosition('{parent.w/2-self.w/2}', 2)
-        :setForeground(colors.white)
-        :setBackground(colors.black)
+        :setForeground(fg)
+        :setBackground(bg)
 
     self.graph = fGraph:addGraph()
         :setPosition(1,1)
         :setSize('{parent.w - 1}', '{parent.h - 1}')
         :setMaxEntries(self.MAX_ENTRIES)
-        :setBackground(colors.black)
-        :setGraphColor(colors.red)
-        :setGraphSymbol('\127')
+        :setBackground(bg)
+        :setGraphColor(fg)
+        :setGraphSymbol(' ')
     
     self.graphscale = fGraph:addGraph()
         :setGraphType('scatter')
@@ -84,14 +84,14 @@ function GraphOutputAdapter:register (bg, fg, fontSize)
     self.labelmax = fLabelMax:addLabel()
         :setPosition(1,1)
         :setText('-----')
-        :setForeground(colors.white)
-        :setBackground(colors.black)
+        :setForeground(fg)
+        :setBackground(bg)
     
     self.labelmin = fLabelMin:addLabel()
         :setPosition(1,1)
         :setText('-----')
-        :setForeground(colors.white)
-        :setBackground(colors.black)
+        :setForeground(fg)
+        :setBackground(bg)
 
     self.graph:setMinValue(currentmin):setMaxValue(currentmax)
 end
