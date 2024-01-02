@@ -47,10 +47,18 @@ function ChartLineOutputAdapter:register ()
         self:dlog('ChartLineOutputAdapter:boot :: plotter ready.')
     end
 
-    self.plotter = plotterFactory(self.win)
+    self:updateLayout()
 
     for i = 1, self.MAX_ENTRIES do
         t.constrainAppend(self.plotData, self.plotter.NAN, self.MAX_ENTRIES)
+    end
+end
+
+function ChartLineOutputAdapter:updateLayout (bypassRender)
+    self.plotter = plotterFactory(self.win)
+
+    if not bypassRender then
+        self:render()
     end
 end
 
@@ -69,6 +77,18 @@ function ChartLineOutputAdapter:write (collection)
         self.gridOffsetX = 0
     end
 
+    -- lazy layout update
+    local winw, winh = self.win.getSize()
+    if winw ~= self.plotter.box.term_width or winh ~= self.plotter.box.term_height then
+        self:updateLayout(true)
+    end
+
+    self:render()
+    
+    return self
+end
+
+function ChartLineOutputAdapter:render ()
     local dataw = #{self.plotData}
 
     local actualmin, actualmax = math.huge, -math.huge
@@ -134,8 +154,6 @@ function ChartLineOutputAdapter:write (collection)
     end
 
     self.win.setVisible(true)
-    
-    return self
 end
 
 return ChartLineOutputAdapter
