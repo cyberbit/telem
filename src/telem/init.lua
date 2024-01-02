@@ -1,9 +1,9 @@
 -- Telem by cyberbit
 -- MIT License
--- Version 0.4.0
+-- Version 0.4.1
 
 local _Telem = {
-    _VERSION = '0.4.0',
+    _VERSION = '0.4.1',
     util = require 'telem.lib.util',
     input = require 'telem.lib.input',
     output = require 'telem.lib.output',
