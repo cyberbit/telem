@@ -179,6 +179,28 @@ function Backplane:cycleEvery(seconds)
     return selfCycle
 end
 
+-- trigger eager layout updates on all attached outputs with updateLayout functions
+function Backplane:updateLayouts()
+    self:dlog('Backplane:updateLayouts :: Updating layouts...')
+
+    for _, key in pairs(self.outputKeys) do
+        local output = self.outputs[key]
+
+        if type(output.updateLayout) == 'function' then
+            self:dlog('Backplane:updateLayouts ::  - ' .. key)
+
+            local results = {pcall(output.updateLayout, output)}
+
+            if not table.remove(results, 1) then
+                t.log('Update layout fault for "' .. key .. '":')
+                t.pprint(table.remove(results, 1))
+            end
+        end
+    end
+
+    self:dlog('Backplane:updateLayouts :: Layouts updated')
+end
+
 function Backplane:debug(debug)
     self.debugState = debug and true or false
 
