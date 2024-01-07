@@ -3,6 +3,7 @@ local t = require 'telem.lib.util'
 local vendor
 local ecnet2
 local random
+local lualzw
 
 local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
@@ -11,8 +12,7 @@ local MetricCollection  = require 'telem.lib.MetricCollection'
 local SecureModemInputAdapter = o.class(InputAdapter)
 SecureModemInputAdapter.type = 'SecureModemInputAdapter'
 
-
-SecureModemInputAdapter.VERSION = 'v1.0.0'
+SecureModemInputAdapter.VERSION = 'v2.0.0'
 
 SecureModemInputAdapter.REQUEST_PREAMBLE = 'telem://'
 SecureModemInputAdapter.REQUESTS = {
@@ -64,6 +64,14 @@ function SecureModemInputAdapter:constructor (peripheralName, address)
             http.websocket(data.url).close()
             
             self:dlog('SecureModemInput:boot :: ECNet2 ready. Address = ' .. ecnet2.address())
+        end
+
+        if not lualzw then
+            self:dlog('SecureModemInput:boot :: Loading lualzw...')
+
+            lualzw = vendor.lualzw
+
+            self:dlog('SecureModemInput:boot :: lualzw ready.')
         end
 
         self:dlog('SecureModemInput:boot :: Opening modem...')
@@ -131,7 +139,7 @@ function SecureModemInputAdapter:read ()
     end
 
     self:dlog('SecureModemInput:read :: listening for response')
-    local sender, collection = self.connection:receive(self.receiveTimeout)
+    local sender, message = self.connection:receive(self.receiveTimeout)
 
     if not sender then
         t.log('SecureModemInput:read :: Receive timed out after ' .. self.receiveTimeout .. ' seconds, retrying next cycle')
@@ -141,15 +149,18 @@ function SecureModemInputAdapter:read ()
         return MetricCollection()
     end
 
-    self:dlog('SecureModemInput:read :: response received, hydrating collection')
-
-    local hydratedCollection = MetricCollection()
-
-    for _, value in ipairs(collection.metrics) do
-        hydratedCollection:insert(Metric(value))
+    local unwrapped = message
+    
+    -- decompress if needed
+    if type(message) == 'string' and string.sub(message, 1, 1) == 'c' then
+        unwrapped = textutils.unserialize(lualzw.decompress(message))
     end
 
-    return hydratedCollection
+    local unpacked = MetricCollection.unpack(unwrapped)
+
+    self:dlog('SecureModemInput:read :: response received')
+
+    return unpacked
 end
 
 return SecureModemInputAdapter
