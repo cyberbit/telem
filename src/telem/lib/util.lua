@@ -112,6 +112,18 @@ local function constrainAppend (data, value, width)
     return removed
 end
 
+local function indexOf (tab, value)
+    if type(value) == 'nil' then return -1 end
+    
+    for i,v in ipairs(tab) do
+        if v == value then
+            return i
+        end
+    end
+
+    return -1
+end
+
 return {
     log = log,
     err = err,
@@ -121,4 +133,5 @@ return {
     shortnum = shortnum,
     shortnum2 = shortnum2,
     constrainAppend = constrainAppend,
+    indexOf = indexOf
 }

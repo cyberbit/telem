@@ -21,8 +21,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Portions of this software are copyright of their respective authors and released under the MIT license:
- - lua-object-model, Copyright 2015 Pavel Batečko (Shira). For licensing see src/telem/lib/LICENSE-ObjectModel.txt
- - ECNet2, Copyright 2020 Miguel Oliveira. For licensing see src/telem/vendor/LICENSE-ECNet2.txt
  - CCryptoLib, Copyright 2023 Miguel Oliveira. For licensing see src/telem/vendor/LICENSE-CCryptoLib.txt
- - RedRun, By JackMacWindows. For licensing see src/telem/vendor/redrun.lua
+ - ECNet2, Copyright 2020 Miguel Oliveira. For licensing see src/telem/vendor/LICENSE-ECNet2.txt
+ - lualzw, Copyright 2016 Rochet2. For licensing see src/telem/vendor/lualzw.lua
+ - lua-object-model, Copyright 2015 Pavel Batečko (Shira). For licensing see src/telem/lib/LICENSE-ObjectModel.txt
  - Plotter, Copyright 2023 Daniel Marcolesco. For licensing see src/telem/vendor/LICENSE-Plotter.txt
+ - RedRun, By JackMacWindows. For licensing see src/telem/vendor/redrun.lua

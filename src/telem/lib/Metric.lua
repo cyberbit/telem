@@ -39,4 +39,32 @@ function Metric:__tostring ()
     return label .. unit .. adapter .. source
 end
 
+function Metric.pack (self)
+    return {
+        n = self.name,
+        v = self.value,
+        u = self.unit,
+        s = self.source,
+        a = self.adapter,
+    }
+end
+
+function Metric.unpack (data)
+    return Metric({
+        name = data.n,
+        value = data.v,
+        unit = data.u,
+        source = data.s,
+        adapter = data.a
+    })
+end
+
+function Metric.serialize (self)
+    return textutils.serialize(self:pack(), { compact = true })
+end
+
+function Metric.unserialize (data)
+    return Metric.unpack(textutils.unserialize(data))
+end
+
 return Metric

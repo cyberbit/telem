@@ -3,6 +3,7 @@ local t = require 'telem.lib.util'
 local vendor
 local ecnet2
 local random
+local lualzw
 
 local OutputAdapter     = require 'telem.lib.OutputAdapter'
 local MetricCollection  = require 'telem.lib.MetricCollection'
@@ -10,7 +11,7 @@ local MetricCollection  = require 'telem.lib.MetricCollection'
 local SecureModemOutputAdapter = o.class(OutputAdapter)
 SecureModemOutputAdapter.type = 'SecureModemOutputAdapter'
 
-SecureModemOutputAdapter.VERSION = 'v1.0.0'
+SecureModemOutputAdapter.VERSION = 'v2.0.0'
 
 SecureModemOutputAdapter.REQUEST_PREAMBLE = 'telem://'
 SecureModemOutputAdapter.REQUESTS = {
@@ -31,11 +32,11 @@ function SecureModemOutputAdapter:constructor (peripheralName)
         self:addComponentByPeripheralID(peripheralName)
 
         if not vendor then
-            self:dlog('SecureModemInput:boot :: Loading vendor modules...')
+            self:dlog('SecureModemOutput:boot :: Loading vendor modules...')
 
             vendor = require 'telem.vendor'
 
-            self:dlog('SecureModemInput:boot :: Vendor modules ready.')
+            self:dlog('SecureModemOutput:boot :: Vendor modules ready.')
         end
 
         if not random then
@@ -60,6 +61,14 @@ function SecureModemOutputAdapter:constructor (peripheralName)
             http.websocket(data.url).close()
             
             t.log('SecureModemOutput:boot :: ECNet2 ready. Address = ' .. ecnet2.address())
+        end
+
+        if not lualzw then
+            self:dlog('SecureModemOutput:boot :: Loading lualzw...')
+
+            lualzw = vendor.lualzw
+
+            self:dlog('SecureModemOutput:boot :: lualzw ready.')
         end
 
         self:dlog('SecureModemOutput:boot :: Opening modem...')
@@ -102,9 +111,18 @@ function SecureModemOutputAdapter:constructor (peripheralName)
                 self:dlog('SecureModemOutput:asyncCycleHandler :: received request from ' .. p2)
 
                 if p3 == self.REQUESTS.GET_COLLECTION then
-                    self:dlog('SecureModemOutput:asyncCacheHandler :: request = GET_COLLECTION')
+                    self:dlog('SecureModemOutput:asyncCycleHandler :: request = GET_COLLECTION')
 
-                    self.connections[id]:send(backplane.collection)
+                    local payload = backplane.collection:pack()
+
+                    -- use compression for payloads with > 256 metrics
+                    if #payload.m > 256 then
+                        self:dlog('SecureModemOutput:asyncCycleHandler :: compressing large payload...')
+
+                        payload = lualzw.compress(textutils.serialize(payload, { compact = true }))
+                    end
+
+                    self.connections[id]:send(payload)
 
                     self:dlog('SecureModemOutput:asyncCycleHandler :: response sent')
                 else
