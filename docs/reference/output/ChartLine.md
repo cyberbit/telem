@@ -9,13 +9,14 @@ telem.output.plotter.chartLine (
   win: window,
   filter: string,
   bg: color,
-  fg: color
+  fg: color,
+  maxEntries: number
 )
 ```
 
 Search the available metrics using the syntax defined in [`find`](/reference/MetricCollection#find) and output a line chart to a specified window. If a matching metric is found, the metric value is pushed to the chart buffer.
 
-The X axis (horizontal value) represents the number of data points recorded, and has a fixed width of `50`. The Y axis (vertical) represents the value of the metric over time. Once the fixed width of the graph is reached, the oldest values will be dropped from the buffer when new values are added. The minimum and maximum range of the Y axis is determined by the minimum and maximum metric values in the graph buffer. The background of the widget and all labels will be `bg`, and the graph/text color will be `fg`.
+The X axis (horizontal value) represents the number of data points recorded, and has a default width of `50`, which can be overridden by passing `maxEntries` in the constructor. The Y axis (vertical) represents the value of the metric over time. Once the fixed width of the graph is reached, the oldest values will be dropped from the buffer when new values are added. The minimum and maximum range of the Y axis is determined by the minimum and maximum metric values in the graph buffer. The background of the widget and all labels will be `bg`, and the graph/text color will be `fg`.
 
 The minimum and maximum labels are designed to shorten themselves using SI suffixes to fit within the available width.
 
@@ -44,6 +45,12 @@ The minimum and maximum labels are designed to shorten themselves using SI suffi
       type: 'color',
       default: 'nil',
       description: 'Foreground color (colors.*)'
+    },
+    {
+      name: 'maxEntries',
+      type: 'number',
+      default: '50',
+      description: 'Maximum entries in the chart buffer'
     }
   ]"
 >
