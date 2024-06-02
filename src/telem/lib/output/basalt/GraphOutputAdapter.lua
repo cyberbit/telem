@@ -22,13 +22,15 @@ local function graphtrackrange (self)
     return min,max
 end
 
-function GraphOutputAdapter:constructor (frame, filter, bg, fg)
+function GraphOutputAdapter:constructor (frame, filter, bg, fg, maxEntries)
     self:super('constructor')
 
     self.bBaseFrame = assert(frame, 'Frame is required')
     self.filter = assert(filter, 'Filter is required')
     
     self.graphdata = {}
+
+    self.MAX_ENTRIES = maxEntries or self.MAX_ENTRIES
 
     self:register(bg, fg)
 end

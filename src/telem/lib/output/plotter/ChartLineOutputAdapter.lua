@@ -12,7 +12,7 @@ ChartLineOutputAdapter.type = 'ChartLineOutputAdapter'
 ChartLineOutputAdapter.MAX_ENTRIES = 50
 ChartLineOutputAdapter.X_TICK = 10
 
-function ChartLineOutputAdapter:constructor (win, filter, bg, fg)
+function ChartLineOutputAdapter:constructor (win, filter, bg, fg, maxEntries)
     self:super('constructor')
 
     self.win = assert(win, 'Window is required')
@@ -26,6 +26,7 @@ function ChartLineOutputAdapter:constructor (win, filter, bg, fg)
 
     self.bg = bg or win.getBackgroundColor() or colors.black
     self.fg = fg or win.getTextColor() or colors.white
+    self.MAX_ENTRIES = maxEntries or self.MAX_ENTRIES
 
     self:register()
 end
