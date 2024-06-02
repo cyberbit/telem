@@ -8,19 +8,16 @@ Tired of creating complex logic to monitor inventory or production? Want somethi
 ![image](https://github.com/cyberbit/telem/assets/7350183/22e0862b-a56e-4ec5-ac9d-956c7aa075bb)
 
 ## Requirements
-- ComputerCraft (Tweaked and Restitched also supported)
+- CC: Tweaked recommended, CC: Restitched also supported
 - `http` access for installer and certain adapters
 
-> **Note:** These docs are being actively written so please excuse my dust! If you have questions, post them [in this discussion](https://github.com/cyberbit/telem/discussions/12).
-
 ## Install
-This runs the installer. You have a choice to install minified, packaged, and source versions.
 ```
 wget run https://pinestore.cc/d/14
 ```
 
 ## Usage
-### Please visit [telem.cc](https://telem.cc) for full documentation.
+### Please visit [telem.cyberbit.dev](https://telem.cyberbit.dev) for full documentation.
 ```lua
 local telem = require 'telem'
 
@@ -46,26 +43,17 @@ parallel.waitForAny(
 ```
 
 ## Input Adapters
-* Hello World (testing)
-* Item Storage
-* Fluid Storage
-* Refined Storage (RS Bridge)
-* ME Storage (ME Bridge)
-* Mekanism Fission Reactor
-* Mekanism Fusion Reactor
-* Mekanism Induction Matrix
-* Mekanism Industrial Turbine
+* Item and Fluid Storage
+* Modded Storage (AE2, Refined Storage)
+* Modded Machines (Mekanism)
 * Custom Inputs
-* **Secure Modems ✨**
+* Secure Modem
 * _More to come!_
 
 ## Output Adapters
-* Hello World (testing)
-* Grafana* (Grafana Cloud or self-hosted)
-* Basalt labels
+* Basalt labels and graphs
+* Plotter charts
 * Custom Outputs
-* **Secure Modems ✨**
+* Secure Modem
+* Grafana (advanced)
 * _More to come!_
-
-*You will need to set up a free account on Grafana Cloud or provision a self-hosted Grafana + InfluxDB + Telegraf instance to use the Grafana output. A more detailed guide for Grafana is planned for the future.
-
