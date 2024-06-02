@@ -20,7 +20,7 @@ local telem = require 'telem'
 
 The fundamental element of Telem is a <span class="mention">[Metric](reference/Metric)</span>, which is just a scalar (numeric) value with some properties attached to it.
 
-**Metric values MUST be scalar. Strings are not permitted.** The reason for this is simple; [telemetry](https://en.wikipedia.org/wiki/Telemetry) means “remote measurement,” and a string (name, etc.) is not a “measurement” of anything.
+**Metric values MUST be scalar. Strings are not permitted.** The reason for this is simple; [telemetry](https://en.wikipedia.org/wiki/Telemetry) means "remote measurement," and a string (name, etc.) is not a "measurement" of anything.
 
 Metrics also support a variety of labels which are exposed as string properties:
 
