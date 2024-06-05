@@ -39,6 +39,9 @@ jobs:
       - name: Install luamin
         run: sudo yarn --verbose global add https://github.com/cyberbit/luamin
 
+      - name: Find bin dir
+        run: yarn global bin
+
       - name: Build
         run: ./build.sh
       
