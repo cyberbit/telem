@@ -27,8 +27,8 @@ cd $workdir
 
 echo 'squishing...'
 mkdir -p dist/release
-~/.yarn/bin/luamin -f dist/telem.lua > dist/release/tail.telem.min.lua
-~/.yarn/bin/luamin -f dist/vendor.lua > dist/release/tail.vendor.min.lua
+luamin -f dist/telem.lua > dist/release/tail.telem.min.lua
+luamin -f dist/vendor.lua > dist/release/tail.vendor.min.lua
 
 echo 'writing header...'
 awk 'NR>=1 && NR<=4' dist/telem.lua > dist/release/telem.min.lua

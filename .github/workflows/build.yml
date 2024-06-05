@@ -40,7 +40,9 @@ jobs:
         run: sudo yarn --verbose global add https://github.com/cyberbit/luamin
 
       - name: Find bin dir
-        run: yarn global bin
+        run: |
+          yarn global bin
+          ll $(yarn global bin)
 
       - name: Build
         run: ./build.sh
