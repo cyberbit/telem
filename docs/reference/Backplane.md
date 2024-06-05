@@ -151,6 +151,14 @@ Backplane:debug (state: boolean)
 
 Set internal debug state. When `state` is `true`, Backplane will write verbose information to the terminal during a cycle. When `state` is `false`, Backplane will only write adapter faults to the terminal. Any adapters added *after* calling `debug()` will also have their debug state set to the same value.
 
+### `cache`
+
+```lua
+Backplane:cache (state: boolean)
+```
+
+Set output cache state. When `state` is `true`, Backplane will save the data history of cacheable output adapters to the filesystem at regular intervals. If the program or computer halts and restarts, the cache will be loaded and the output adapters will be re-initialized with the cached data. An output adapter must call `self:cacheable()`, as well as implement `getState()` and `loadState()`, to be cacheable.
+
 ## Usage
 
 ```lua

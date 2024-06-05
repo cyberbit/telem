@@ -18,6 +18,10 @@ telem.output.basalt.graph (
 Requires **[Basalt 1.7+](https://basalt.madefor.cc/)**. This is **not** included in the installer's dependencies due to size.
 :::
 
+::: tip
+This adapter is [cacheable](/reference/Backplane#cache).
+:::
+
 Search the available metrics using the syntax defined in [`find`](/reference/MetricCollection#find) and output a graph to a specified [Basalt container](https://basalt.madefor.cc/#/objects/Container). If a matching metric is found, the metric value is pushed to the graph buffer.
 
 The X axis (horizontal value) represents the number of data points recorded, and has a default width of `50`, which can be overridden by passing `maxEntries` in the constructor. The Y axis (vertical) represents the value of the metric over time. Once the fixed width of the graph is reached, the oldest values will be dropped from the buffer when new values are added. The minimum and maximum range of the Y axis is determined by the minimum and maximum metric values in the graph buffer. The background of the widget and all labels will be `bg`, and the graph/text color will be `fg`.

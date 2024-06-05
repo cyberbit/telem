@@ -15,6 +15,8 @@ ChartLineOutputAdapter.X_TICK = 10
 function ChartLineOutputAdapter:constructor (win, filter, bg, fg, maxEntries)
     self:super('constructor')
 
+    self:cacheable()
+
     self.win = assert(win, 'Window is required')
     self.filter = assert(filter, 'Filter is required')
 
@@ -87,6 +89,24 @@ function ChartLineOutputAdapter:write (collection)
     self:render()
     
     return self
+end
+
+function ChartLineOutputAdapter:getState ()
+    local plotData = {}
+
+    for k,v in ipairs(self.plotData) do
+        plotData[k] = v
+    end
+
+    return {
+        plotData = plotData,
+        gridOffsetX = self.gridOffsetX
+    }
+end
+
+function ChartLineOutputAdapter:loadState (state)
+    self.plotData = state.plotData
+    self.gridOffsetX = state.gridOffsetX
 end
 
 function ChartLineOutputAdapter:render ()

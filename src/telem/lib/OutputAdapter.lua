@@ -11,6 +11,8 @@ function OutputAdapter:constructor()
 
     self.asyncCycleHandler = nil
 
+    self.isCacheable = false
+
     -- boot components
     self:setBoot(function ()
         self.components = {}
@@ -49,6 +51,18 @@ function OutputAdapter:addComponentByPeripheralType (type)
     assert(tempComponent, 'Could not find peripheral type ' .. type)
 
     self.components[key] = tempComponent
+end
+
+function OutputAdapter:cacheable ()
+    self.isCacheable = true
+end
+
+function OutputAdapter:getState ()
+    t.err(self.type .. ' has not implemented getState()')
+end
+
+function OutputAdapter:loadState (state)
+    t.err(self.type .. ' has not implemented loadState()')
 end
 
 function OutputAdapter:write (metrics)

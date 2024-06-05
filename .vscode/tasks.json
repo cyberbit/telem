@@ -10,7 +10,7 @@
             "presentation": {
                 "close": true,
                 "focus": false,
-                "reveal": "silent",
+                "reveal": "always",
                 "panel": "shared"
             }
         }

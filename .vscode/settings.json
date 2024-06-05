@@ -1,5 +1,5 @@
 {
-    "autobuild": true,
+    // "autobuild": true,
     "Lua.diagnostics.globals": [
         "colors",
         "colours",
@@ -26,6 +26,12 @@
         "turtle",
         "vector",
         "window",
-        "mekanismEnergyHelper"
-    ]
+        "mekanismEnergyHelper",
+        "require"
+    ],
+    "triggerTaskOnSave.tasks": {
+        "build": [
+            "src/telem/**/*.lua"
+        ]
+    }
 }

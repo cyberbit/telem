@@ -4,7 +4,7 @@ outline: deep
 
 # OutputAdapter <Badge type="info" text="API" /> <RepoLink path="lib/OutputAdapter.lua" />
 
-OutputAdapter is an [abstract](https://en.wikipedia.org/wiki/Abstract_type) class that functions as a metric consumer. Typically, an OutputAdapter implementation will accept one or more parameters to its constructor method. These properties define what data sources and/or peripherals it should query when `read()` is called.
+OutputAdapter is an [abstract](https://en.wikipedia.org/wiki/Abstract_type) class that functions as a metric consumer. Typically, an OutputAdapter implementation will accept one or more parameters to its constructor method. These properties define what targets and/or peripherals it should interact with when `write()` is called.
 
 ## Properties
 
@@ -77,14 +77,42 @@ self.components = {
 }
 ```
 
-## `write`
+### `write` <Badge type="warning" text="abstract" />
 
 ```lua
 OutputAdapter:write (metrics: MetricCollection)
 ```
 
-Writes provided [MetricCollection](MetricCollection) to all assigned components. Specific behavior is implementation-dependent.
+Writes provided [MetricCollection](MetricCollection) to implementation-defined targets. This will be called by the [Backplane](Backplane) during a cycle.
 
-::: danger
-Because OutputAdapter is an abstract class, calling this method on InputAdapter or on an incomplete implementation of InputAdapter will throw an error.
-:::
+### `debug`
+
+```lua
+OutputAdapter:debug (state: boolean)
+```
+
+Set internal debug state. When `state` is `true`, OutputAdapter will write verbose information to the terminal.
+
+### `cacheable`
+
+```lua
+OutputAdapter:cacheable ()
+```
+
+Flag this OutputAdapter implementation as cacheable. This will notify the Backplane to call `getState()` and `loadState()` on this adapter when needed.
+
+### `getState` <Badge type="warning" text="abstract" />
+
+```lua
+OutputAdapter:getState (): table
+```
+
+Returns a serializable version of the OutputAdapter's internal state.
+
+### `loadState` <Badge type="warning" text="abstract" />
+
+```lua
+OutputAdapter:loadState (state: table)
+```
+
+Loads a previously saved state into the OutputAdapter.

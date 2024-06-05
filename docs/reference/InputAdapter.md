@@ -84,10 +84,10 @@ self.components = {
 }
 ```
 
-### `read`
+### `read` <Badge type="warning" text="abstract" />
 
-Reads all assigned components.
+```lua
+InputAdapter:read (): MetricCollection
+```
 
-::: danger
-Because InputAdapter is an abstract class, calling this method on InputAdapter or on an incomplete implementation of InputAdapter will throw an error.
-:::
+Reads data from implementation-defined sources into a [MetricCollection](MetricCollection) and returns it.
