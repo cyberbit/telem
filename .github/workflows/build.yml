@@ -37,12 +37,7 @@ jobs:
         run: luarocks install luacc
       
       - name: Install luamin
-        run: sudo yarn --verbose global add https://github.com/cyberbit/luamin
-
-      - name: Find bin dir
-        run: |
-          yarn global bin
-          ls $(yarn global bin)
+        run: sudo yarn global add https://github.com/cyberbit/luamin
 
       - name: Build
         run: ./build.sh
