@@ -42,7 +42,7 @@ jobs:
       - name: Find bin dir
         run: |
           yarn global bin
-          ll $(yarn global bin)
+          ls $(yarn global bin)
 
       - name: Build
         run: ./build.sh
