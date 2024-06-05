@@ -89,6 +89,24 @@ function ChartLineOutputAdapter:write (collection)
     return self
 end
 
+function ChartLineOutputAdapter:getState ()
+    local plotData = {}
+
+    for k,v in ipairs(self.plotData) do
+        plotData[k] = v
+    end
+
+    return {
+        plotData = plotData,
+        gridOffsetX = self.gridOffsetX
+    }
+end
+
+function ChartLineOutputAdapter:loadState (state)
+    self.plotData = state.plotData
+    self.gridOffsetX = state.gridOffsetX
+end
+
 function ChartLineOutputAdapter:render ()
     local dataw = #{self.plotData}
 

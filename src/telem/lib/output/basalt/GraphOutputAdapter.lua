@@ -135,4 +135,49 @@ function GraphOutputAdapter:write (collection)
     return self
 end
 
+function GraphOutputAdapter:getState ()
+    local graphdata = {}
+
+    for k,v in ipairs(self.graphdata) do
+        graphdata[k] = v
+    end
+
+    return {
+        graphdata = graphdata,
+        tick = self.tick
+    }
+end
+
+function GraphOutputAdapter:loadState (state)
+    self.graphdata = state.graphdata
+    self.tick = state.tick
+
+    local newmin, newmax = graphtrackrange(self)
+
+    if newmin == newmax then
+        newmin = newmin - 1
+        newmax = newmax + 1
+    end
+
+    self.graph:setMinValue(newmin):setMaxValue(newmax)
+
+    for _,v in ipairs(self.graphdata) do
+        self.graph:addDataPoint(v)
+
+        if self.tick == self.SCALE_TICK then
+            self.graphscale:addDataPoint(100)
+            self.tick = 1
+        else
+            self.graphscale:addDataPoint(50)
+            self.tick = self.tick + 1
+        end
+    end
+
+    self.label:setFontSize(2)
+    self.label:setText(t.shortnum(self.graphdata[#self.graphdata]))
+
+    self.labelmax:setText(t.shortnum(newmax))
+    self.labelmin:setText(t.shortnum(newmin))
+end
+
 return GraphOutputAdapter

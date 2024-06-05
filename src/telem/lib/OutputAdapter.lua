@@ -51,6 +51,14 @@ function OutputAdapter:addComponentByPeripheralType (type)
     self.components[key] = tempComponent
 end
 
+function OutputAdapter:getState ()
+    t.err(self.type .. ' has not implemented getState()')
+end
+
+function OutputAdapter:loadState (state)
+    t.err(self.type .. ' has not implemented loadState()')
+end
+
 function OutputAdapter:write (metrics)
     t.err(self.type .. ' has not implemented write()')
 end

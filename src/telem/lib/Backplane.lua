@@ -10,6 +10,11 @@ Backplane.type = 'Backplane'
 
 function Backplane:constructor ()
     self.debugState = false
+    
+    self.loaded = false
+    self.cacheState = false
+    self.lastCache = 0
+    self.cacheRate = 1
 
     self.inputs = {}
     self.outputs = {}
@@ -93,6 +98,33 @@ function Backplane:cycle()
     self:dlog('Backplane:cycle :: ' .. os.date())
     self:dlog('Backplane:cycle :: cycle START !')
 
+    -- load output states
+    if not self.loaded and self.cacheState then
+        self:dlog('Backplane:cycle :: loading state...')
+
+        local inf = fs.open('/.telem/state', 'r')
+
+        if inf then
+            local cache = textutils.unserialize(inf.readAll()) or {}
+            inf.close()
+
+            for k, v in pairs(cache) do
+                local output = self.outputs[k]
+
+                if output and output.loadState then
+                    self:dlog('Backplane:cycle ::  - ' .. k)
+
+                    local results = {pcall(output.loadState, output, v)}
+
+                    if not table.remove(results, 1) then
+                        t.log('loadState fault for "' .. k .. '":')
+                        t.pprint(table.remove(results, 1))
+                    end
+                end
+            end
+        end
+    end
+
     self:dlog('Backplane:cycle :: reading inputs...')
 
     -- read inputs
@@ -131,7 +163,41 @@ function Backplane:cycle()
 
     self:dlog('Backplane:cycle :: saving state...')
 
+    self:dlog('Backplane:cycle ::  - Backplane')
     self.collection = metrics
+
+    -- cache output states
+    if self.cacheState then
+        local time = os.epoch('utc')
+
+        if self.lastCache + self.cacheRate * 1000 <= time then
+            local cache = {}
+
+            for _, key in pairs(self.outputKeys) do
+                local output = self.outputs[key]
+
+                if output.getState then
+                    self:dlog('Backplane:cycle ::  - ' .. key)
+
+                    local results = {pcall(output.getState, output)}
+
+                    if not table.remove(results, 1) then
+                        t.log('getState fault for "' .. key .. '":')
+                        t.pprint(table.remove(results, 1))
+                    end
+
+                    cache[key] = table.remove(results, 1)
+                end
+            end
+
+            fs.makeDir('/.telem')
+            local outf = fs.open('/.telem/state', 'w')
+            outf.write(textutils.serialize(cache, { compact = true }))
+            outf.flush()
+
+            self.lastCache = time
+        end
+    end
 
     self:dlog('Backplane:cycle :: writing outputs...')
 
@@ -147,6 +213,10 @@ function Backplane:cycle()
             t.log('Output fault for "' .. key .. '":')
             t.pprint(table.remove(results, 1))
         end
+    end
+
+    if not self.loaded then
+        self.loaded = true
     end
 
     self:dlog('Backplane:cycle :: cycle END !')
@@ -199,6 +269,12 @@ function Backplane:updateLayouts()
     end
 
     self:dlog('Backplane:updateLayouts :: Layouts updated')
+end
+
+function Backplane:cache(cache)
+    self.cacheState = cache and true or false
+
+    return self
 end
 
 function Backplane:debug(debug)
