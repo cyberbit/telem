@@ -55,8 +55,6 @@ end
 
 function OutputAdapter:cacheable ()
     self.isCacheable = true
-
-    return self
 end
 
 function OutputAdapter:getState ()
