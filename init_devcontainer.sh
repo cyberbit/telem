@@ -22,4 +22,4 @@ cd ../..
 rm -rf .luatmp
 
 # install luamin
-yarn global add luamin
+yarn global add https://github.com/cyberbit/luamin

@@ -37,7 +37,7 @@ jobs:
         run: luarocks install luacc
       
       - name: Install luamin
-        run: npm install -g https://github.com/cyberbit/luamin
+        run: yarn add -G https://github.com/cyberbit/luamin
 
       - name: Build
         run: ./build.sh
