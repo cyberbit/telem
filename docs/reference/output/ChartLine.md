@@ -5,7 +5,7 @@ outline: deep
 # Plotter Line Chart Output <Badge type="warning" text="beta" /> <RepoLink path="lib/output/plotter/ChartLineOutputAdapter.lua" />
 
 ```lua
-telem.output.plotter.chartLine (
+telem.output.plotter.line (
   win: window,
   filter: string,
   bg: color,
