@@ -25,6 +25,8 @@ end
 function GraphOutputAdapter:constructor (frame, filter, bg, fg, maxEntries)
     self:super('constructor')
 
+    self:cacheable()
+
     self.bBaseFrame = assert(frame, 'Frame is required')
     self.filter = assert(filter, 'Filter is required')
     

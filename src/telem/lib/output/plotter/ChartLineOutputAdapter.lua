@@ -15,6 +15,8 @@ ChartLineOutputAdapter.X_TICK = 10
 function ChartLineOutputAdapter:constructor (win, filter, bg, fg, maxEntries)
     self:super('constructor')
 
+    self:cacheable()
+
     self.win = assert(win, 'Window is required')
     self.filter = assert(filter, 'Filter is required')
 

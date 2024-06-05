@@ -111,7 +111,7 @@ function Backplane:cycle()
             for k, v in pairs(cache) do
                 local output = self.outputs[k]
 
-                if output and output.loadState then
+                if output and output.isCacheable then
                     self:dlog('Backplane:cycle ::  - ' .. k)
 
                     local results = {pcall(output.loadState, output, v)}
@@ -176,7 +176,7 @@ function Backplane:cycle()
             for _, key in pairs(self.outputKeys) do
                 local output = self.outputs[key]
 
-                if output.getState then
+                if output.isCacheable then
                     self:dlog('Backplane:cycle ::  - ' .. key)
 
                     local results = {pcall(output.getState, output)}
