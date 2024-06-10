@@ -9,6 +9,7 @@ local ecnet2 = require 'ecnet2'
 local random = require 'ccryptolib.random'
 local plotter = require 'plotter'
 local lualzw = require 'lualzw'
+local fluent = require 'fluent'
 
 return {
     ccryptolib = {
@@ -16,5 +17,6 @@ return {
     },
     ecnet2 = ecnet2,
     lualzw = lualzw,
-    plotter = plotter
+    plotter = plotter,
+    fluent = fluent
 }

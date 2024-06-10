@@ -1,12 +1,13 @@
 -- Telem by cyberbit
 -- MIT License
--- Version 0.6.0
+-- Version 0.7.0
 
 local _Telem = {
-    _VERSION = '0.6.0',
+    _VERSION = '0.7.0',
     util = require 'telem.lib.util',
     input = require 'telem.lib.input',
     output = require 'telem.lib.output',
+    middleware = require 'telem.lib.middleware',
     
     -- API
     backplane = require 'telem.lib.Backplane',

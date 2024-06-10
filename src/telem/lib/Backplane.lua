@@ -4,6 +4,7 @@ local t = require 'telem.lib.util'
 local InputAdapter     = require 'telem.lib.InputAdapter'
 local OutputAdapter    = require 'telem.lib.OutputAdapter'
 local MetricCollection = require 'telem.lib.MetricCollection'
+local Middleware       = require 'telem.lib.BaseMiddleware'
 
 local Backplane = o.class()
 Backplane.type = 'Backplane'
@@ -18,6 +19,7 @@ function Backplane:constructor ()
 
     self.inputs = {}
     self.outputs = {}
+    self.middlewares = {}
 
     -- workaround to guarantee processing order
     self.inputKeys = {}
@@ -81,14 +83,45 @@ function Backplane:addOutput (name, output)
     return self
 end
 
+function Backplane:middleware (...)
+    local args = {...}
+
+    for _, middleware in ipairs(args) do
+        self:addMiddleware(middleware)
+    end
+
+    return self
+end
+
+function Backplane:addMiddleware (middleware)
+    assert(o.instanceof(middleware, Middleware), 'middleware must be a Middleware')
+
+    table.insert(self.middlewares, middleware)
+
+    return self
+end
+
 function Backplane:addAsyncCycleHandler (adapter, handler)
     table.insert(self.asyncCycleHandlers, handler)
 end
 
--- NYI
-function Backplane:processMiddleware ()
-    --
-    return self
+function Backplane:processMiddleware (middlewares, collection)
+    assert(middlewares and type(middlewares) == 'table', 'middlewares must be a list of Middleware')
+
+    local newCollection = collection
+
+    for _, middleware in ipairs(middlewares) do
+        local results = {pcall(middleware.handle, middleware, newCollection)}
+
+        if not table.remove(results, 1) then
+            t.log('Middleware fault:')
+            t.pprint(table.remove(results, 1))
+        end
+
+        newCollection = table.remove(results, 1)
+    end
+
+    return newCollection
 end
 
 function Backplane:cycle()
@@ -139,10 +172,13 @@ function Backplane:cycle()
             t.log('Input fault for "' .. key .. '":')
             t.pprint(table.remove(results, 1))
         else
-            local inputMetrics = table.remove(results, 1)
+            local inputCollection = table.remove(results, 1)
 
-            -- attach adapter name
-            for _,v in ipairs(inputMetrics.metrics) do
+            -- process input middleware
+            local processedInputCollection = self:processMiddleware(input.middlewares, inputCollection)
+
+            for _,v in ipairs(processedInputCollection.metrics) do
+                -- attach adapter name
                 v.adapter = key .. (v.adapter and ':' .. v.adapter or '')
 
                 table.insert(tempMetrics, v)
@@ -150,13 +186,8 @@ function Backplane:cycle()
         end
     end
 
-    -- TODO process middleware
+    self:dlog('Backplane:cycle :: committing metrics...')
 
-    self:dlog('Backplane:cycle :: sorting metrics...')
-
-    -- sort
-    -- TODO make this a middleware
-    table.sort(tempMetrics, function (a,b) return a.name < b.name end)
     for _,v in ipairs(tempMetrics) do
         metrics:insert(v)
     end
@@ -164,6 +195,7 @@ function Backplane:cycle()
     self:dlog('Backplane:cycle :: saving state...')
 
     self:dlog('Backplane:cycle ::  - Backplane')
+
     self.collection = metrics
 
     -- cache output states
@@ -198,6 +230,10 @@ function Backplane:cycle()
             self.lastCache = time
         end
     end
+
+    self:dlog('Backplane:cycle :: processing middleware...')
+
+    self.collection = self:processMiddleware(self.middlewares, self.collection)
 
     self:dlog('Backplane:cycle :: writing outputs...')
 
