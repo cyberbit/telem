@@ -74,6 +74,7 @@ export default defineConfig({
         items: [
           { text: 'Hello World', link: '/reference/output/HelloWorld' },
           { text: 'Line Chart', link: '/reference/output/ChartLine' },
+          { text: 'Area Chart', link: '/reference/output/ChartArea' },
           { text: 'Secure Modem', link: '/reference/output/SecureModem' },
           { text: 'Custom', link: '/reference/output/Custom' },
           { text: 'Grafana', link: '/reference/output/Grafana' },
