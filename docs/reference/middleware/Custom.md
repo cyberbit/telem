@@ -5,7 +5,9 @@ outline: deep
 # Custom Middleware <RepoLink path="lib/middleware/CustomMiddleware.lua" />
 
 ```lua
-telem.middleware.custom (handler: fun(collection: MetricCollection): MetricCollection)
+telem.middleware.custom (
+  handler: fun(collection: MetricCollection): MetricCollection
+)
 ```
 
 This middleware wraps a user-provided function for custom middleware implementations. Need to calculate the ratio between two metrics? Count the total number of items from an adapter? Measure a metric relative to an in-game day? Anything is possible!
