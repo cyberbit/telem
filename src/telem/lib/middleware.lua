@@ -1,6 +1,6 @@
 return {
-  handleCollection = require 'telem.lib.middleware.HandleCollectionMiddleware',
+  sort = require 'telem.lib.middleware.SortMiddleware',
   calcAvg = require 'telem.lib.middleware.CalcAverageMiddleware',
   calcDelta = require 'telem.lib.middleware.CalcDeltaMiddleware',
-  sort = require 'telem.lib.middleware.SortCollectionMiddleware',
+  custom = require 'telem.lib.middleware.CustomMiddleware',
 }
