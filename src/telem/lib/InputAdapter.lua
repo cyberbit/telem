@@ -4,6 +4,8 @@ local t = require 'telem.lib.util'
 local InputAdapter = o.class()
 InputAdapter.type = 'InputAdapter'
 
+local Middleware = require 'telem.lib.BaseMiddleware'
+
 function InputAdapter:constructor()
     assert(self.type ~= InputAdapter.type, 'InputAdapter cannot be instantiated')
 
@@ -11,7 +13,9 @@ function InputAdapter:constructor()
 
     self.prefix = ''
     self.asyncCycleHandler = nil
-
+    
+    self.middlewares = {}
+    
     -- boot components
     self:setBoot(function ()
         self.components = {}
@@ -56,6 +60,24 @@ function InputAdapter:read ()
     self:boot()
 
     t.err(self.type .. ' has not implemented read()')
+end
+
+function InputAdapter:middleware (...)
+    local args = {...}
+
+    for _, middleware in ipairs(args) do
+        self:addMiddleware(middleware)
+    end
+
+    return self
+end
+
+function InputAdapter:addMiddleware (middleware)
+    assert(o.instanceof(middleware, Middleware), 'middleware must be a Middleware')
+
+    table.insert(self.middlewares, middleware)
+
+    return self
 end
 
 function InputAdapter:debug(debug)

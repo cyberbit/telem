@@ -15,7 +15,7 @@ features:
   - title: Standardized data format
     details: No more standardization headaches across different peripherals
   - title: Intuitive API
-    details: Utilize dozens of built-in inputs and outputs with a fluent interface. Or write your own!
+    details: Utilize dozens of built-in inputs and outputs with a simple interface. Or write your own!
   - title: Deep integrations
     details: First-class support for Mekanism, Applied Energistics, and more
 ---

@@ -30,6 +30,7 @@ export default defineConfig({
           { text: 'InputAdapter', link: '/reference/InputAdapter' },
           { text: 'OutputAdapter', link: '/reference/OutputAdapter' },
           { text: 'Backplane', link: '/reference/Backplane' },
+          { text: 'Middleware', link: '/reference/Middleware' },
         ]
       },
       {
@@ -84,6 +85,16 @@ export default defineConfig({
               { text: 'Graph', link: '/reference/output/basalt/Graph' },
             ]
           }
+        ]
+      },
+      {
+        text: 'Middleware',
+        collapsed: false,
+        items: [
+          { text: 'Sort', link: '/reference/middleware/Sort' },
+          { text: 'Calculate Average', link: '/reference/middleware/CalcAverage' },
+          { text: 'Calculate Delta', link: '/reference/middleware/CalcDelta' },
+          { text: 'Custom', link: '/reference/middleware/Custom' },
         ]
       }
     ],

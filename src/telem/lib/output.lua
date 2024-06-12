@@ -14,6 +14,7 @@ return {
     -- Plotter
     plotter = {
         line = require 'telem.lib.output.plotter.ChartLineOutputAdapter',
+        area = require 'telem.lib.output.plotter.ChartAreaOutputAdapter',
     },
 
     -- Modem

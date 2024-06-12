@@ -1,3 +1,7 @@
+---
+outline: deep
+---
+
 # Getting Started
 
 ## Install
@@ -37,13 +41,19 @@ A [MetricCollection](reference/MetricCollection)  is a list of Metric elements, 
 
 There are two types of adapters: [InputAdapter](reference/InputAdapter) and [OutputAdapter](reference/OutputAdapter). The base classes themselves are abstract classes and cannot be instantiated. Instead, there are several implementations of these adapters targeting generic resource providers and machinery from supported mods.
 
-Explore the reference pages to learn more about the specific adapters.
+Explore the pages in the **Input** and **Output** sections to learn more about the specific adapters.
 
 ### Backplane
 
 The [Backplane](reference/Backplane) is the main API interface of Telem. Any configured adapters will be attached here and read/written when a cycle is requested.
 
 You can learn more about Backplane by visiting the Backplane API listing.
+
+### Middleware
+
+[Middleware](reference/Middleware) is a powerful feature of Telem that allows you to transform metrics in a variety of ways. You can calculate deltas, rates, and averages of existing metrics, or craft your own using custom middleware.
+
+Take a look at the pages in the Middleware section to learn more.
 
 ## Hello World
 
@@ -52,7 +62,7 @@ To familiarize yourself with the syntax, create the following program:
 ```lua
 local telem = require 'telem'
 
--- setup the fluent interface
+-- setup the backplane
 local backplane = telem.backplane()
 
 -- Hello World input will always output a single metric with a specified value
