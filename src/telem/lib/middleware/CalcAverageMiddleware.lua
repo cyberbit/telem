@@ -1,8 +1,6 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
 
-local fluent = require('telem.vendor').fluent
-
 local Metric     = require 'telem.lib.Metric'
 local Middleware = require 'telem.lib.BaseMiddleware'
 

@@ -36,6 +36,13 @@ All properties are set by Backplane and should not be mutated outside of this cl
       setBy: true
     },
     {
+      name: 'middlewares',
+      type: 'Middleware[]',
+      default: '{}',
+      description: 'List of Middleware.',
+      setBy: true
+    },
+    {
       name: 'inputKeys',
       type: 'string[]',
       default: '[]',
@@ -158,6 +165,14 @@ Backplane:cache (state: boolean)
 ```
 
 Set output cache state. When `state` is `true`, Backplane will save the data history of cacheable output adapters to the filesystem at regular intervals. If the program or computer halts and restarts, the cache will be loaded and the output adapters will be re-initialized with the cached data. An output adapter must call `self:cacheable()`, as well as implement `getState()` and `loadState()`, to be cacheable.
+
+### `middleware`
+
+```lua
+Backplane:middleware (middleware1: Middleware, middleware2?: Middleware, ...): self
+```
+
+Set the middleware stack for this Backplane. Middleware will be executed in the order they are passed to this function. Middleware can be any class that inherits from [Middleware](Middleware).
 
 ## Usage
 
