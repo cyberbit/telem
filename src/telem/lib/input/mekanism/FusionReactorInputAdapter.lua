@@ -1,15 +1,21 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local FusionReactorInputAdapter = o.class(InputAdapter)
+local FusionReactorInputAdapter = o.class(BaseMekanismInputAdapter)
 FusionReactorInputAdapter.type = 'FusionReactorInputAdapter'
 
+-- alternative call that passes another call as a parameter
+local callIsActiveCooled = function (method)
+    return function (v)
+        return v[method](v.isActiveCooledLogic())
+    end
+end
+
 function FusionReactorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
     self.prefix = 'mekfusion:'
@@ -31,87 +37,49 @@ function FusionReactorInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
-
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function FusionReactorInputAdapter:read ()
-    self:boot()
-
-    local source, fusion = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- minimum necessary for monitoring a fusion reactor
-        elseif v == 'basic' then
-            local isActive = fusion.isActiveCooledLogic()
-            metrics:insert(Metric{ name = self.prefix .. 'plasma_temperature', value = fusion.getPlasmaTemperature(), unit = 'K', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'case_temperature', value = fusion.getCaseTemperature(), unit = 'K', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'water_filled_percentage', value = fusion.getWaterFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'steam_filled_percentage', value = fusion.getSteamFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'tritium_filled_percentage', value = fusion.getTritiumFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'deuterium_filled_percentage', value = fusion.getDeuteriumFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'dt_fuel_filled_percentage', value = fusion.getDTFuelFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(fusion.getProductionRate()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'injection_rate', value = fusion.getInjectionRate() / 1000, unit = 'B/t', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'min_injection_rate', value = fusion.getMinInjectionRate(isActive) / 1000, unit = 'B/t', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'max_plasma_temperature', value = fusion.getMaxPlasmaTemperature(isActive), unit = 'K', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'max_casing_temperature', value = fusion.getMaxCasingTemperature(isActive), unit = 'K', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'passive_generation_rate', value = mekanismEnergyHelper.joulesToFE(fusion.getPassiveGeneration(isActive)), unit = 'FE/t', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'ignition_temperature', value = fusion.getIgnitionTemperature(isActive), unit = 'K', source = source })
-
-        -- some further production metrics
-        elseif v == 'advanced' then
-            -- metrics:insert(Metric{ name = self.prefix .. 'transfer_loss', value = fusion.getTransferLoss(), unit = nil, source = source })
-            -- metrics:insert(Metric{ name = self.prefix .. 'environmental_loss', value = fusion.getEnvironmentalLoss(), unit = nil, source = source })
-            
-        elseif v == 'coolant' then
-            metrics:insert(Metric{ name = self.prefix .. 'water_capacity', value = fusion.getWaterCapacity() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'water_needed', value = fusion.getWaterNeeded() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'steam_capacity', value = fusion.getSteamCapacity() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'steam_needed', value = fusion.getSteamNeeded() / 1000, unit = 'B', source = source })
-            
-        elseif v == 'fuel' then
-            metrics:insert(Metric{ name = self.prefix .. 'tritium_capacity', value = fusion.getTritiumCapacity() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'tritium_needed', value = fusion.getTritiumNeeded() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'deuterium_capacity', value = fusion.getDeuteriumCapacity() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'deuterium_needed', value = fusion.getDeuteriumNeeded() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'dt_fuel_capacity', value = fusion.getDTFuelCapacity() / 1000, unit = 'B', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'dt_fuel_needed', value = fusion.getDTFuelNeeded() / 1000, unit = 'B', source = source })
-            
-            -- measurements based on the multiblock structure itself
-        elseif v == 'formation' then
-            metrics:insert(Metric{ name = self.prefix .. 'formed', value = (fusion.isFormed() and 1 or 0), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'height', value = fusion.getHeight(), unit = 'm', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'length', value = fusion.getLength(), unit = 'm', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'width', value = fusion.getWidth(), unit = 'm', source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'active_cooled_logic', value = (fusion.isActiveCooledLogic() and 1 or 0), unit = nil, source = source })
-        end
-        
-        loaded[v] = true
-        
-        -- not sure if these are useful, but they return strings anyway which are not Metric compatible, RIP
-        -- metrics:insert(Metric{ name = self.prefix .. 'logic_mode', value = fusion.getLogicMode(), unit = nil, source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'tritium', value = fusion.getTritium() / 1000, unit = 'B', source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'deuterium', value = fusion.getDeuterium() / 1000, unit = 'B', source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'dt_fuel', value = fusion.getDTFuel() / 1000, unit = 'B', source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'hohlraum', value = fusion.getHohlraum(), unit = nil, source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'water', value = fusion.getWater() / 1000, unit = 'B', source = source })
-        -- metrics:insert(Metric{ name = self.prefix .. 'steam', value = fusion.getSteam() / 1000, unit = 'B', source = source })
-    end
-    
-    return metrics
+    self.queries = {
+        basic = {
+            plasma_temperature          = fn():call('getPlasmaTemperature'):temp(),
+            case_temperature            = fn():call('getCaseTemperature'):temp(),
+            water_filled_percentage     = fn():call('getWaterFilledPercentage'),
+            steam_filled_percentage     = fn():call('getSteamFilledPercentage'),
+            tritium_filled_percentage   = fn():call('getTritiumFilledPercentage'),
+            deuterium_filled_percentage = fn():call('getDeuteriumFilledPercentage'),
+            dt_fuel_filled_percentage   = fn():call('getDTFuelFilledPercentage'),
+            production_rate             = fn():call('getProductionRate'):joulesToFE():energyRate(),
+            injection_rate              = fn():call('getInjectionRate'):div(1000):fluidRate(),
+            min_injection_rate          = fn():transform(callIsActiveCooled('getMinInjectionRate')):div(1000):fluidRate(),
+            max_plasma_temperature      = fn():transform(callIsActiveCooled('getMaxPlasmaTemperature')):temp(),
+            max_casing_temperature      = fn():transform(callIsActiveCooled('getMaxCasingTemperature')):temp(),
+            passive_generation_rate     = fn():transform(callIsActiveCooled('getPassiveGeneration')):joulesToFE():energyRate(),
+            ignition_temperature        = fn():transform(callIsActiveCooled('getIgnitionTemperature')):temp(),
+        },
+        advanced = {
+            -- transfer_loss            = fn():call('getTransferLoss'),
+            -- environmental_loss       = fn():call('getEnvironmentalLoss'),
+        },
+        coolant = {
+            water_capacity              = fn():call('getWaterCapacity'):div(1000):fluid(),
+            water_needed                = fn():call('getWaterNeeded'):div(1000):fluid(),
+            steam_capacity              = fn():call('getSteamCapacity'):div(1000):fluid(),
+            steam_needed                = fn():call('getSteamNeeded'):div(1000):fluid(),
+        },
+        fuel = {
+            tritium_capacity            = fn():call('getTritiumCapacity'):div(1000):fluid(),
+            tritium_needed              = fn():call('getTritiumNeeded'):div(1000):fluid(),
+            deuterium_capacity          = fn():call('getDeuteriumCapacity'):div(1000):fluid(),
+            deuterium_needed            = fn():call('getDeuteriumNeeded'):div(1000):fluid(),
+            dt_fuel_capacity            = fn():call('getDTFuelCapacity'):div(1000):fluid(),
+            dt_fuel_needed              = fn():call('getDTFuelNeeded'):div(1000):fluid(),
+        },
+        formation = {
+            formed                      = fn():call('isFormed'):toFlag(),
+            height                      = fn():call('getHeight'):with('unit', 'm'),
+            length                      = fn():call('getLength'):with('unit', 'm'),
+            width                       = fn():call('getWidth'):with('unit', 'm'),
+            active_cooled_logic         = fn():call('isActiveCooledLogic'):toFlag(),
+        }
+    }
 end
 
 return FusionReactorInputAdapter
