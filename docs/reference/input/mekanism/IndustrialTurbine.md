@@ -137,21 +137,21 @@ DUMPING_MODES = { IDLE = 1, DUMPING_EXCESS = 2, DUMPING = 3 }
   :metrics="[
     {
       name: 'mekturbine:energy',
-      value: '0 - inf',
+      value: '0.0 - inf',
       unit: 'FE',
       adapter: 'my_turbine',
       source: 'right'
     },
     {
       name: 'mekturbine:max_energy',
-      value: '0 - inf',
+      value: '0.0 - inf',
       unit: 'FE',
       adapter: 'my_turbine',
       source: 'right'
     },
     {
       name: 'mekturbine:energy_needed',
-      value: '0 - inf',
+      value: '0.0 - inf',
       unit: 'FE',
       adapter: 'my_turbine',
       source: 'right'
