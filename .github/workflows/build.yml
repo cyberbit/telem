@@ -7,8 +7,12 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
+    paths:
+      - "src/**"
   pull_request:
     branches: [ "main" ]
+    paths:
+      - "src/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -33,7 +37,7 @@ jobs:
         run: luarocks install luacc
       
       - name: Install luamin
-        run: npm install -g https://github.com/cyberbit/luamin
+        run: sudo yarn global add https://github.com/cyberbit/luamin
 
       - name: Build
         run: ./build.sh
@@ -41,8 +45,14 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: dist
+          name: dev
           path: dist/*.lua
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: dist/release/*.lua
       
       # via https://github.com/softprops/action-gh-release/issues/270
       - name: Create tag
@@ -60,7 +70,10 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
           prerelease: true
+          draft: true
           tag_name: ${{ steps.tag.outputs.tag }}
           files: |
             dist/telem.lua
-            dist/telem.min.lua
+            dist/vendor.lua
+            dist/release/telem.min.lua
+            dist/release/vendor.min.lua

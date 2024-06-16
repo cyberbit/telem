@@ -8,6 +8,7 @@ return {
     refinedStorage = require 'telem.lib.input.RefinedStorageInputAdapter',
     meStorage = require 'telem.lib.input.MEStorageInputAdapter',
 
+    -- machinery
     mekanism = {
         fissionReactor = require 'telem.lib.input.mekanism.FissionReactorInputAdapter',
         inductionMatrix = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
@@ -18,5 +19,8 @@ return {
         dynamicTank = require 'telem.lib.input.mekanism.DynamicTankInputAdapter',
         digitalMiner = require 'telem.lib.input.mekanism.DigitalMinerInputAdapter',
         gasGenerator = require 'telem.lib.input.mekanism.GasGeneratorInputAdapter',
-    }
+    },
+
+    -- modem
+    secureModem = require 'telem.lib.input.SecureModemInputAdapter'
 }

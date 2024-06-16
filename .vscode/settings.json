@@ -1,3 +1,8 @@
 {
-    "autobuild": true
+    // "autobuild": true,
+    "triggerTaskOnSave.tasks": {
+        "build": [
+            "src/telem/**/*.lua"
+        ]
+    }
 }

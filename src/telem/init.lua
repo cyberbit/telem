@@ -1,8 +1,13 @@
+-- Telem by cyberbit
+-- MIT License
+-- Version 0.7.1
+
 local _Telem = {
-    _VERSION = '0.2.0',
+    _VERSION = '0.7.1',
     util = require 'telem.lib.util',
     input = require 'telem.lib.input',
     output = require 'telem.lib.output',
+    middleware = require 'telem.lib.middleware',
     
     -- API
     backplane = require 'telem.lib.Backplane',
@@ -10,6 +15,11 @@ local _Telem = {
     metricCollection = require 'telem.lib.MetricCollection'
 }
 
--- _Telem.util.log('init')
+local args = {...}
+
+if #args < 1 or type(package.loaded['telem']) ~= 'table' then
+    print('Telem ' .. _Telem._VERSION)
+    print(' * A command-line interface is not yet implemented, please use require()')
+end
 
 return _Telem

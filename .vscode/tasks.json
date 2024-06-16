@@ -6,7 +6,13 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "./build.sh"
+            "command": "./build.sh",
+            "presentation": {
+                "close": true,
+                "focus": false,
+                "reveal": "silent",
+                "panel": "shared"
+            }
         }
     ]
 }

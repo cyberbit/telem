@@ -24,7 +24,7 @@ function LabelOutputAdapter:register (bg, fg, fontSize)
     -- TODO idk if this inner frame is necessary
     self.bInnerFrame = self.bBaseFrame:addFrame()
         :setBackground(bg)
-        :setSize('{parent.w}', '{parent.h}')
+        :setSize('parent.w', 'parent.h')
 
     self.bLabelValue = self.bInnerFrame
         :addLabel()
@@ -32,7 +32,7 @@ function LabelOutputAdapter:register (bg, fg, fontSize)
         :setFontSize(fontSize or 2)
         :setBackground(bg)
         :setForeground(fg)
-        :setPosition('{parent.w/2-self.w/2}', '{parent.h/2-self.h/2}')
+        :setPosition('parent.w/2-self.w/2', 'parent.h/2-self.h/2')
     
     self.bLabelName = self.bInnerFrame
         :addLabel()
