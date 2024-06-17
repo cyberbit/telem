@@ -33,55 +33,55 @@ function FissionReactorInputAdapter:constructor (peripheralName, categories)
 
     self.queries = {
         basic = {
-            status                              = fn():call('getStatus'):toFlag(),
-            burn_rate                           = fn():call('getBurnRate'):div(1000):fluidRate(),
-            max_burn_rate                       = fn():call('getMaxBurnRate'):div(1000):fluidRate(),
-            temperature                         = fn():call('getTemperature'):temp(),
-            damage_percent                      = fn():call('getDamagePercent'),
-            fuel_filled_percentage              = fn():call('getFuelFilledPercentage'),
-            coolant_filled_percentage           = fn():call('getCoolantFilledPercentage'),
-            heated_coolant_filled_percentage    = fn():call('getHeatedCoolantFilledPercentage'),
-            waste_filled_percentage             = fn():call('getWasteFilledPercentage')
+            status                              = fn():callElse('getStatus', 0):toFlag(),
+            burn_rate                           = fn():callElse('getBurnRate', 0):div(1000):fluidRate(),
+            max_burn_rate                       = fn():callElse('getMaxBurnRate', 0):div(1000):fluidRate(),
+            temperature                         = fn():callElse('getTemperature', 0):temp(),
+            damage_percent                      = fn():callElse('getDamagePercent', 0),
+            fuel_filled_percentage              = fn():callElse('getFuelFilledPercentage', 0),
+            coolant_filled_percentage           = fn():callElse('getCoolantFilledPercentage', 0),
+            heated_coolant_filled_percentage    = fn():callElse('getHeatedCoolantFilledPercentage', 0),
+            waste_filled_percentage             = fn():callElse('getWasteFilledPercentage', 0)
         },
         advanced = {
-            actual_burn_rate                    = fn():call('getActualBurnRate'):div(1000):fluidRate(),
-            environmental_loss                  = fn():call('getEnvironmentalLoss'),
-            heating_rate                        = fn():call('getHeatingRate'):div(1000):fluidRate(),
+            actual_burn_rate                    = fn():callElse('getActualBurnRate', 0):div(1000):fluidRate(),
+            environmental_loss                  = fn():callElse('getEnvironmentalLoss', 0),
+            heating_rate                        = fn():callElse('getHeatingRate', 0):div(1000):fluidRate(),
         },
         coolant = {
-            coolant                             = fn():call('getCoolant'):get('amount'):div(1000):fluid(),
-            coolant_capacity                    = fn():call('getCoolantCapacity'):div(1000):fluid(),
-            coolant_needed                      = fn():call('getCoolantNeeded'):div(1000):fluid(),
-            heated_coolant                      = fn():call('getHeatedCoolant'):get('amount'):div(1000):fluid(),
-            heated_coolant_capacity             = fn():call('getHeatedCoolantCapacity'):div(1000):fluid(),
-            heated_coolant_needed               = fn():call('getHeatedCoolantNeeded'):div(1000):fluid()
+            coolant                             = fn():callElse('getCoolant', { amount = 0 }):get('amount'):div(1000):fluid(),
+            coolant_capacity                    = fn():callElse('getCoolantCapacity', 0):div(1000):fluid(),
+            coolant_needed                      = fn():callElse('getCoolantNeeded', 0):div(1000):fluid(),
+            heated_coolant                      = fn():callElse('getHeatedCoolant', { amount = 0 }):get('amount'):div(1000):fluid(),
+            heated_coolant_capacity             = fn():callElse('getHeatedCoolantCapacity', 0):div(1000):fluid(),
+            heated_coolant_needed               = fn():callElse('getHeatedCoolantNeeded', 0):div(1000):fluid()
         },
         fuel = {
-            fuel                                = fn():call('getFuel'):get('amount'):div(1000):fluid(),
-            fuel_capacity                       = fn():call('getFuelCapacity'):div(1000):fluid(),
-            fuel_needed                         = fn():call('getFuelNeeded'):div(1000):fluid()
+            fuel                                = fn():callElse('getFuel', { amount = 0 }):get('amount'):div(1000):fluid(),
+            fuel_capacity                       = fn():callElse('getFuelCapacity', 0):div(1000):fluid(),
+            fuel_needed                         = fn():callElse('getFuelNeeded', 0):div(1000):fluid()
         },
         waste = {
-            waste                               = fn():call('getWaste'):get('amount'):div(1000):fluid(),
-            waste_capacity                      = fn():call('getWasteCapacity'):div(1000):fluid(),
-            waste_needed                        = fn():call('getWasteNeeded'):div(1000):fluid()
+            waste                               = fn():callElse('getWaste', { amount = 0 }):get('amount'):div(1000):fluid(),
+            waste_capacity                      = fn():callElse('getWasteCapacity', 0):div(1000):fluid(),
+            waste_needed                        = fn():callElse('getWasteNeeded', 0):div(1000):fluid()
         },
         formation = {
-            formed                              = fn():call('isFormed'):toFlag(),
-            force_disabled                      = fn():call('isForceDisabled'):toFlag(),
-            height                              = fn():call('getHeight'):with('unit', 'm'),
-            length                              = fn():call('getLength'):with('unit', 'm'),
-            width                               = fn():call('getWidth'):with('unit', 'm'),
-            fuel_assemblies                     = fn():call('getFuelAssemblies'),
-            fuel_surface_area                   = fn():call('getFuelSurfaceArea'):with('unit', 'm²'),
-            heat_capacity                       = fn():call('getHeatCapacity'):with('unit', 'J/K'),
-            boil_efficiency                     = fn():call('getBoilEfficiency')
+            force_disabled                      = fn():callElse('isForceDisabled', 0):toFlag(),
+            fuel_assemblies                     = fn():callElse('getFuelAssemblies', 0),
+            fuel_surface_area                   = fn():callElse('getFuelSurfaceArea', 0):with('unit', 'm²'),
+            heat_capacity                       = fn():callElse('getHeatCapacity', 0):with('unit', 'J/K'),
+            boil_efficiency                     = fn():callElse('getBoilEfficiency', 0),
         }
     }
 
-    -- not sure if these are useful, but they return strings anyway which are not Metric compatible, RIP
-    -- fission.getLogicMode()
-    -- fission.getRedstoneLogicStatus()
+    self:withMultiblockQueries()
+
+    -- getMinPos
+    -- getRedstoneMode
+    -- getMaxPos
+    -- getRedstoneLogicStatus
+    -- getLogicMode
 end
 
 return FissionReactorInputAdapter

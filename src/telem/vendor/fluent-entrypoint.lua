@@ -67,4 +67,24 @@ function Fluent:metricable()
   end)
 end
 
+--- Call a method on the value. Returns the result of the call, or `elseValue` if the call errors. 
+---@param method string Method name
+---@param elseValue any Value to set if the call errors
+---@param ... any Method arguments
+function Fluent:callElse (method, elseValue, ...)
+  local args = {...}
+
+  return self:_enqueue(function (this)
+      local success, result = pcall(this.value[method], table.unpack(args))
+
+      if not success then
+          this.value = elseValue
+
+          return
+      end
+      
+      this.value = result
+  end)
+end
+
 return Fluent

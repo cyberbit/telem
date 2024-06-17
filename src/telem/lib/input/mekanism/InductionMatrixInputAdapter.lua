@@ -30,34 +30,29 @@ function InductionMatrixInputAdapter:constructor (peripheralName, categories)
 
     self.queries = {
         basic = {
-            energy_filled_percentage    = fn():call('getEnergyFilledPercentage'),
-            energy_input                = fn():call('getLastInput'):joulesToFE():energyRate(),
-            energy_output               = fn():call('getLastOutput'):joulesToFE():energyRate(),
-            energy_transfer_cap         = fn():call('getTransferCap'):joulesToFE():energyRate()
+            energy_input        = fn():callElse('getLastInput', 0):joulesToFE():energyRate(),
+            energy_output       = fn():callElse('getLastOutput', 0):joulesToFE():energyRate(),
+            energy_transfer_cap = fn():callElse('getTransferCap', 0):joulesToFE():energyRate(),
         },
-        advanced = {
-            comparator_level            = fn():call('getComparatorLevel')
-        },
-        energy = {
-            energy                      = fn():call('getEnergy'):joulesToFE():energy(),
-            max_energy                  = fn():call('getMaxEnergy'):joulesToFE():energy(),
-            energy_needed               = fn():call('getEnergyNeeded'):joulesToFE():energy()
-        },
+
         formation = {
-            formed                      = fn():call('isFormed'):toFlag(),
-            height                      = fn():call('getHeight'):with('unit', 'm'),
-            length                      = fn():call('getLength'):with('unit', 'm'),
-            width                       = fn():call('getWidth'):with('unit', 'm'),
-            installed_cells             = fn():call('getInstalledCells'),
-            installed_providers         = fn():call('getInstalledProviders')
+            installed_cells     = fn():callElse('getInstalledCells', 0),
+            installed_providers = fn():callElse('getInstalledProviders', 0),
         }
     }
 
-    -- not sure if these are useful, but they return types which are not Metric compatible, RIP
-    -- induction.getInputItem()
-    -- induction.getOutputItem()
-    -- induction.getMaxPos()
-    -- induction.getMinPos()
+    self:withGenericMachineQueries()
+    self:withMultiblockQueries()
+
+    -- getMaxPos
+    -- getInputItem
+    -- getOutputItem
+    -- getMinPos
+    -- getMode
+
+    -- for generic, does NOT implement:
+        -- getDirection
+        -- getRedstoneMode
 end
 
 return InductionMatrixInputAdapter
