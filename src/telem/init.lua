@@ -1,6 +1,6 @@
 -- Telem by cyberbit
 -- MIT License
--- Version 0.7.1
+-- Version 0.7.2
 
 local _Telem = {
     _VERSION = '0.7.1',
