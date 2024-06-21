@@ -4,10 +4,10 @@ local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
 local MetricCollection  = require 'telem.lib.MetricCollection'
 
-local BaseAdvancedPeripheralsAdapter = o.class(InputAdapter)
-BaseAdvancedPeripheralsAdapter.type = 'BaseAdvancedPeripheralsAdapter'
+local BaseAdvancedPeripheralsInputAdapter = o.class(InputAdapter)
+BaseAdvancedPeripheralsInputAdapter.type = 'BaseAdvancedPeripheralsInputAdapter'
 
-function BaseAdvancedPeripheralsAdapter:constructor (peripheralName)
+function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName)
     self:super('constructor')
 
     self.prefix = 'ap:'
@@ -28,7 +28,7 @@ local function queueHelper (results, index, query)
     end
 end
 
-function BaseAdvancedPeripheralsAdapter:read ()
+function BaseAdvancedPeripheralsInputAdapter:read ()
     self:boot()
 
     local source, component = next(self.components)
@@ -51,4 +51,4 @@ function BaseAdvancedPeripheralsAdapter:read ()
     return MetricCollection(table.unpack(tempMetrics))
 end
 
-return BaseAdvancedPeripheralsAdapter
+return BaseAdvancedPeripheralsInputAdapter
