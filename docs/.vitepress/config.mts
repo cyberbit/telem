@@ -43,6 +43,13 @@ export default defineConfig({
           { text: 'Secure Modem', link: '/reference/input/SecureModem' },
           { text: 'Custom', link: '/reference/input/Custom' },
           {
+            text: 'Advanced Peripherals',
+            collapsed: true,
+            items: [
+              { text: 'Energy Detector', link: '/reference/input/advanced-peripherals/EnergyDetector' },
+            ]
+          },
+          {
             text: 'Applied Energistics',
             collapsed: true,
             items: [
@@ -65,7 +72,7 @@ export default defineConfig({
             items: [
               { text: 'Refined Storage', link: '/reference/input/refined-storage/RefinedStorage' },
             ]
-          }
+          },
         ]
       },
       {

@@ -5,7 +5,7 @@ mkdir .luatmp
 cd .luatmp
 
 # install lua
-# sudo apt update
+sudo apt update
 sudo apt install lua5.3 liblua5.3-dev
 
 # install luarocks

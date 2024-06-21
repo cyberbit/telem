@@ -16,6 +16,10 @@ return {
         fusionReactor = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
     },
 
+    advancedPeripherals = {
+        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+    },
+
     -- modem
     secureModem = require 'telem.lib.input.SecureModemInputAdapter'
 }
