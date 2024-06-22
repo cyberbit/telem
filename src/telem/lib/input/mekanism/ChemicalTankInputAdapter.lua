@@ -1,15 +1,15 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local Metric                    = require 'telem.lib.Metric'
 
-local ChemicalTankInputAdapter = o.class(InputAdapter)
+local ChemicalTankInputAdapter = o.class(BaseMekanismInputAdapter)
 ChemicalTankInputAdapter.type = 'ChemicalTankInputAdapter'
 
 function ChemicalTankInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
     self.prefix = 'mekchemtank:'
@@ -17,6 +17,8 @@ function ChemicalTankInputAdapter:constructor (peripheralName, categories)
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
+        'storage'
     }
 
     if not categories then
@@ -27,40 +29,30 @@ function ChemicalTankInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
+    self.queries = {
+        basic = {
+            filled_percentage = fn():call('getFilledPercentage'),
+        },
+        advanced = {
+            dumping_mode = fn():call('getDumpingMode'):toLookup({ IDLE = 1, DUMPING_EXCESS = 2, DUMPING = 3 }),
+        },
+        storage = {
+            stored = fn():call('getStored'):get('amount'):div(1000):fluid(),
+            capacity = fn():call('getCapacity'):div(1000):fluid(),
+        },
+    }
 
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
+    self.storageQueries = {
+        fn():call('getStored'):transform(function (v)
+            return { Metric{ name = v.name, value = v.amount / 1000, unit = 'B' } }
+        end)
+    }
 
-function ChemicalTankInputAdapter:read ()
-    self:boot()
-
-    local source, tank = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = (tank.getCapacity() / 1000), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'stored', value = (tank.getStored().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'filled_percentage', value = tank.getFilledPercentage(), unit = nil, source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    -- getComparatorLevel
+    -- getRedstoneMode
+    
+    -- TODO does not support energy
+    -- self:withGenericMachineQueries()
 end
 
 return ChemicalTankInputAdapter
-

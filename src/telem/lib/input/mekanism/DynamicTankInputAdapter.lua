@@ -1,23 +1,25 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local Metric                    = require 'telem.lib.Metric'
 
-local DynamicTankInputAdapter = o.class(InputAdapter)
+---@class telem.DynamicTankInputAdapter : telem.BaseMekanismInputAdapter
+local DynamicTankInputAdapter = o.class(BaseMekanismInputAdapter)
 DynamicTankInputAdapter.type = 'DynamicTankInputAdapter'
 
 function DynamicTankInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
-    self.prefix = 'mekchemtank:'
+    self.prefix = 'mekdyntank:'
 
     -- TODO make these constants
     local allCategories = {
         'basic',
-        'chemical'
+        'storage',
+        'formation'
     }
 
     if not categories then
@@ -28,41 +30,29 @@ function DynamicTankInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
+    self.queries = {
+        basic = {
+            filled_percentage = fn():call('getFilledPercentage'),
+        },
+        storage = {
+            stored = fn():call('getStored'):get('amount'):div(1000):fluid(),
+            fluid_capacity = fn():call('getTankCapacity'):div(1000):fluid(),
+            chemical_capacity = fn():call('getChemicalTankCapacity'):div(1000):fluid(),
+        },
+    }
 
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
+    self.storageQueries = {
+        fn():call('getStored'):transform(function (v)
+            return { Metric{ name = v.name, value = v.amount / 1000, unit = 'B' } }
+        end)
+    }
 
-function DynamicTankInputAdapter:read ()
-    self:boot()
+    self:withMultiblockQueries()
 
-    local source, tank = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'capacity', value = (tank.getTankCapacity() / 1000), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'stored', value = (tank.getStored().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'filled_percentage', value = tank.getFilledPercentage(), unit = nil, source = source })
-        elseif v == 'chemical' then -- dunno what this does /shrug
-            metrics:insert(Metric{ name = self.prefix .. 'chemical_capacity', value = (tank.getChemicalTankCapacity() / 1000), unit = "B", source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    -- getComparatorLevel
+    
+    -- TODO only supports comparator
+    -- self:withGenericMachineQueries()
 end
 
 return DynamicTankInputAdapter

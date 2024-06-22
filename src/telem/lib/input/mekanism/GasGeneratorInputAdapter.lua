@@ -1,15 +1,14 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local GasGeneratorInputAdapter = o.class(InputAdapter)
+local GasGeneratorInputAdapter = o.class(BaseMekanismInputAdapter)
 GasGeneratorInputAdapter.type = 'GasGeneratorInputAdapter'
 
 function GasGeneratorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
     self.prefix = 'mekgasgen:'
@@ -17,6 +16,9 @@ function GasGeneratorInputAdapter:constructor (peripheralName, categories)
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
+        'fuel',
+        'energy'
     }
 
     if not categories then
@@ -27,44 +29,20 @@ function GasGeneratorInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
-
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function GasGeneratorInputAdapter:read ()
-    self:boot()
-
-    local source, generator = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(generator.getEnergy()), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (generator.getEnergyFilledPercentage()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(generator.getProductionRate()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_capacity', value = (generator.getFuelCapacity() / 1000), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_amount', value = (generator.getFuel().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_filled_percentage', value = generator.getFuelFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fuel_needed', value = (generator.getFuelNeeded() / 1000), unit = 'B/t', source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self.queries = {
+        basic = {
+            fuel_filled_percentage  = fn():call('getFuelFilledPercentage'),
+            burn_rate               = fn():call('getBurnRate'):div(1000):fluidRate(),
+        },
+        fuel = {
+            fuel                    = fn():call('getFuel'):get('amount'):div(1000):fluid(),
+            fuel_capacity           = fn():call('getFuelCapacity'):div(1000):fluid(),
+            fuel_needed             = fn():call('getFuelNeeded'):div(1000):fluid(),
+        }
+    }
+    
+    self:withGenericMachineQueries()
+    self:withGeneratorQueries()
 end
 
 return GasGeneratorInputAdapter
-

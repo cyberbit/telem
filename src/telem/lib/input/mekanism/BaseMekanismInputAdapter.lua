@@ -6,6 +6,7 @@ local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
 local MetricCollection  = require 'telem.lib.MetricCollection'
 
+---@class telem.BaseMekanismInputAdapter : telem.InputAdapter
 local BaseMekanismInputAdapter = o.class(InputAdapter)
 BaseMekanismInputAdapter.type = 'BaseMekanismInputAdapter'
 
@@ -14,7 +15,11 @@ function BaseMekanismInputAdapter:constructor (peripheralName)
 
     self.prefix = 'mek:'
 
+    ---@type table<string, table<string, cyberbit.Fluent>>
     self.queries = {}
+
+    ---@type cyberbit.Fluent[]
+    self.storageQueries = {}
 
     -- boot components
     self:setBoot(function ()
@@ -34,12 +39,12 @@ function BaseMekanismInputAdapter:withMultiblockQueries ()
     self.queries.formation = self.queries.formation or {}
 
     -- multiblock
-    self.queries.formation.isFormed = fn():call('isFormed'):toFlag()
+    self.queries.formation.formed   = fn():call('isFormed'):toFlag()
     
     -- multiblock (formed)
-    self.queries.formation.height   = fn():callElse('getHeight', 0):with('unit', 'm')
-    self.queries.formation.length   = fn():callElse('getLength', 0):with('unit', 'm')
-    self.queries.formation.width    = fn():callElse('getWidth', 0):with('unit', 'm')
+    self.queries.formation.height   = fn():call('getHeight'):with('unit', 'm')
+    self.queries.formation.length   = fn():call('getLength'):with('unit', 'm')
+    self.queries.formation.width    = fn():call('getWidth'):with('unit', 'm')
 
     return self
 end
@@ -49,13 +54,13 @@ function BaseMekanismInputAdapter:withGenericMachineQueries ()
     self.queries.advanced = self.queries.advanced or {}
     self.queries.energy = self.queries.energy or {}
 
-    self.queries.basic.getEnergyFilledPercentage = fn():callElse('getEnergyFilledPercentage', 0)
+    self.queries.basic.energy_filled_percentage = fn():call('getEnergyFilledPercentage')
 
-    self.queries.advanced.getComparatorLevel = fn():callElse('getComparatorLevel', 0)
+    self.queries.advanced.comparator_level      = fn():call('getComparatorLevel')
 
-    self.queries.energy.getEnergy = fn():callElse('getEnergy', 0):joulesToFE():energy()
-    self.queries.energy.getMaxEnergy = fn():callElse('getMaxEnergy', 0):joulesToFE():energy()
-    self.queries.energy.getEnergyNeeded = fn():callElse('getEnergyNeeded', 0):joulesToFE():energy()
+    self.queries.energy.energy                  = fn():call('getEnergy'):joulesToFE():energy()
+    self.queries.energy.max_energy              = fn():call('getMaxEnergy'):joulesToFE():energy()
+    self.queries.energy.energy_needed           = fn():call('getEnergyNeeded'):joulesToFE():energy()
 
     -- getDirection
     -- getRedstoneMode
@@ -77,9 +82,11 @@ end
 
 function BaseMekanismInputAdapter:withGeneratorQueries ()
     self.queries.basic = self.queries.basic or {}
+    self.queries.energy = self.queries.energy or {}
 
-    self.queries.basic.energy_filled_percentage = fn():callElse('getEnergyFilledPercentage', 0)
-    self.queries.basic.production_rate          = fn():callElse('getProductionRate', 0):joulesToFE():energyRate()
+    self.queries.basic.production_rate      = fn():call('getProductionRate'):joulesToFE():energyRate()
+
+    self.queries.energy.max_energy_output   = fn():call('getMaxOutput'):joulesToFE():energyRate()
 
     return self
 end
@@ -104,6 +111,7 @@ function BaseMekanismInputAdapter:read ()
     local tempMetrics = {}
     local queue = {}
 
+    -- execute single-metric queries from a queue
     for _, category in ipairs(self.categories) do
         for k, v in pairs(self.queries[category]) do
             table.insert(queue, queueHelper(
@@ -114,7 +122,24 @@ function BaseMekanismInputAdapter:read ()
         end
     end
 
+    -- for _,v in ipairs(queue) do
+    --     v()
+    -- end
+
     parallel.waitForAll(table.unpack(queue))
+
+    -- execute storage queries, which may return multiple metrics
+    -- these have no category and are always included
+    for k, v in pairs(self.storageQueries) do
+        local tempResult = v:from(component):result()
+
+        for _, metric in ipairs(tempResult) do
+            metric.name = 'storage:' .. metric.name
+            metric.source = source
+
+            table.insert(tempMetrics, metric)
+        end
+    end
 
     return MetricCollection(table.unpack(tempMetrics))
 end

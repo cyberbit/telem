@@ -1,23 +1,23 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local Metric                    = require 'telem.lib.Metric'
 
-local DigitalMinerInputAdapter = o.class(InputAdapter)
+local DigitalMinerInputAdapter = o.class(BaseMekanismInputAdapter)
 DigitalMinerInputAdapter.type = 'DigitalMinerInputAdapter'
 
 function DigitalMinerInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
-    self.prefix = 'mekdigitalminer:'
+    self.prefix = 'mekminer:'
 
     -- TODO make these constants
     local allCategories = {
         'basic',
-        'energy'
+        'advanced'
     }
 
     if not categories then
@@ -28,42 +28,56 @@ function DigitalMinerInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
+    local slotUsageQuery = fn()
+        :transform(function (v)
+            local slots = {}
+            
+            local function getSlot(slot)
+                return function ()
+                    slots[slot] = v.getItemInSlot(slot) or false
+                end
+            end
+            
+            local queue = {}
+            for i = 0, v.getSlotCount() - 1 do
+                table.insert(queue, getSlot(i))
+            end
 
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
+            parallel.waitForAll(table.unpack(queue))
 
-function DigitalMinerInputAdapter:read ()
-    self:boot()
+            return slots
+        end)
+        :reduce(function (initial, _, v)
+            if v and v.count and tonumber(v.count) > 0 then
+                return initial + 1
+            else
+                return initial
+            end
+        end, 0)
 
-    local source, miner = next(self.components)
+    self.queries = {
+        basic = {
+            running                             = fn():call('isRunning'):toFlag(),
+            slot_count                          = fn():call('getSlotCount'),
+            state                               = fn():call('getState'):toLookup({ FINISHED = 1, IDLE = 2, PAUSED = 3, SEARCHING = 4 }),
+            to_mine                             = fn():call('getToMine'),
+            energy_usage                        = fn():call('getEnergyUsage'):joulesToFE():with('unit', 'FE/t'),
+            slot_usage                          = slotUsageQuery,
+        },
+        advanced = {
+            auto_eject                          = fn():call('getAutoEject'):toFlag(),
+            auto_pull                           = fn():call('getAutoPull'):toFlag(),
+            inverse_mode                        = fn():call('getInverseMode'):toFlag(),
+            inverse_mode_requires_replacement   = fn():call('getInverseModeRequiresReplacement'):toFlag(),
+            max_radius                          = fn():call('getMaxRadius'):with('unit', 'm'),
+            max_y                               = fn():call('getMaxY'),
+            min_y                               = fn():call('getMinY'),
+            radius                              = fn():call('getRadius'):with('unit', 'm'),
+            silk_touch                          = fn():call('getSilkTouch'):toFlag(),
+        },
+    }
 
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- TODO: Maybe add `formation`and `advanced` later?
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (miner.getEnergyFilledPercentage()), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_usage', value = mekanismEnergyHelper.joulesToFE(miner.getEnergyUsage()), unit = "FE/t", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'to_mine', value = miner.getToMine(), unit = "item", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'running', value = (miner.isRunning() and 1 or 0), unit = nil, source = source })
-        elseif v == 'energy'
-            metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(miner.getEnergy()), unit = "FE", source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self:withGenericMachineQueries()
 end
 
 return DigitalMinerInputAdapter

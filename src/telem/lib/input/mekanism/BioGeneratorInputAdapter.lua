@@ -1,15 +1,14 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local BioGeneratorInputAdapter = o.class(InputAdapter)
+local BioGeneratorInputAdapter = o.class(BaseMekanismInputAdapter)
 BioGeneratorInputAdapter.type = 'BioGeneratorInputAdapter'
 
 function BioGeneratorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
     self.prefix = 'mekbiogen:'
@@ -17,6 +16,7 @@ function BioGeneratorInputAdapter:constructor (peripheralName, categories)
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
         'fuel',
         'energy'
     }
@@ -29,45 +29,19 @@ function BioGeneratorInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
-
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function BioGeneratorInputAdapter:read ()
-    self:boot()
-
-    local source, generator = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = (generator.getEnergyFilledPercentage()), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_filled_percentage', value = generator.getBioFuelFilledPercentage(), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'production_rate', value = mekanismEnergyHelper.joulesToFE(generator.getProductionRate()), unit = "FE/t", source = source })
-        elseif v == 'energy' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy', value = mekanismEnergyHelper.joulesToFE(generator.getEnergy()), unit = "FE", source = source })
-        elseif v == 'fuel' then
-            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_capacity', value = (generator.getBioFuelCapacity() / 1000), unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel', value = (generator.getBioFuel().amount / 1000), unit = "B", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'bio_fuel_needed', value = (generator.getBioFuelNeeded() / 1000), unit = 'B/t', source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self.queries = {
+        basic = {
+            bio_fuel_filled_percentage  = fn():call('getBioFuelFilledPercentage'),
+        },
+        fuel = {
+            bio_fuel                    = fn():call('getBioFuel'):get('amount'):div(1000):fluid(),
+            bio_fuel_capacity           = fn():call('getBioFuelCapacity'):div(1000):fluid(),
+            bio_fuel_needed             = fn():call('getBioFuelNeeded'):div(1000):fluid(),
+        }
+    }
+    
+    self:withGenericMachineQueries()
+    self:withGeneratorQueries()
 end
 
 return BioGeneratorInputAdapter
