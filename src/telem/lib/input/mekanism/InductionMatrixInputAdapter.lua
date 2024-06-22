@@ -30,14 +30,14 @@ function InductionMatrixInputAdapter:constructor (peripheralName, categories)
 
     self.queries = {
         basic = {
-            energy_input        = fn():callElse('getLastInput', 0):joulesToFE():energyRate(),
-            energy_output       = fn():callElse('getLastOutput', 0):joulesToFE():energyRate(),
-            energy_transfer_cap = fn():callElse('getTransferCap', 0):joulesToFE():energyRate(),
+            energy_input        = fn():call('getLastInput'):joulesToFE():energyRate(),
+            energy_output       = fn():call('getLastOutput'):joulesToFE():energyRate(),
+            energy_transfer_cap = fn():call('getTransferCap'):joulesToFE():energyRate(),
         },
 
         formation = {
-            installed_cells     = fn():callElse('getInstalledCells', 0),
-            installed_providers = fn():callElse('getInstalledProviders', 0),
+            installed_cells     = fn():call('getInstalledCells'),
+            installed_providers = fn():call('getInstalledProviders'),
         }
     }
 
