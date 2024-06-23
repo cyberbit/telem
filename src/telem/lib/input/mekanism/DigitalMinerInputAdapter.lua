@@ -3,7 +3,6 @@ local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
 local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
-local Metric                    = require 'telem.lib.Metric'
 
 local DigitalMinerInputAdapter = o.class(BaseMekanismInputAdapter)
 DigitalMinerInputAdapter.type = 'DigitalMinerInputAdapter'
@@ -61,7 +60,7 @@ function DigitalMinerInputAdapter:constructor (peripheralName, categories)
             slot_count                          = fn():call('getSlotCount'),
             state                               = fn():call('getState'):toLookup({ FINISHED = 1, IDLE = 2, PAUSED = 3, SEARCHING = 4 }),
             to_mine                             = fn():call('getToMine'),
-            energy_usage                        = fn():call('getEnergyUsage'):joulesToFE():with('unit', 'FE/t'),
+            energy_usage                        = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
             slot_usage                          = slotUsageQuery,
         },
         advanced = {
