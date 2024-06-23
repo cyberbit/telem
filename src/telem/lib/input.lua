@@ -10,15 +10,16 @@ return {
 
     -- machinery
     mekanism = {
-        fissionReactor = require 'telem.lib.input.mekanism.FissionReactorInputAdapter',
-        inductionMatrix = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
-        industrialTurbine = require 'telem.lib.input.mekanism.IndustrialTurbineInputAdapter',
-        fusionReactor = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
-        chemicalTank = require 'telem.lib.input.mekanism.ChemicalTankInputAdapter',
-        bioGenerator = require 'telem.lib.input.mekanism.BioGeneratorInputAdapter',
-        dynamicTank = require 'telem.lib.input.mekanism.DynamicTankInputAdapter',
-        digitalMiner = require 'telem.lib.input.mekanism.DigitalMinerInputAdapter',
-        gasGenerator = require 'telem.lib.input.mekanism.GasGeneratorInputAdapter',
+        bioGenerator        = require 'telem.lib.input.mekanism.BioGeneratorInputAdapter',
+        chemicalTank        = require 'telem.lib.input.mekanism.ChemicalTankInputAdapter',
+        digitalMiner        = require 'telem.lib.input.mekanism.DigitalMinerInputAdapter',
+        dynamicTank         = require 'telem.lib.input.mekanism.DynamicTankInputAdapter',
+        fissionReactor      = require 'telem.lib.input.mekanism.FissionReactorInputAdapter',
+        fusionReactor       = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
+        gasGenerator        = require 'telem.lib.input.mekanism.GasGeneratorInputAdapter',
+        inductionMatrix     = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
+        industrialTurbine   = require 'telem.lib.input.mekanism.IndustrialTurbineInputAdapter',
+        isotopicCentrifuge  = require 'telem.lib.input.mekanism.IsotopicCentrifugeInputAdapter',
     },
 
     -- modem

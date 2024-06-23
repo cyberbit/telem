@@ -1,24 +1,26 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local Metric                    = require 'telem.lib.Metric'
 
-local IsotopicCentrifugeInputAdapter = o.class(InputAdapter)
+local IsotopicCentrifugeInputAdapter = o.class(BaseMekanismInputAdapter)
 IsotopicCentrifugeInputAdapter.type = 'IsotopicCentrifugeInputAdapter'
 
 function IsotopicCentrifugeInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
-    self.prefix = 'mekunicable:'
+    self.prefix = 'mekcentrifuge:'
 
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
+        'energy',
         'input',
-        'output'
+        'output',
     }
 
     if not categories then
@@ -29,49 +31,25 @@ function IsotopicCentrifugeInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
+    self.queries = {
+        basic = {
+            input_filled_percentage     = fn():call('getInputFilledPercentage'),
+            output_filled_percentage    = fn():call('getOutputFilledPercentage'),
+            energy_usage                = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
+        },
+        input = {
+            input                       = fn():call('getInput'):get('amount'):div(1000):fluid(),
+            input_capacity              = fn():call('getInputCapacity'):div(1000):fluid(),
+            input_needed                = fn():call('getInputNeeded'):div(1000):fluid(),
+        },
+        output = {
+            output                      = fn():call('getOutput'):get('amount'):div(1000):fluid(),
+            output_capacity             = fn():call('getOutputCapacity'):div(1000):fluid(),
+            output_needed               = fn():call('getOutputNeeded'):div(1000):fluid(),
+        },
+    }
 
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function IsotopicCentrifugeInputAdapter:read ()
-    self:boot()
-
-    local source, centrifuge = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy', value = centrifuge.getEnergy(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_needed', value = centrifuge.getEnergyNeeded(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_usage', value = centrifuge.getEnergyUsage(), unit = "FE/t", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = centrifuge.getEnergyFilledPercentage(), unit = nil, source = source })
-        elseif v == 'input' then
-            metrics:insert(Metric{ name = self.prefix .. 'input', value = centrifuge.getInput().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'input_capacity', value = centrifuge.getInputCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'input_filled_percentage', value = centrifuge.getInputFilledPercentage(), unit = nil, source = source })
-        elseif v == 'output' then
-            metrics:insert(Metric{ name = self.prefix .. 'output', value = centrifuge.getOutput().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'output_capacity', value = centrifuge.getOutputCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'output_filled_percentage', value = centrifuge.getOutputFilledPercentage(), unit = nil, source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self:withGenericMachineQueries()
 end
 
 return IsotopicCentrifugeInputAdapter
-
