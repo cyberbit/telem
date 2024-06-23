@@ -1,15 +1,14 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local LaserAmplifierInputAdapter = o.class(InputAdapter)
+local LaserAmplifierInputAdapter = o.class(BaseMekanismInputAdapter)
 LaserAmplifierInputAdapter.type = 'LaserAmplifierInputAdapter'
 
 function LaserAmplifierInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
     self.prefix = 'meklaseramp:'
@@ -17,6 +16,8 @@ function LaserAmplifierInputAdapter:constructor (peripheralName, categories)
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
+        'energy',
     }
 
     if not categories then
@@ -27,41 +28,16 @@ function LaserAmplifierInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
+    self.queries = {
+        advanced = {
+            delay                   = fn():call('getDelay'):with('unit', 't'),
+            min_threshold           = fn():call('getMinThreshold'):joulesToFE():energy(),
+            max_threshold           = fn():call('getMaxThreshold'):joulesToFE():energy(),
+            redstone_output_mode    = fn():call('getRedstoneOutputMode'):toLookup({ ENERGY_CONTENTS = 1, ENTITY_DETECTION = 2, OFF = 3 }),
+        },
+    }
 
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function LaserAmplifierInputAdapter:read ()
-    self:boot()
-
-    local source, laser = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy', value = laser.getEnergy(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_max', value = laser.getMaxEnergy(), unit = "FE", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'energy_needed', value = laser.getEnergyNeeded(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = laser.getEnergyFilledPercentage(), unit = nil, source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self:withGenericMachineQueries()
 end
 
 return LaserAmplifierInputAdapter
-

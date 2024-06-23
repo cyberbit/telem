@@ -1,27 +1,32 @@
+local prefixInput = 'telem.lib.input.'
+local prefixMek = prefixInput .. 'mekanism.'
+
 return {
-    helloWorld = require 'telem.lib.input.HelloWorldInputAdapter',
-    custom = require 'telem.lib.input.CustomInputAdapter',
+    helloWorld              = require (prefixInput .. 'HelloWorldInputAdapter'),
+    custom                  = require (prefixInput .. 'CustomInputAdapter'),
 
     -- storage
-    itemStorage = require 'telem.lib.input.ItemStorageInputAdapter',
-    fluidStorage = require 'telem.lib.input.FluidStorageInputAdapter',
-    refinedStorage = require 'telem.lib.input.RefinedStorageInputAdapter',
-    meStorage = require 'telem.lib.input.MEStorageInputAdapter',
+    itemStorage             = require (prefixInput .. 'ItemStorageInputAdapter'),
+    fluidStorage            = require (prefixInput .. 'FluidStorageInputAdapter'),
+    refinedStorage          = require (prefixInput .. 'RefinedStorageInputAdapter'),
+    meStorage               = require (prefixInput .. 'MEStorageInputAdapter'),
 
     -- machinery
     mekanism = {
-        bioGenerator        = require 'telem.lib.input.mekanism.BioGeneratorInputAdapter',
-        chemicalTank        = require 'telem.lib.input.mekanism.ChemicalTankInputAdapter',
-        digitalMiner        = require 'telem.lib.input.mekanism.DigitalMinerInputAdapter',
-        dynamicTank         = require 'telem.lib.input.mekanism.DynamicTankInputAdapter',
-        fissionReactor      = require 'telem.lib.input.mekanism.FissionReactorInputAdapter',
-        fusionReactor       = require 'telem.lib.input.mekanism.FusionReactorInputAdapter',
-        gasGenerator        = require 'telem.lib.input.mekanism.GasGeneratorInputAdapter',
-        inductionMatrix     = require 'telem.lib.input.mekanism.InductionMatrixInputAdapter',
-        industrialTurbine   = require 'telem.lib.input.mekanism.IndustrialTurbineInputAdapter',
-        isotopicCentrifuge  = require 'telem.lib.input.mekanism.IsotopicCentrifugeInputAdapter',
+        bioGenerator        = require (prefixMek .. 'BioGeneratorInputAdapter'),
+        chemicalTank        = require (prefixMek .. 'ChemicalTankInputAdapter'),
+        digitalMiner        = require (prefixMek .. 'DigitalMinerInputAdapter'),
+        dynamicTank         = require (prefixMek .. 'DynamicTankInputAdapter'),
+        fissionReactor      = require (prefixMek .. 'FissionReactorInputAdapter'),
+        fusionReactor       = require (prefixMek .. 'FusionReactorInputAdapter'),
+        gasGenerator        = require (prefixMek .. 'GasGeneratorInputAdapter'),
+        inductionMatrix     = require (prefixMek .. 'InductionMatrixInputAdapter'),
+        industrialTurbine   = require (prefixMek .. 'IndustrialTurbineInputAdapter'),
+        isotopicCentrifuge  = require (prefixMek .. 'IsotopicCentrifugeInputAdapter'),
+        laser               = require (prefixMek .. 'LaserInputAdapter'),
+        laserAmplifier      = require (prefixMek .. 'LaserAmplifierInputAdapter'),
     },
 
     -- modem
-    secureModem = require 'telem.lib.input.SecureModemInputAdapter'
+    secureModem = require (prefixInput .. 'SecureModemInputAdapter'),
 }
