@@ -1,22 +1,21 @@
 local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local UniversalCableInputAdapter = o.class(InputAdapter)
+local UniversalCableInputAdapter = o.class(BaseMekanismInputAdapter)
 UniversalCableInputAdapter.type = 'UniversalCableInputAdapter'
 
 function UniversalCableInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
-    self.prefix = 'mekunicable:'
+    self.prefix = 'mekcable:'
 
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'transfer',
     }
 
     if not categories then
@@ -27,41 +26,16 @@ function UniversalCableInputAdapter:constructor (peripheralName, categories)
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
-
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function UniversalCableInputAdapter:read ()
-    self:boot()
-
-    local source, cable = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'buffer', value = cable.getBuffer(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_capacity', value = cable.getCapacity(), unit = "FE", source = source }) -- might error might not, no clue!
-            metrics:insert(Metric{ name = self.prefix .. 'energy_needed', value = cable.getNeeded(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = cable.getFilledPercentage(), unit = nil, source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self.queries = {
+        basic = {
+            filled_percentage   = fn():call('getFilledPercentage')
+        },
+        transfer = {
+            buffer              = fn():call('getBuffer'):joulesToFE():energy(),
+            capacity            = fn():call('getCapacity'):joulesToFE():energy(),
+            needed              = fn():call('getNeeded'):joulesToFE():energy(),
+        }
+    }
 end
 
 return UniversalCableInputAdapter
-

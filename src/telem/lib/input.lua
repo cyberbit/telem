@@ -1,34 +1,35 @@
-local function prefixInput(target) return 'telem.lib.input.' .. target end
-local function prefixMek(target) return prefixInput('mekanism.' .. target) end
+local function requireInput(target) return require ('telem.lib.input.' .. target) end
+local function requireMek(target) return requireInput('mekanism.' .. target) end
 
 return {
-    helloWorld              = require (prefixInput('HelloWorldInputAdapter')),
-    custom                  = require (prefixInput('CustomInputAdapter')),
+    helloWorld              = requireInput('HelloWorldInputAdapter'),
+    custom                  = requireInput('CustomInputAdapter'),
 
     -- storage
-    itemStorage             = require (prefixInput('ItemStorageInputAdapter')),
-    fluidStorage            = require (prefixInput('FluidStorageInputAdapter')),
-    refinedStorage          = require (prefixInput('RefinedStorageInputAdapter')),
-    meStorage               = require (prefixInput('MEStorageInputAdapter')),
+    itemStorage             = requireInput('ItemStorageInputAdapter'),
+    fluidStorage            = requireInput('FluidStorageInputAdapter'),
+    refinedStorage          = requireInput('RefinedStorageInputAdapter'),
+    meStorage               = requireInput('MEStorageInputAdapter'),
 
     -- machinery
     mekanism = {
-        bioGenerator        = require (prefixMek('BioGeneratorInputAdapter')),
-        chemicalTank        = require (prefixMek('ChemicalTankInputAdapter')),
-        digitalMiner        = require (prefixMek('DigitalMinerInputAdapter')),
-        dynamicTank         = require (prefixMek('DynamicTankInputAdapter')),
-        fissionReactor      = require (prefixMek('FissionReactorInputAdapter')),
-        fusionReactor       = require (prefixMek('FusionReactorInputAdapter')),
-        gasGenerator        = require (prefixMek('GasGeneratorInputAdapter')),
-        inductionMatrix     = require (prefixMek('InductionMatrixInputAdapter')),
-        industrialTurbine   = require (prefixMek('IndustrialTurbineInputAdapter')),
-        isotopicCentrifuge  = require (prefixMek('IsotopicCentrifugeInputAdapter')),
-        laser               = require (prefixMek('LaserInputAdapter')),
-        laserAmplifier      = require (prefixMek('LaserAmplifierInputAdapter')),
-        mechanicalPipe      = require (prefixMek('MechanicalPipeInputAdapter')),
-        pressurizedTube     = require (prefixMek('PressurizedTubeInputAdapter')),
+        bioGenerator        = requireMek('BioGeneratorInputAdapter'),
+        chemicalTank        = requireMek('ChemicalTankInputAdapter'),
+        digitalMiner        = requireMek('DigitalMinerInputAdapter'),
+        dynamicTank         = requireMek('DynamicTankInputAdapter'),
+        fissionReactor      = requireMek('FissionReactorInputAdapter'),
+        fusionReactor       = requireMek('FusionReactorInputAdapter'),
+        gasGenerator        = requireMek('GasGeneratorInputAdapter'),
+        inductionMatrix     = requireMek('InductionMatrixInputAdapter'),
+        industrialTurbine   = requireMek('IndustrialTurbineInputAdapter'),
+        isotopicCentrifuge  = requireMek('IsotopicCentrifugeInputAdapter'),
+        laser               = requireMek('LaserInputAdapter'),
+        laserAmplifier      = requireMek('LaserAmplifierInputAdapter'),
+        mechanicalPipe      = requireMek('MechanicalPipeInputAdapter'),
+        pressurizedTube     = requireMek('PressurizedTubeInputAdapter'),
+        universalCable      = requireMek('UniversalCableInputAdapter'),
     },
 
     -- modem
-    secureModem = require (prefixInput('SecureModemInputAdapter')),
+    secureModem = requireInput('SecureModemInputAdapter'),
 }
