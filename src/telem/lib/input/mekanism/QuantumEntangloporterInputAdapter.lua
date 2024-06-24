@@ -1,29 +1,28 @@
 local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
+local fn = require 'telem.vendor'.fluent.fn
 
-local InputAdapter      = require 'telem.lib.InputAdapter'
-local Metric            = require 'telem.lib.Metric'
-local MetricCollection  = require 'telem.lib.MetricCollection'
+local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local QuantumEntangloporterInputAdapter = o.class(InputAdapter)
+local QuantumEntangloporterInputAdapter = o.class(BaseMekanismInputAdapter)
 QuantumEntangloporterInputAdapter.type = 'QuantumEntangloporterInputAdapter'
 
 function QuantumEntangloporterInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor')
+    self:super('constructor', peripheralName)
 
     -- TODO this will be a configurable feature later
-    self.prefix = 'mekquantumentanglo:'
+    self.prefix = 'mekentanglo:'
 
     -- TODO make these constants
     local allCategories = {
         'basic',
+        'advanced',
         'fluid',
         'gas',
         'infuse',
         'item',
         'pigment',
         'slurry',
-        'loss',
+        'energy'
     }
 
     if not categories then
@@ -34,70 +33,54 @@ function QuantumEntangloporterInputAdapter:constructor (peripheralName, categori
         self.categories = categories
     end
 
-    -- boot components
-    self:setBoot(function ()
-        self.components = {}
-
-        self:addComponentByPeripheralID(peripheralName)
-    end)()
-end
-
-function QuantumEntangloporterInputAdapter:read ()
-    self:boot()
-
-    local source, quantum_entangloporter = next(self.components)
-
-    local metrics = MetricCollection()
-
-    local loaded = {}
-
-    for _,v in ipairs(self.categories) do
-        -- skip, already loaded
-        if loaded[v] then
-            -- do nothing
-
-        -- Literally all we have lmao
-        elseif v == 'basic' then
-            metrics:insert(Metric{ name = self.prefix .. 'energy_amount', value = quantum_entangloporter.getEnergy(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_needed', value = quantum_entangloporter.getEnergyNeeded(), unit = "FE", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'energy_filled_percentage', value = quantum_entangloporter.getEnergyFilledPercentage(), unit = nil, source = source })
-        elseif v == 'fluid' then
-            metrics:insert(Metric{ name = self.prefix .. 'fluid_amount', value = quantum_entangloporter.getBufferFluid().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fluid_capacity', value = quantum_entangloporter.getBufferFluidCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fluid_filled_percentage', value = quantum_entangloporter.getBufferFluidFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'fluid_needed', value = quantum_entangloporter.getBufferFluidNeeded() / 1000, unit = "B", source = source })
-        elseif v == 'gas' then
-            metrics:insert(Metric{ name = self.prefix .. 'gas_amount', value = quantum_entangloporter.getBufferGas().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'gas_capacity', value = quantum_entangloporter.getBufferGasCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'gas_filled_percentage', value = quantum_entangloporter.getBufferGasFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'gas_needed', value = quantum_entangloporter.getBufferGasNeeded() / 1000, unit = "B", source = source })
-        elseif v == 'infuse' then
-            metrics:insert(Metric{ name = self.prefix .. 'infuse_amount', value = quantum_entangloporter.getBufferInfuse().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'infuse_capacity', value = quantum_entangloporter.getBufferInfuseCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'infuse_filled_percentage', value = quantum_entangloporter.getBufferInfuseFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'infuse_needed', value = quantum_entangloporter.getBufferInfuseNeeded() / 1000, unit = "B", source = source })
-        elseif v == 'item' then
-            metrics:insert(Metric{ name = self.prefix .. 'item_amount', value = quantum_entangloporter.getBufferItem().count, unit = nil, source = source })
-        elseif v == 'pigment' then
-            metrics:insert(Metric{ name = self.prefix .. 'pigment_amount', value = quantum_entangloporter.getBufferPigment().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'pigment_capacity', value = quantum_entangloporter.getBufferPigmentCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'pigment_filled_percentage', value = quantum_entangloporter.getBufferPigmentFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'pigment_needed', value = quantum_entangloporter.getBufferPigmentNeeded() / 1000, unit = "B", source = source })
-        elseif v == 'slurry' then
-            metrics:insert(Metric{ name = self.prefix .. 'slurry_amount', value = quantum_entangloporter.getBufferSlurry().amount / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'slurry_capacity', value = quantum_entangloporter.getBufferSlurryCapacity() / 1000, unit = "B", source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'slurry_filled_percentage', value = quantum_entangloporter.getBufferSlurryFilledPercentage(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'slurry_needed', value = quantum_entangloporter.getBufferSlurryNeeded() / 1000, unit = "B", source = source })
-        elseif v == 'loss' then
-            metrics:insert(Metric{ name = self.prefix .. 'transfer_loss', value = quantum_entangloporter.getTransferLoss(), unit = nil, source = source })
-            metrics:insert(Metric{ name = self.prefix .. 'environmental_loss', value = quantum_entangloporter.getEnvironmentalLoss(), unit = nil, source = source })
-        end
-
-        loaded[v] = true
-    end
-
-    return metrics
+    self.queries = {
+        basic = {
+            fluid_filled_percentage     = fn():call('getBufferFluidFilledPercentage'),
+            gas_filled_percentage       = fn():call('getBufferGasFilledPercentage'),
+            infuse_filled_percentage    = fn():call('getBufferInfuseTypeFilledPercentage'),
+            pigment_filled_percentage   = fn():call('getBufferPigmentFilledPercentage'),
+            slurry_filled_percentage    = fn():call('getBufferSlurryFilledPercentage'),
+            energy_filled_percentage    = fn():call('getEnergyFilledPercentage'),
+            temperature                 = fn():call('getTemperature'):temp(),
+        },
+        advanced = {
+            transfer_loss               = fn():call('getTransferLoss'),
+            environmental_loss          = fn():call('getEnvironmentalLoss'),
+        },
+        fluid = {
+            fluid                       = fn():call('getBufferFluid'):get('amount'):div(1000):fluid(),
+            fluid_capacity              = fn():call('getBufferFluidCapacity'):div(1000):fluid(),
+            fluid_needed                = fn():call('getBufferFluidNeeded'):div(1000):fluid(),
+        },
+        gas = {
+            gas                         = fn():call('getBufferGas'):get('amount'):div(1000):fluid(),
+            gas_capacity                = fn():call('getBufferGasCapacity'):div(1000):fluid(),
+            gas_needed                  = fn():call('getBufferGasNeeded'):div(1000):fluid(),
+        },
+        infuse = {
+            infuse                      = fn():call('getBufferInfuseType'):get('amount'):div(1000):fluid(),
+            infuse_capacity             = fn():call('getBufferInfuseTypeCapacity'):div(1000):fluid(),
+            infuse_needed               = fn():call('getBufferInfuseTypeNeeded'):div(1000):fluid(),
+        },
+        item = {
+            item_count                  = fn():call('getBufferItem'):get('count'),
+        },
+        pigment = {
+            pigment                     = fn():call('getBufferPigment'):get('amount'):div(1000):fluid(),
+            pigment_capacity            = fn():call('getBufferPigmentCapacity'):div(1000):fluid(),
+            pigment_needed              = fn():call('getBufferPigmentNeeded'):div(1000):fluid(),
+        },
+        slurry = {
+            slurry                      = fn():call('getBufferSlurry'):get('amount'):div(1000):fluid(),
+            slurry_capacity             = fn():call('getBufferSlurryCapacity'):div(1000):fluid(),
+            slurry_needed               = fn():call('getBufferSlurryNeeded'):div(1000):fluid(),
+        },
+        energy = {
+            energy                      = fn():call('getEnergy'):joulesToFE():energy(),
+            max_energy                  = fn():call('getMaxEnergy'):joulesToFE():energy(),
+            energy_needed               = fn():call('getEnergyNeeded'):joulesToFE():energy(),
+        },
+    }
 end
 
 return QuantumEntangloporterInputAdapter
-
