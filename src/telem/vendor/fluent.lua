@@ -343,6 +343,69 @@ function Fluent:has (key)
     end)
 end
 
+--- Remove any elements from the value that are not in the provided list.
+---
+--- The result keys are determined by the first key of the current value.
+--- If it is numeric, the result will be reindexed numerically.
+--- Otherwise, the current value's keys will be preserved.
+---@param superset any[]
+function Fluent:intersect (superset)
+    return self:_enqueue(function (this)
+        local result = {}
+
+        local iter = type(next(this.value)) == 'number' and ipairs or pairs
+
+        for k, v in iter(this.value) do
+            for _, ov in iter(superset) do
+                if v == ov then
+                    if iter == ipairs then
+                        table.insert(result, v)
+                    else
+                        result[k] = v
+                    end
+                end
+            end
+        end
+
+        this.value = result
+    end)
+end
+
+--- Return a list of elements from the value that are not in the provided list.
+---
+--- The result keys are determined by the first key of the current value.
+--- If it is numeric, the result will be reindexed numerically.
+--- Otherwise, the current value's keys will be preserved.
+---@param superset any[]
+function Fluent:diff (superset)
+    return self:_enqueue(function (this)
+        local result = {}
+
+        local iter = type(next(this.value)) == 'number' and ipairs or pairs
+
+        for k, v in iter(this.value) do
+            local found = false
+
+            for _, ov in iter(superset) do
+                if v == ov then
+                    found = true
+                    break
+                end
+            end
+
+            if not found then
+                if iter == ipairs then
+                    table.insert(result, v)
+                else
+                    result[k] = v
+                end
+            end
+        end
+
+        this.value = result
+    end)
+end
+
 --- Get a list of the value's keys.
 function Fluent:keys ()
     return self:_enqueue(function (this)
@@ -512,11 +575,13 @@ end
 ---@param initial any
 function Fluent:reduce (func, initial)
     return self:_enqueue(function (this)
+        local innerInitial = initial
+
         for k, v in pairs(this.value) do
-            initial = func(initial, k, v)
+            innerInitial = func(innerInitial, k, v)
         end
 
-        this.value = initial
+        this.value = innerInitial
     end)
 end
 
