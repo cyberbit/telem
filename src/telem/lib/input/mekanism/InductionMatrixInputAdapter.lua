@@ -1,32 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local InductionMatrixInputAdapter = o.class(BaseMekanismInputAdapter)
-InductionMatrixInputAdapter.type = 'InductionMatrixInputAdapter'
+local InductionMatrixInputAdapter = base.mintAdapter('InductionMatrixInputAdapter')
 
-function InductionMatrixInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function InductionMatrixInputAdapter:beforeRegister ()
     self.prefix = 'mekinduction:'
-
-    local allCategories = {
-        'basic',
-        'advanced',
-        'energy',
-        'formation'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {
@@ -42,7 +21,7 @@ function InductionMatrixInputAdapter:constructor (peripheralName, categories)
     }
 
     self:withGenericMachineQueries()
-    self:withMultiblockQueries()
+        :withMultiblockQueries()
 
     -- getMaxPos
     -- getInputItem

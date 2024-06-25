@@ -2,7 +2,6 @@ local fn = require 'telem.vendor'.fluent.fn
 
 local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
----@class telem.BioGeneratorInputAdapter : telem.BaseMekanismInputAdapter
 local BioGeneratorInputAdapter = base.mintAdapter('BioGeneratorInputAdapter')
 
 function BioGeneratorInputAdapter:beforeRegister ()

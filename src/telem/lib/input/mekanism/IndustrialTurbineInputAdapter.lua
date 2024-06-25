@@ -1,33 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local IndustrialTurbineInputAdapter = o.class(BaseMekanismInputAdapter)
-IndustrialTurbineInputAdapter.type = 'IndustrialTurbineInputAdapter'
+local IndustrialTurbineInputAdapter = base.mintAdapter('IndustrialTurbineInputAdapter')
 
-function IndustrialTurbineInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function IndustrialTurbineInputAdapter:beforeRegister ()
     self.prefix = 'mekturbine:'
-
-    local allCategories = {
-        'basic',
-        'advanced',
-        'energy',
-        'steam',
-        'formation'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {
@@ -57,7 +35,7 @@ function IndustrialTurbineInputAdapter:constructor (peripheralName, categories)
     }
 
     self:withGenericMachineQueries()
-    self:withMultiblockQueries()
+        :withMultiblockQueries()
 
     -- getMinPos
     -- getMaxPos

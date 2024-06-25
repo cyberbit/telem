@@ -1,35 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
-local Metric                    = require 'telem.lib.Metric'
+local base  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local IsotopicCentrifugeInputAdapter = o.class(BaseMekanismInputAdapter)
-IsotopicCentrifugeInputAdapter.type = 'IsotopicCentrifugeInputAdapter'
+local IsotopicCentrifugeInputAdapter = base.mintAdapter('IsotopicCentrifugeInputAdapter')
 
-function IsotopicCentrifugeInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function IsotopicCentrifugeInputAdapter:beforeRegister ()
     self.prefix = 'mekcentrifuge:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'energy',
-        'input',
-        'output',
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

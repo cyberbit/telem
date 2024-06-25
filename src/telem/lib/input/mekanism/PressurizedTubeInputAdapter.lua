@@ -1,30 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local PressurizedTubeInputAdapter = o.class(BaseMekanismInputAdapter)
-PressurizedTubeInputAdapter.type = 'PressurizedTubeInputAdapter'
+local PressurizedTubeInputAdapter = base.mintAdapter('PressurizedTubeInputAdapter')
 
-function PressurizedTubeInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function PressurizedTubeInputAdapter:beforeRegister ()
     self.prefix = 'mektube:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'transfer',
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

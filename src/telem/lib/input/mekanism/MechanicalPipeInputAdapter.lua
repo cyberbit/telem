@@ -1,31 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local MechanicalPipeInputAdapter = o.class(BaseMekanismInputAdapter)
-MechanicalPipeInputAdapter.type = 'MechanicalPipeInputAdapter'
+local MechanicalPipeInputAdapter = base.mintAdapter('MechanicalPipeInputAdapter')
 
-function MechanicalPipeInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function MechanicalPipeInputAdapter:beforeRegister ()
     self.prefix = 'mekpipe:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'transfer',
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

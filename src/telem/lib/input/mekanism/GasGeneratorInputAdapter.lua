@@ -1,33 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local GasGeneratorInputAdapter = o.class(BaseMekanismInputAdapter)
-GasGeneratorInputAdapter.type = 'GasGeneratorInputAdapter'
+local GasGeneratorInputAdapter = base.mintAdapter('GasGeneratorInputAdapter')
 
-function GasGeneratorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function GasGeneratorInputAdapter:beforeRegister ()
     self.prefix = 'mekgasgen:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'fuel',
-        'energy'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {
@@ -42,7 +20,7 @@ function GasGeneratorInputAdapter:constructor (peripheralName, categories)
     }
     
     self:withGenericMachineQueries()
-    self:withGeneratorQueries()
+        :withGeneratorQueries()
 end
 
 return GasGeneratorInputAdapter

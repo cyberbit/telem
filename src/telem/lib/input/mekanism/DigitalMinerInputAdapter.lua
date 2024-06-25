@@ -2,7 +2,6 @@ local fn = require 'telem.vendor'.fluent.fn
 
 local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
----@class telem.DigitalMinerInputAdapter : telem.BaseMekanismInputAdapter
 local DigitalMinerInputAdapter = base.mintAdapter('DigitalMinerInputAdapter')
 
 function DigitalMinerInputAdapter:beforeRegister ()

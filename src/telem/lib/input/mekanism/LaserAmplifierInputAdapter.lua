@@ -1,32 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local LaserAmplifierInputAdapter = o.class(BaseMekanismInputAdapter)
-LaserAmplifierInputAdapter.type = 'LaserAmplifierInputAdapter'
+local LaserAmplifierInputAdapter = base.mintAdapter('LaserAmplifierInputAdapter')
 
-function LaserAmplifierInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function LaserAmplifierInputAdapter:beforeRegister ()
     self.prefix = 'meklaseramp:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'energy',
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         advanced = {

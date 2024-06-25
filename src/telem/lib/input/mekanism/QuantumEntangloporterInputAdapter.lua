@@ -1,37 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local QuantumEntangloporterInputAdapter = o.class(BaseMekanismInputAdapter)
-QuantumEntangloporterInputAdapter.type = 'QuantumEntangloporterInputAdapter'
+local QuantumEntangloporterInputAdapter = base.mintAdapter('QuantumEntangloporterInputAdapter')
 
-function QuantumEntangloporterInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function QuantumEntangloporterInputAdapter:beforeRegister ()
     self.prefix = 'mekentanglo:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'fluid',
-        'gas',
-        'infuse',
-        'item',
-        'pigment',
-        'slurry',
-        'energy'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

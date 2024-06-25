@@ -3,7 +3,6 @@ local fn = require 'telem.vendor'.fluent.fn
 local base      = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 local Metric    = require 'telem.lib.Metric'
 
----@class telem.ChemicalTankInputAdapter : telem.BaseMekanismInputAdapter
 local ChemicalTankInputAdapter = base.mintAdapter('ChemicalTankInputAdapter')
 
 function ChemicalTankInputAdapter:beforeRegister ()

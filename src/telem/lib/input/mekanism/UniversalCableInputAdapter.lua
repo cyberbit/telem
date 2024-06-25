@@ -1,30 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local UniversalCableInputAdapter = o.class(BaseMekanismInputAdapter)
-UniversalCableInputAdapter.type = 'UniversalCableInputAdapter'
+local UniversalCableInputAdapter = base.mintAdapter('UniversalCableInputAdapter')
 
-function UniversalCableInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function UniversalCableInputAdapter:beforeRegister ()
     self.prefix = 'mekcable:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'transfer',
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

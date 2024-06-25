@@ -1,10 +1,8 @@
-
 local fn = require 'telem.vendor'.fluent.fn
 
 local base      = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 local Metric    = require 'telem.lib.Metric'
 
----@class telem.DynamicTankInputAdapter : telem.BaseMekanismInputAdapter
 local DynamicTankInputAdapter = base.mintAdapter('DynamicTankInputAdapter')
 
 function DynamicTankInputAdapter:beforeRegister ()
