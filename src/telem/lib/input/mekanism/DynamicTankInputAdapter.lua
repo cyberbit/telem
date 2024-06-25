@@ -1,34 +1,14 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
+
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
-local Metric                    = require 'telem.lib.Metric'
+local base      = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local Metric    = require 'telem.lib.Metric'
 
 ---@class telem.DynamicTankInputAdapter : telem.BaseMekanismInputAdapter
-local DynamicTankInputAdapter = o.class(BaseMekanismInputAdapter)
-DynamicTankInputAdapter.type = 'DynamicTankInputAdapter'
+local DynamicTankInputAdapter = base.mintAdapter('DynamicTankInputAdapter')
 
-function DynamicTankInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function DynamicTankInputAdapter:beforeRegister ()
     self.prefix = 'mekdyntank:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'storage',
-        'formation'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {

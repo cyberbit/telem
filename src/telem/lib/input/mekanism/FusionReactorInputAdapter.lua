@@ -1,40 +1,17 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local FusionReactorInputAdapter = o.class(BaseMekanismInputAdapter)
-FusionReactorInputAdapter.type = 'FusionReactorInputAdapter'
+local FusionReactorInputAdapter = base.mintAdapter('FusionReactorInputAdapter')
 
--- alternative call that passes another call as a parameter
-local callIsActiveCooled = function (method)
-    return function (v)
-        return v[method](v.isActiveCooledLogic())
-    end
-end
-
-function FusionReactorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function FusionReactorInputAdapter:beforeRegister ()
     self.prefix = 'mekfusion:'
 
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'fuel',
-        'coolant',
-        'formation'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
+    -- alternative call that passes another call as a parameter
+    local callIsActiveCooled = function (method)
+        return function (v)
+            return v[method](v.isActiveCooledLogic())
+        end
     end
 
     self.queries = {

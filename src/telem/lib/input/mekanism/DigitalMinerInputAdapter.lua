@@ -1,45 +1,26 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter  = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local DigitalMinerInputAdapter = o.class(BaseMekanismInputAdapter)
-DigitalMinerInputAdapter.type = 'DigitalMinerInputAdapter'
+---@class telem.DigitalMinerInputAdapter : telem.BaseMekanismInputAdapter
+local DigitalMinerInputAdapter = base.mintAdapter('DigitalMinerInputAdapter')
 
-function DigitalMinerInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function DigitalMinerInputAdapter:beforeRegister ()
     self.prefix = 'mekminer:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
+            
+    local function processSlot(slots, component, slot)
+        return function ()
+            slots[slot] = component.getItemInSlot(slot) or false
+        end
     end
 
     local slotUsageQuery = fn()
         :transform(function (v)
             local slots = {}
             
-            local function getSlot(slot)
-                return function ()
-                    slots[slot] = v.getItemInSlot(slot) or false
-                end
-            end
-            
             local queue = {}
             for i = 0, v.getSlotCount() - 1 do
-                table.insert(queue, getSlot(i))
+                table.insert(queue, processSlot(slots, v, i))
             end
 
             parallel.waitForAll(table.unpack(queue))

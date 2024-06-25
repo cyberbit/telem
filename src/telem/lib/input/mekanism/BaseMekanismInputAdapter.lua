@@ -1,6 +1,7 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
-local fn = require 'telem.vendor'.fluent.fn
+local fl = require 'telem.vendor'.fluent
+local fn = fl.fn
 
 local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
@@ -10,10 +11,12 @@ local MetricCollection  = require 'telem.lib.MetricCollection'
 local BaseMekanismInputAdapter = o.class(InputAdapter)
 BaseMekanismInputAdapter.type = 'BaseMekanismInputAdapter'
 
-function BaseMekanismInputAdapter:constructor (peripheralName)
+function BaseMekanismInputAdapter:constructor (peripheralName, categories)
     self:super('constructor')
 
     self.prefix = 'mek:'
+
+    self.categories = categories or { 'basic' }
 
     ---@type table<string, table<string, cyberbit.Fluent>>
     self.queries = {}
@@ -27,6 +30,28 @@ function BaseMekanismInputAdapter:constructor (peripheralName)
 
         self:addComponentByPeripheralID(peripheralName)
     end)()
+
+    self:beforeRegister()
+
+    self:register()
+end
+
+function BaseMekanismInputAdapter:beforeRegister ()
+    -- nothing by default, should be overridden by subclasses
+end
+
+function BaseMekanismInputAdapter:register ()
+    local allCategories = fl(self.queries):keys():result()
+
+    if self.categories == '*' then
+        self.categories = allCategories
+    elseif type(self.categories) == 'table' then
+        self.categories = fl(self.categories):intersect(allCategories):result()
+    else
+        error('categories must be a list of categories or "*"')
+    end
+
+    return self
 end
 
 -- function BaseMekanismInputAdapter:queries (queries)
@@ -35,6 +60,9 @@ end
 --     return self
 -- end
 
+--- Adds queries for multiblock structures.
+---
+--- Categories: formation
 function BaseMekanismInputAdapter:withMultiblockQueries ()
     self.queries.formation = self.queries.formation or {}
 
@@ -49,6 +77,9 @@ function BaseMekanismInputAdapter:withMultiblockQueries ()
     return self
 end
 
+--- Adds queries for generic machines.
+---
+--- Categories: basic, advanced, energy
 function BaseMekanismInputAdapter:withGenericMachineQueries ()
     self.queries.basic = self.queries.basic or {}
     self.queries.advanced = self.queries.advanced or {}
@@ -68,18 +99,23 @@ function BaseMekanismInputAdapter:withGenericMachineQueries ()
     return self
 end
 
+--- NYI
 function BaseMekanismInputAdapter:withElectricMachineQueries ()
     --
 
     return self
 end
 
+--- NYI
 function BaseMekanismInputAdapter:withFactoryMachineQueries ()
     --
 
     return self
 end
 
+--- Adds queries for generators.
+---
+--- Categories: basic, energy
 function BaseMekanismInputAdapter:withGeneratorQueries ()
     self.queries.basic = self.queries.basic or {}
     self.queries.energy = self.queries.energy or {}
@@ -91,6 +127,7 @@ function BaseMekanismInputAdapter:withGeneratorQueries ()
     return self
 end
 
+--- NYI
 function BaseMekanismInputAdapter:withRecipeProgressQueries ()
     --
 
@@ -142,6 +179,17 @@ function BaseMekanismInputAdapter:read ()
     end
 
     return MetricCollection(table.unpack(tempMetrics))
+end
+
+function BaseMekanismInputAdapter.mintAdapter (type)
+    local adapter = o.class(BaseMekanismInputAdapter)
+    adapter.type = type
+
+    function adapter:constructor (peripheralName, categories)
+        self:super('constructor', peripheralName, categories)
+    end
+
+    return adapter
 end
 
 return BaseMekanismInputAdapter

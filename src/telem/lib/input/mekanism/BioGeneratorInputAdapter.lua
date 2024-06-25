@@ -1,33 +1,12 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local BioGeneratorInputAdapter = o.class(BaseMekanismInputAdapter)
-BioGeneratorInputAdapter.type = 'BioGeneratorInputAdapter'
+---@class telem.BioGeneratorInputAdapter : telem.BaseMekanismInputAdapter
+local BioGeneratorInputAdapter = base.mintAdapter('BioGeneratorInputAdapter')
 
-function BioGeneratorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function BioGeneratorInputAdapter:beforeRegister ()
     self.prefix = 'mekbiogen:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'fuel',
-        'energy'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {
@@ -41,8 +20,7 @@ function BioGeneratorInputAdapter:constructor (peripheralName, categories)
     }
     
     self:withGenericMachineQueries()
-    self:withGeneratorQueries()
+        :withGeneratorQueries()
 end
 
 return BioGeneratorInputAdapter
-
