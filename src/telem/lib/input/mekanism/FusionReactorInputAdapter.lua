@@ -31,10 +31,10 @@ function FusionReactorInputAdapter:beforeRegister ()
             passive_generation_rate     = fn():transform(callIsActiveCooled('getPassiveGeneration')):joulesToFE():energyRate(),
             ignition_temperature        = fn():transform(callIsActiveCooled('getIgnitionTemperature')):temp(),
         },
-        advanced = {
-            -- transfer_loss            = fn():call('getTransferLoss'),
-            -- environmental_loss       = fn():call('getEnvironmentalLoss'),
-        },
+        -- advanced = {
+        --     transfer_loss            = fn():call('getTransferLoss'),
+        --     environmental_loss       = fn():call('getEnvironmentalLoss'),
+        -- },
         coolant = {
             water_capacity              = fn():call('getWaterCapacity'):div(1000):fluid(),
             water_needed                = fn():call('getWaterNeeded'):div(1000):fluid(),

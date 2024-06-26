@@ -13,7 +13,10 @@ return {
 
     -- machinery
     mekanism = {
+        apns                    = requireMek('AntiprotonicNucleosynthesizerInputAdapter'),
+        bin                     = requireMek('BinInputAdapter'),
         bioGenerator            = requireMek('BioGeneratorInputAdapter'),
+        boiler                  = requireMek('ThermoelectricBoilerInputAdapter'),
         chemicalTank            = requireMek('ChemicalTankInputAdapter'),
         digitalMiner            = requireMek('DigitalMinerInputAdapter'),
         dynamicTank             = requireMek('DynamicTankInputAdapter'),
