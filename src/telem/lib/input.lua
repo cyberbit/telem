@@ -17,6 +17,7 @@ return {
         bin                     = requireMek('BinInputAdapter'),
         bioGenerator            = requireMek('BioGeneratorInputAdapter'),
         boiler                  = requireMek('ThermoelectricBoilerInputAdapter'),
+        chemicalCrystallizer    = requireMek('ChemicalCrystallizerInputAdapter'),
         chemicalTank            = requireMek('ChemicalTankInputAdapter'),
         digitalMiner            = requireMek('DigitalMinerInputAdapter'),
         dynamicTank             = requireMek('DynamicTankInputAdapter'),

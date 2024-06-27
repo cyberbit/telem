@@ -131,7 +131,7 @@ end
 function BaseMekanismInputAdapter:withRecipeProgressQueries ()
     self.queries.recipe = self.queries.recipe or {}
 
-    self.queries.recipe.recipe_progress = fn():call('getRecipeProgress')
+    self.queries.recipe.recipe_progress = fn():call('getRecipeProgress'):with('unit', 't')
     self.queries.recipe.ticks_required  = fn():call('getTicksRequired'):with('unit', 't')
 
     return self
