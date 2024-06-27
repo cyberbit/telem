@@ -18,6 +18,7 @@ return {
         bioGenerator            = requireMek('BioGeneratorInputAdapter'),
         boiler                  = requireMek('ThermoelectricBoilerInputAdapter'),
         chemicalCrystallizer    = requireMek('ChemicalCrystallizerInputAdapter'),
+        dissolutionChamber      = requireMek('ChemicalDissolutionChamberInputAdapter'),
         chemicalTank            = requireMek('ChemicalTankInputAdapter'),
         digitalMiner            = requireMek('DigitalMinerInputAdapter'),
         dynamicTank             = requireMek('DynamicTankInputAdapter'),

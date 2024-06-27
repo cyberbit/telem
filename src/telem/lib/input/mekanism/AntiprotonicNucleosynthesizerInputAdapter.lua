@@ -25,6 +25,8 @@ function AntiprotonicNucleosynthesizerInputAdapter:beforeRegister ()
     self:withGenericMachineQueries()
         :withRecipeProgressQueries()
 
+    -- TODO input_item_count?
+
     -- getDirection
     -- getRedstoneMode
 end
