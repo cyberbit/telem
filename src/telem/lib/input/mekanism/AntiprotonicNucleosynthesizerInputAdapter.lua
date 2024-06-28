@@ -13,12 +13,13 @@ function AntiprotonicNucleosynthesizerInputAdapter:beforeRegister ()
             energy_usage                        = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {
+            input_item_count                    = fn():call('getInputItem'):get('count'):with('unit', 'item'),
             input_chemical                      = fn():call('getInputChemical'):get('amount'):div(1000):fluid(),
             input_chemical_capacity             = fn():call('getInputChemicalCapacity'):div(1000):fluid(),
             input_chemical_needed               = fn():call('getInputChemicalNeeded'):div(1000):fluid(),
         },
         output = {
-            output_count                        = fn():call('getOutput'):get('count'):with('unit', 'item'),
+            output_item_count                   = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
         }
     }
     
