@@ -18,6 +18,7 @@ function ChemicalTankInputAdapter:beforeRegister ()
         storage = {
             stored              = fn():call('getStored'):get('amount'):div(1000):fluid(),
             capacity            = fn():call('getCapacity'):div(1000):fluid(),
+            needed              = fn():call('getNeeded'):div(1000):fluid(),
         },
     }
 
