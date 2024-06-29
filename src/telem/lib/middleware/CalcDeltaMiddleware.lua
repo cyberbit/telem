@@ -9,11 +9,14 @@ local Middleware = require 'telem.lib.BaseMiddleware'
 local CalcDeltaMiddleware = o.class(Middleware)
 CalcDeltaMiddleware.type = 'CalcDeltaMiddleware'
 
+local rateIntervalSourceFactors = { utc = 1000, ingame = 72000 }
+
 function CalcDeltaMiddleware:constructor(windowSize)
   self:super('constructor')
 
   self.windowSize = windowSize or 50
   self.rateInterval = 1
+  self.rateIntervalSource = 'utc'
   self.forceProcess = false
 
   self.history = {}
@@ -26,12 +29,15 @@ function CalcDeltaMiddleware:force()
   return self
 end
 
-function CalcDeltaMiddleware:interval(interval)
+function CalcDeltaMiddleware:interval(interval, source)
   local factor, unit = interval:match('^(%d+)(%l)$')
+  source = source or 'utc'
 
   assert(factor, 'CalcDeltaMiddleware:interval :: invalid interval format')
+  assert(source == 'utc' or source == 'ingame', 'CalcDeltaMiddleware:interval :: interval source must be "utc" or "ingame"')
 
-  self.rateInterval = tonumber(factor) * fluent(unit):toLookup({ s = 1, m = 60, h = 3600, d = 86400 }):result()
+  self.rateInterval = tonumber(factor) * fluent(unit):toLookup({ t = 0.05, s = 1, m = 60, h = 3600, d = 86400 }):result()
+  self.rateIntervalSource = source
 
   return self
 end
@@ -43,7 +49,7 @@ function CalcDeltaMiddleware:handle(target)
 end
 
 function CalcDeltaMiddleware:handleCollection(collection)
-  local timestamp = os.epoch('utc') / 1000
+  local timestamp = os.epoch(self.rateIntervalSource) / rateIntervalSourceFactors[self.rateIntervalSource]
 
   for _, v in ipairs(collection.metrics) do
     if self.forceProcess or v.source ~= 'middleware' then
