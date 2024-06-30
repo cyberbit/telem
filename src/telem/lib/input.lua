@@ -36,6 +36,7 @@ return {
         fuelwoodHeater          = requireMek('FuelwoodHeaterInputAdapter'),
         fusionReactor           = requireMek('FusionReactorInputAdapter'),
         gasGenerator            = requireMek('GasGeneratorInputAdapter'),
+        heatGenerator           = requireMek('HeatGeneratorInputAdapter'),
         inductionMatrix         = requireMek('InductionMatrixInputAdapter'),
         industrialTurbine       = requireMek('IndustrialTurbineInputAdapter'),
         isotopicCentrifuge      = requireMek('IsotopicCentrifugeInputAdapter'),
