@@ -6,44 +6,12 @@ local FormulaicAssemblicatorInputAdapter = base.mintAdapter('FormulaicAssemblica
 
 function FormulaicAssemblicatorInputAdapter:beforeRegister ()
     self.prefix = 'mekassemblicator:'
-            
-    local function processSlot(method, slots, component, slot)
-        return function ()
-            slots[slot] = component[method](slot) or false
-        end
-    end
-
-    local function mintSlotUsageQuery(getSlotsMethodName, getSlotItemMethodName)
-        return fn()
-            :transform(function (v)
-                local slots = {}
-                
-                local queue = {}
-                for i = 0, v[getSlotsMethodName]() - 1 do
-                    table.insert(queue, processSlot(getSlotItemMethodName, slots, v, i))
-                end
-
-                parallel.waitForAll(table.unpack(queue))
-
-                return slots
-            end)
-            :reduce(function (initial, _, v)
-                if v and v.count and tonumber(v.count) > 0 then
-                    return initial + 1
-                else
-                    return initial
-                end
-            end, 0)
-    end
-
-    local slotUsageQuery        = mintSlotUsageQuery('getSlots', 'getItemInSlot')
-    local outputSlotUsageQuery  = mintSlotUsageQuery('getCraftingOutputSlots', 'getCraftingOutputSlot')
 
     self.queries = {
         basic = {
-            input_slot_usage    = slotUsageQuery,
+            input_slot_usage    = base.mintSlotUsageQuery('getSlots', 'getItemInSlot'),
             input_slot_count    = fn():call('getSlots'),
-            output_slot_usage   = outputSlotUsageQuery,
+            output_slot_usage   = base.mintSlotUsageQuery('getCraftingOutputSlots', 'getCraftingOutputSlot'),
             output_slot_count   = fn():call('getCraftingOutputSlots'),
 
             -- TODO: does not support energy usage? need to verify

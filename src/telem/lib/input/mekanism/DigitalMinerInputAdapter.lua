@@ -6,33 +6,6 @@ local DigitalMinerInputAdapter = base.mintAdapter('DigitalMinerInputAdapter')
 
 function DigitalMinerInputAdapter:beforeRegister ()
     self.prefix = 'mekminer:'
-            
-    local function processSlot(slots, component, slot)
-        return function ()
-            slots[slot] = component.getItemInSlot(slot) or false
-        end
-    end
-
-    local slotUsageQuery = fn()
-        :transform(function (v)
-            local slots = {}
-            
-            local queue = {}
-            for i = 0, v.getSlotCount() - 1 do
-                table.insert(queue, processSlot(slots, v, i))
-            end
-
-            parallel.waitForAll(table.unpack(queue))
-
-            return slots
-        end)
-        :reduce(function (initial, _, v)
-            if v and v.count and tonumber(v.count) > 0 then
-                return initial + 1
-            else
-                return initial
-            end
-        end, 0)
 
     self.queries = {
         basic = {
@@ -41,7 +14,7 @@ function DigitalMinerInputAdapter:beforeRegister ()
             state                               = fn():call('getState'):toLookup({ FINISHED = 1, IDLE = 2, PAUSED = 3, SEARCHING = 4 }),
             to_mine                             = fn():call('getToMine'),
             energy_usage                        = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
-            slot_usage                          = slotUsageQuery,
+            slot_usage                          = base.mintSlotUsageQuery('getSlotCount', 'getItemInSlot'),
         },
         advanced = {
             auto_eject                          = fn():call('getAutoEject'):toFlag(),
