@@ -184,6 +184,8 @@ function BaseMekanismInputAdapter:read ()
     return MetricCollection(table.unpack(tempMetrics))
 end
 
+------ Static Methods ------
+
 function BaseMekanismInputAdapter.mintAdapter (type)
     local adapter = o.class(BaseMekanismInputAdapter)
     adapter.type = type
@@ -193,6 +195,35 @@ function BaseMekanismInputAdapter.mintAdapter (type)
     end
 
     return adapter
+end
+
+function BaseMekanismInputAdapter.mintSlotUsageQuery (getSlotsMethodName, getSlotItemMethodName)
+    local function processSlot(method, slots, component, slot)
+        return function ()
+            slots[slot] = component[method](slot) or false
+        end
+    end
+
+    return fn()
+        :transform(function (v)
+            local slots = {}
+            
+            local queue = {}
+            for i = 0, v[getSlotsMethodName]() - 1 do
+                table.insert(queue, processSlot(getSlotItemMethodName, slots, v, i))
+            end
+
+            parallel.waitForAll(table.unpack(queue))
+
+            return slots
+        end)
+        :reduce(function (initial, _, v)
+            if v and v.count and tonumber(v.count) > 0 then
+                return initial + 1
+            else
+                return initial
+            end
+        end, 0)
 end
 
 return BaseMekanismInputAdapter
