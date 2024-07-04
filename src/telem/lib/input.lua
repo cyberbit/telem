@@ -56,6 +56,7 @@ return {
         reactionChamber         = requireMek('PressurizedReactionChamberInputAdapter'),
         pressurizedTube         = requireMek('PressurizedTubeInputAdapter'),
         quantumEntangloporter   = requireMek('QuantumEntangloporterInputAdapter'),
+        wasteBarrel             = requireMek('RadioactiveWasteBarrelInputAdapter'),
         resistiveHeater         = requireMek('ResistiveHeaterInputAdapter'),
         condensentrator         = requireMek('RotaryCondensentratorInputAdapter'),
         universalCable          = requireMek('UniversalCableInputAdapter'),
