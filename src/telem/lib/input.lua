@@ -60,6 +60,9 @@ return {
         resistiveHeater         = requireMek('ResistiveHeaterInputAdapter'),
         condensentrator         = requireMek('RotaryCondensentratorInputAdapter'),
         sps                     = requireMek('SupercriticalPhaseShifterInputAdapter'),
+        seismicVibrator         = requireMek('SeismicVibratorInputAdapter'),
+        solarGenerator          = requireMek('SolarGeneratorInputAdapter'),
+        neutronActivator        = requireMek('SolarNeutronActivatorInputAdapter'),
         universalCable          = requireMek('UniversalCableInputAdapter'),
     },
 
