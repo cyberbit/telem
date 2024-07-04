@@ -59,6 +59,7 @@ return {
         wasteBarrel             = requireMek('RadioactiveWasteBarrelInputAdapter'),
         resistiveHeater         = requireMek('ResistiveHeaterInputAdapter'),
         condensentrator         = requireMek('RotaryCondensentratorInputAdapter'),
+        sps                     = requireMek('SupercriticalPhaseShifterInputAdapter'),
         universalCable          = requireMek('UniversalCableInputAdapter'),
     },
 
