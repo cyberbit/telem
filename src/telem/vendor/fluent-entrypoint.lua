@@ -87,4 +87,11 @@ function Fluent:callElse (method, elseValue, ...)
   end)
 end
 
+--- Return the length of the value using `#value`.
+function Fluent:count ()
+  return self:_enqueue(function (this)
+      this.value = #this.value
+  end)
+end
+
 return Fluent

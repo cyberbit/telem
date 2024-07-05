@@ -63,7 +63,10 @@ return {
         seismicVibrator         = requireMek('SeismicVibratorInputAdapter'),
         solarGenerator          = requireMek('SolarGeneratorInputAdapter'),
         neutronActivator        = requireMek('SolarNeutronActivatorInputAdapter'),
+        teleporter              = requireMek('TeleporterInputAdapter'),
+        evaporationPlant        = requireMek('ThermalEvaporationPlantInputAdapter'),
         universalCable          = requireMek('UniversalCableInputAdapter'),
+        windGenerator           = requireMek('WindGeneratorInputAdapter'),
     },
 
     -- modem
