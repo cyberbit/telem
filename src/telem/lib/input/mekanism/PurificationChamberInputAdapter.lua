@@ -2,10 +2,10 @@ local fn = require 'telem.vendor'.fluent.fn
 
 local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local OsmiumCompressorInputAdapter = base.mintAdapter('OsmiumCompressorInputAdapter')
+local PurificationChamberInputAdapter = base.mintAdapter('PurificationChamberInputAdapter')
 
-function OsmiumCompressorInputAdapter:beforeRegister ()
-    self.prefix = 'mekcompress:'
+function PurificationChamberInputAdapter:beforeRegister ()
+    self.prefix = 'mekpurify:'
 
     self.queries = {
         basic = {
@@ -29,4 +29,4 @@ function OsmiumCompressorInputAdapter:beforeRegister ()
     -- getRedstoneMode
 end
 
-return OsmiumCompressorInputAdapter
+return PurificationChamberInputAdapter
