@@ -5,7 +5,7 @@ local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 local PrecisionSawmillInputAdapter = base.mintAdapter('PrecisionSawmillInputAdapter')
 
 function PrecisionSawmillInputAdapter:beforeRegister ()
-    self.prefix = 'meksawmill:'
+    self.prefix = 'meksaw:'
 
     self.queries = {
         basic = {

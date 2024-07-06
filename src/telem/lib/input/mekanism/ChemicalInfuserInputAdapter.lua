@@ -5,7 +5,7 @@ local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 local ChemicalInfuserInputAdapter = base.mintAdapter('ChemicalInfuserInputAdapter')
 
 function ChemicalInfuserInputAdapter:beforeRegister ()
-    self.prefix = 'mekcheminfuser:'
+    self.prefix = 'mekcheminfuse:'
 
     self.queries = {
         basic = {

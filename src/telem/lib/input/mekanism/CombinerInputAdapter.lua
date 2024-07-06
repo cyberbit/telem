@@ -5,7 +5,7 @@ local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 local CombinerInputAdapter = base.mintAdapter('CombinerInputAdapter')
 
 function CombinerInputAdapter:beforeRegister ()
-    self.prefix = 'mekcombiner:'
+    self.prefix = 'mekcombine:'
 
     self.queries = {
         basic = {
