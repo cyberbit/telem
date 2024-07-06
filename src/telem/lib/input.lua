@@ -74,8 +74,14 @@ return {
         windGenerator           = requireMek('WindGeneratorInputAdapter'),
 
         -- factories
+        combiningFactory        = requireMek('CombiningFactoryInputAdapter'),
+        compressingFactory      = requireMek('CompressingFactoryInputAdapter'),
         crushingFactory         = requireMek('CrushingFactoryInputAdapter'),
         enrichingFactory        = requireMek('EnrichingFactoryInputAdapter'),
+        infusingFactory         = requireMek('InfusingFactoryInputAdapter'),
+        injectingFactory        = requireMek('InjectingFactoryInputAdapter'),
+        purifyingFactory        = requireMek('PurifyingFactoryInputAdapter'),
+        sawingFactory           = requireMek('SawingFactoryInputAdapter'),
         smeltingFactory         = requireMek('SmeltingFactoryInputAdapter'),
     },
 
