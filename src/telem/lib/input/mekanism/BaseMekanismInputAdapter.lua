@@ -54,6 +54,17 @@ function BaseMekanismInputAdapter:register ()
     return self
 end
 
+function BaseMekanismInputAdapter:getFactorySize ()
+    local _, component = next(self.components)
+
+    return fn()
+        :from({ 9, 7, 5, 3 })
+        :first(function (_, v)
+            return component and pcall(component.getRecipeProgress, v - 1)
+        end)
+        :result()
+end
+
 -- function BaseMekanismInputAdapter:queries (queries)
 --     self.queries = queries
 
@@ -127,12 +138,25 @@ function BaseMekanismInputAdapter:withGeneratorQueries ()
     return self
 end
 
---- NYI
-function BaseMekanismInputAdapter:withRecipeProgressQueries ()
+--- Adds queries for machines with recipes. If `factorySize` is provided,
+--- each process will have its own recipe progress metric.
+---
+--- Categories: recipe
+---@param factorySize? integer Factory size
+function BaseMekanismInputAdapter:withRecipeProgressQueries (factorySize)
     self.queries.recipe = self.queries.recipe or {}
 
-    self.queries.recipe.recipe_progress = fn():call('getRecipeProgress'):with('unit', 't')
     self.queries.recipe.ticks_required  = fn():call('getTicksRequired'):with('unit', 't')
+    
+    if not factorySize then
+        self.queries.recipe.recipe_progress = fn():call('getRecipeProgress'):with('unit', 't')
+    else
+        assert(type(factorySize) == 'number', 'factorySize must be a number')
+
+        for i = 0, factorySize - 1 do
+            self.queries.recipe['recipe_progress_' .. i] = fn():call('getRecipeProgress', i):with('unit', 't')
+        end
+    end
 
     return self
 end
@@ -224,6 +248,29 @@ function BaseMekanismInputAdapter.mintSlotUsageQuery (getSlotsMethodName, getSlo
                 return initial
             end
         end, 0)
+end
+
+function BaseMekanismInputAdapter.mintSlotCountQuery (slotCount, getSlotItemMethodName)
+    local function processSlot(method, slots, component, slot)
+        return function ()
+            slots[slot] = component[method](slot) or false
+        end
+    end
+    
+    return fn()
+        :transform(function (v)
+            local slots = {}
+            
+            local queue = {}
+            for i = 0, slotCount - 1 do
+                table.insert(queue, processSlot(getSlotItemMethodName, slots, v, i))
+            end
+    
+            parallel.waitForAll(table.unpack(queue))
+    
+            return slots
+        end)
+        :sum('count')
 end
 
 return BaseMekanismInputAdapter

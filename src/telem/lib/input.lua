@@ -11,8 +11,8 @@ return {
     refinedStorage              = requireInput('RefinedStorageInputAdapter'),
     meStorage                   = requireInput('MEStorageInputAdapter'),
 
-    -- machinery
     mekanism = {
+        -- machines
         apns                    = requireMek('AntiprotonicNucleosynthesizerInputAdapter'),
         bin                     = requireMek('BinInputAdapter'),
         bioGenerator            = requireMek('BioGeneratorInputAdapter'),
@@ -72,6 +72,11 @@ return {
         evaporationPlant        = requireMek('ThermalEvaporationPlantInputAdapter'),
         universalCable          = requireMek('UniversalCableInputAdapter'),
         windGenerator           = requireMek('WindGeneratorInputAdapter'),
+
+        -- factories
+        crushingFactory         = requireMek('CrushingFactoryInputAdapter'),
+        enrichingFactory        = requireMek('EnrichingFactoryInputAdapter'),
+        smeltingFactory         = requireMek('SmeltingFactoryInputAdapter'),
     },
 
     -- modem
