@@ -83,6 +83,9 @@ return {
         purifyingFactory        = requireMek('PurifyingFactoryInputAdapter'),
         sawingFactory           = requireMek('SawingFactoryInputAdapter'),
         smeltingFactory         = requireMek('SmeltingFactoryInputAdapter'),
+
+        -- QIO
+        qioDriveArray           = requireMek('QIODriveArrayInputAdapter'),
     },
 
     -- modem

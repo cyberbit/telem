@@ -94,4 +94,20 @@ function Fluent:count ()
   end)
 end
 
+--- Flatten the value's elements into a single list.
+--- Order of elements is not guaranteed.
+function Fluent:flatten ()
+  return self:_enqueue(function (this)
+      local flattened = {}
+
+      for _, v in pairs(this.value) do
+          for _, vv in pairs(v) do
+              table.insert(flattened, vv)
+          end
+      end
+
+      this.value = flattened
+  end)
+end
+
 return Fluent
