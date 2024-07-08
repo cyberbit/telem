@@ -54,6 +54,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: 'Antiprotonic Nucleosynthesizer', link: '/reference/input/mekanism/AntiprotonicNucleosynthesizer' },
+              { text: 'Bin', link: '/reference/input/mekanism/Bin' },
+              { text: 'Bio Generator', link: '/reference/input/mekanism/BioGenerator' },
               { text: 'Fission Reactor', link: '/reference/input/mekanism/FissionReactor' },
               { text: 'Fusion Reactor', link: '/reference/input/mekanism/FusionReactor' },
               { text: 'Induction Matrix', link: '/reference/input/mekanism/InductionMatrix' },
