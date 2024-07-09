@@ -88,6 +88,10 @@ return {
         qioDriveArray           = requireMek('QIODriveArrayInputAdapter'),
     },
 
+    advancedPeripherals = {
+        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+    },
+
     -- modem
     secureModem                 = requireInput('SecureModemInputAdapter'),
 }
