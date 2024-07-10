@@ -7,6 +7,9 @@ local ChemicalWasherInputAdapter = base.mintAdapter('ChemicalWasherInputAdapter'
 function ChemicalWasherInputAdapter:beforeRegister ()
     self.prefix = 'mekactivator:'
 
+    local _, component = next(self.components)
+    local supportsCanSeeSun = type(component.canSeeSun) == 'function'
+
     self.queries = {
         basic = {
             input_item_count                = fn():call('getInputItem'):get('count'):with('unit', 'item'),
@@ -28,7 +31,10 @@ function ChemicalWasherInputAdapter:beforeRegister ()
         }
     }
 
-    -- TODO Mekanism 10.2.5 does not canSeeSun method
+    -- Mekanism 10.3+ only
+    if supportsCanSeeSun then
+        self.queries.basic.sees_sun = fn():call('canSeeSun'):toFlag()
+    end
     
     -- TODO does not support energy
     -- self:withGenericMachineQueries()

@@ -10,8 +10,11 @@ function ElectrolyticSeparatorInputAdapter:beforeRegister ()
     self.queries = {
         basic = {
             input_filled_percentage         = fn():call('getInputFilledPercentage'),
+            input_item_count                = fn():call('getInputItem'):get('count'):with('unit', 'item'),
             output_left_filled_percentage   = fn():call('getLeftOutputFilledPercentage'),
+            output_left_item_count          = fn():call('getLeftOutputItem'):get('count'):with('unit', 'item'),
             output_right_filled_percentage  = fn():call('getRightOutputFilledPercentage'),
+            output_right_item_count         = fn():call('getRightOutputItem'):get('count'):with('unit', 'item'),
             energy_usage                    = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {

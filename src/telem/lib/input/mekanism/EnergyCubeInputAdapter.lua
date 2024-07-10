@@ -8,7 +8,10 @@ function EnergyCubeInputAdapter:beforeRegister ()
     self.prefix = 'mekenergycube:'
 
     self.queries = {
-        -- current supported queries covered by generic machine mixin
+        basic = {
+            charge_item_count       = fn():call('getChargeItem'):get('count'):with('unit', 'item'),
+            discharge_item_count    = fn():call('getDischargeItem'):get('count'):with('unit', 'item'),
+        }
     }
     
     self:withGenericMachineQueries()

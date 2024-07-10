@@ -11,6 +11,8 @@ function FluidTankInputAdapter:beforeRegister ()
     self.queries = {
         basic = {
             filled_percentage   = fn():call('getFilledPercentage'),
+            input_item_count    = fn():call('getInputItem'):get('count'):with('unit', 'item'),
+            output_item_count   = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
         },
         storage = {
             stored              = fn():call('getStored'):get('amount'):div(1000):fluid(),

@@ -66,6 +66,10 @@ Given a Bio Generator peripheral on the `right` side of the computer, this appen
     {
       name: 'mekbiogen:bio_fuel_filled_percentage',
       value: '0.0 - 1.0'
+    },
+    {
+      name: 'mekbiogen:bio_fuel_item_count',
+      value: '0 - inf'
     }
   ]"
 />

@@ -10,7 +10,9 @@ function ChemicalTankInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
+            fill_item_count     = fn():call('getFillItem'):get('count'):with('unit', 'item'),
             filled_percentage   = fn():call('getFilledPercentage'),
+            drain_item_count    = fn():call('getDrainItem'):get('count'):with('unit', 'item'),
         },
         advanced = {
             dumping_mode        = fn():call('getDumpingMode'):toLookup({ IDLE = 1, DUMPING_EXCESS = 2, DUMPING = 3 }),

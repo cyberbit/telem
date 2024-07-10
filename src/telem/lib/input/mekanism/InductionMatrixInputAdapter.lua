@@ -9,14 +9,15 @@ function InductionMatrixInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
-            energy_input        = fn():call('getLastInput'):joulesToFE():energyRate(),
-            energy_output       = fn():call('getLastOutput'):joulesToFE():energyRate(),
-            energy_transfer_cap = fn():call('getTransferCap'):joulesToFE():energyRate(),
+            energy_input            = fn():call('getLastInput'):joulesToFE():energyRate(),
+            energy_output           = fn():call('getLastOutput'):joulesToFE():energyRate(),
+            energy_transfer_cap     = fn():call('getTransferCap'):joulesToFE():energyRate(),
+            input_item_count        = fn():call('getInputItem'):get('count'):with('unit', 'item'),
+            output_item_count       = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
         },
-
         formation = {
-            installed_cells     = fn():call('getInstalledCells'),
-            installed_providers = fn():call('getInstalledProviders'),
+            installed_cells         = fn():call('getInstalledCells'),
+            installed_providers     = fn():call('getInstalledProviders'),
         }
     }
 
@@ -24,8 +25,6 @@ function InductionMatrixInputAdapter:beforeRegister ()
         :withMultiblockQueries()
 
     -- getMaxPos
-    -- getInputItem
-    -- getOutputItem
     -- getMinPos
     -- getMode
 

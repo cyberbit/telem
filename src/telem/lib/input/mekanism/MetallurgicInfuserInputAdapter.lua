@@ -9,7 +9,7 @@ function MetallurgicInfuserInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
-            input_item_count            = fn():call('getInput'):get('count'):with('unit', 'item'),
+            input_count                 = fn():call('getInput'):get('count'):with('unit', 'item'),
             infuse_item_count           = fn():call('getInfuseTypeItem'):get('count'):with('unit', 'item'),
             infuse_filled_percentage    = fn():call('getInfuseTypeFilledPercentage'),
             output_count                = fn():call('getOutput'):get('count'):with('unit', 'item'),

@@ -9,9 +9,12 @@ function ChemicalInfuserInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
+            input_left_item_count           = fn():call('getLeftInputItem'):get('count'):with('unit', 'item'),
             input_left_filled_percentage    = fn():call('getLeftInputFilledPercentage'),
             input_right_filled_percentage   = fn():call('getRightInputFilledPercentage'),
+            input_right_item_count          = fn():call('getRightInputItem'):get('count'):with('unit', 'item'),
             output_filled_percentage        = fn():call('getOutputFilledPercentage'),
+            output_item_count               = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
             energy_usage                    = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {

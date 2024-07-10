@@ -7,6 +7,9 @@ local ThermoelectricBoilerInputAdapter = base.mintAdapter('ThermoelectricBoilerI
 function ThermoelectricBoilerInputAdapter:beforeRegister ()
     self.prefix = 'mekboiler:'
 
+    local _, component = next(self.components)
+    local supportsEnvironmentalLoss = type(component.getEnvironmentalLoss) == 'function'
+
     self.queries = {
         basic = {
             boil_rate                           = fn():call('getBoilRate'):div(1000):fluidRate(),
@@ -17,9 +20,6 @@ function ThermoelectricBoilerInputAdapter:beforeRegister ()
             cooled_coolant_filled_percentage    = fn():call('getCooledCoolantFilledPercentage'),
             heated_coolant_filled_percentage    = fn():call('getHeatedCoolantFilledPercentage'),
         },
-        -- advanced = {
-        --     environmental_loss                  = fn():call('getEnvironmentalLoss'),
-        -- },
         water = {
             water                               = fn():call('getWater'):get('amount'):div(1000):fluid(),
             water_capacity                      = fn():call('getWaterCapacity'):div(1000):fluid(),
@@ -43,6 +43,12 @@ function ThermoelectricBoilerInputAdapter:beforeRegister ()
             boil_capacity                       = fn():call('getBoilCapacity'):div(1000):fluidRate(),
         },
     }
+
+    -- Mekanism 10.3+ only
+    if supportsEnvironmentalLoss then
+        self.queries.advanced = self.queries.advanced or {}
+        self.queries.advanced.environmental_loss = fn():call('getEnvironmentalLoss')
+    end
 
     self:withMultiblockQueries()
 

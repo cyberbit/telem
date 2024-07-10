@@ -7,10 +7,13 @@ local ResistiveHeaterInputAdapter = base.mintAdapter('ResistiveHeaterInputAdapte
 function ResistiveHeaterInputAdapter:beforeRegister ()
     self.prefix = 'mekresheater:'
 
+    local _, component = next(self.components)
+    local supportsEnergyUsed = type(component.getEnergyUsed) == 'function'
+
     self.queries = {
         basic = {
             energy_filled_percentage    = fn():call('getEnergyFilledPercentage'),
-            energy_usage                = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
+            energy_usage_target         = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
             temperature                 = fn():call('getTemperature'):temp(),
         },
         advanced = {
@@ -23,7 +26,11 @@ function ResistiveHeaterInputAdapter:beforeRegister ()
         },
     }
 
-    -- TODO energy_usage reflects usage target, not actual usage
+    -- Mekanism 10.3+ only
+    if supportsEnergyUsed then
+        self.queries.basic.energy_usage = fn():call('getEnergyUsed'):joulesToFE():energyRate()
+    end
+
 
     -- TODO does not support comparator
     -- self:withGenericMachineQueries()

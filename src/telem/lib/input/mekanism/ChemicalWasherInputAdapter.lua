@@ -12,6 +12,8 @@ function ChemicalWasherInputAdapter:beforeRegister ()
             fluid_filled_percentage         = fn():call('getFluidFilledPercentage'),
             input_slurry_filled_percentage  = fn():call('getSlurryInputFilledPercentage'),
             output_slurry_filled_percentage = fn():call('getSlurryOutputFilledPercentage'),
+            input_fluid_item_count          = fn():call('getFluidItemInput'):get('count'):with('unit', 'item'),
+            output_fluid_item_count         = fn():call('getFluidItemOutput'):get('count'):with('unit', 'item'),
             energy_usage                    = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {

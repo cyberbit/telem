@@ -9,8 +9,10 @@ function IsotopicCentrifugeInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
+            input_item_count            = fn():call('getInputItem'):get('count'):with('unit', 'item'),
             input_filled_percentage     = fn():call('getInputFilledPercentage'),
             output_filled_percentage    = fn():call('getOutputFilledPercentage'),
+            output_item_count           = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
             energy_usage                = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {

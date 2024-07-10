@@ -9,11 +9,10 @@ function ChemicalOxidizerInputAdapter:beforeRegister ()
 
     self.queries = {
         basic = {
-            output_filled_percentage    = fn():call('getOutputFilledPercentage'),
-            energy_usage                = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
-        },
-        input = {
             input_count                 = fn():call('getInput'):get('count'):with('unit', 'item'),
+            output_filled_percentage    = fn():call('getOutputFilledPercentage'),
+            output_item_count           = fn():call('getOutputItem'):get('count'):with('unit', 'item'),
+            energy_usage                = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         output = {
             output                      = fn():call('getOutput'):get('amount'):div(1000):fluid(),

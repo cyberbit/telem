@@ -11,6 +11,7 @@ function GasGeneratorInputAdapter:beforeRegister ()
         basic = {
             fuel_filled_percentage  = fn():call('getFuelFilledPercentage'),
             burn_rate               = fn():call('getBurnRate'):div(1000):fluidRate(),
+            fuel_item_count         = fn():call('getFuelItem'):get('count'):with('unit', 'item'),
         },
         fuel = {
             fuel                    = fn():call('getFuel'):get('amount'):div(1000):fluid(),

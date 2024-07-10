@@ -1,7 +1,6 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
 
----@class telem.InputAdapter
 local InputAdapter = o.class()
 InputAdapter.type = 'InputAdapter'
 

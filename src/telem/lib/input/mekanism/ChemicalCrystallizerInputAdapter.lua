@@ -10,6 +10,7 @@ function ChemicalCrystallizerInputAdapter:beforeRegister ()
     self.queries = {
         basic = {
             input_filled_percentage = fn():call('getInputFilledPercentage'),
+            input_item_count        = fn():call('getInputItem'):get('count'):with('unit', 'item'),
             energy_usage            = fn():call('getEnergyUsage'):joulesToFE():energyRate(),
         },
         input = {

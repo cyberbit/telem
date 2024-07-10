@@ -7,7 +7,6 @@ local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
 local MetricCollection  = require 'telem.lib.MetricCollection'
 
----@class telem.BaseMekanismInputAdapter : telem.InputAdapter
 local BaseMekanismInputAdapter = o.class(InputAdapter)
 BaseMekanismInputAdapter.type = 'BaseMekanismInputAdapter'
 
@@ -65,12 +64,6 @@ function BaseMekanismInputAdapter:getFactorySize ()
         :result()
 end
 
--- function BaseMekanismInputAdapter:queries (queries)
---     self.queries = queries
-
---     return self
--- end
-
 --- Adds queries for multiblock structures.
 ---
 --- Categories: formation
@@ -106,20 +99,6 @@ function BaseMekanismInputAdapter:withGenericMachineQueries ()
 
     -- getDirection
     -- getRedstoneMode
-
-    return self
-end
-
---- NYI
-function BaseMekanismInputAdapter:withElectricMachineQueries ()
-    --
-
-    return self
-end
-
---- NYI
-function BaseMekanismInputAdapter:withFactoryMachineQueries ()
-    --
 
     return self
 end
@@ -185,10 +164,6 @@ function BaseMekanismInputAdapter:read ()
             ))
         end
     end
-
-    -- for _,v in ipairs(queue) do
-    --     v()
-    -- end
 
     parallel.waitForAll(table.unpack(queue))
 

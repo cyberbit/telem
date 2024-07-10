@@ -17,9 +17,6 @@ function MechanicalPipeInputAdapter:beforeRegister ()
             needed              = fn():call('getNeeded'):div(1000):fluid(),
         }
     }
-
-    -- TODO only supports energy and direction
-    -- self:withGenericMachineQueries()
 end
 
 return MechanicalPipeInputAdapter
