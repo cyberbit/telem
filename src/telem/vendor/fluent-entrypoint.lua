@@ -67,4 +67,47 @@ function Fluent:metricable()
   end)
 end
 
+--- Call a method on the value. Returns the result of the call, or `elseValue` if the call errors. 
+---@param method string Method name
+---@param elseValue any Value to set if the call errors
+---@param ... any Method arguments
+function Fluent:callElse (method, elseValue, ...)
+  local args = {...}
+
+  return self:_enqueue(function (this)
+      local success, result = pcall(this.value[method], table.unpack(args))
+
+      if not success then
+          this.value = elseValue
+
+          return
+      end
+      
+      this.value = result
+  end)
+end
+
+--- Return the length of the value using `#value`.
+function Fluent:count ()
+  return self:_enqueue(function (this)
+      this.value = #this.value
+  end)
+end
+
+--- Flatten the value's elements into a single list.
+--- Order of elements is not guaranteed.
+function Fluent:flatten ()
+  return self:_enqueue(function (this)
+      local flattened = {}
+
+      for _, v in pairs(this.value) do
+          for _, vv in pairs(v) do
+              table.insert(flattened, vv)
+          end
+      end
+
+      this.value = flattened
+  end)
+end
+
 return Fluent

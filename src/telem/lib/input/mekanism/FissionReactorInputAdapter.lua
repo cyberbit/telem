@@ -1,35 +1,11 @@
-local o = require 'telem.lib.ObjectModel'
-local t = require 'telem.lib.util'
 local fn = require 'telem.vendor'.fluent.fn
 
-local BaseMekanismInputAdapter = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
+local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local FissionReactorInputAdapter = o.class(BaseMekanismInputAdapter)
-FissionReactorInputAdapter.type = 'FissionReactorInputAdapter'
+local FissionReactorInputAdapter = base.mintAdapter('FissionReactorInputAdapter')
 
-function FissionReactorInputAdapter:constructor (peripheralName, categories)
-    self:super('constructor', peripheralName)
-
-    -- TODO this will be a configurable feature later
+function FissionReactorInputAdapter:beforeRegister ()
     self.prefix = 'mekfission:'
-
-    -- TODO make these constants
-    local allCategories = {
-        'basic',
-        'advanced',
-        'fuel',
-        'coolant',
-        'waste',
-        'formation'
-    }
-
-    if not categories then
-        self.categories = { 'basic' }
-    elseif categories == '*' then
-        self.categories = allCategories
-    else
-        self.categories = categories
-    end
 
     self.queries = {
         basic = {
@@ -67,21 +43,21 @@ function FissionReactorInputAdapter:constructor (peripheralName, categories)
             waste_needed                        = fn():call('getWasteNeeded'):div(1000):fluid()
         },
         formation = {
-            formed                              = fn():call('isFormed'):toFlag(),
             force_disabled                      = fn():call('isForceDisabled'):toFlag(),
-            height                              = fn():call('getHeight'):with('unit', 'm'),
-            length                              = fn():call('getLength'):with('unit', 'm'),
-            width                               = fn():call('getWidth'):with('unit', 'm'),
             fuel_assemblies                     = fn():call('getFuelAssemblies'),
             fuel_surface_area                   = fn():call('getFuelSurfaceArea'):with('unit', 'm²'),
             heat_capacity                       = fn():call('getHeatCapacity'):with('unit', 'J/K'),
-            boil_efficiency                     = fn():call('getBoilEfficiency')
+            boil_efficiency                     = fn():call('getBoilEfficiency'),
         }
     }
 
-    -- not sure if these are useful, but they return strings anyway which are not Metric compatible, RIP
-    -- fission.getLogicMode()
-    -- fission.getRedstoneLogicStatus()
+    self:withMultiblockQueries()
+
+    -- getMinPos
+    -- getRedstoneMode
+    -- getMaxPos
+    -- getRedstoneLogicStatus
+    -- getLogicMode
 end
 
 return FissionReactorInputAdapter
