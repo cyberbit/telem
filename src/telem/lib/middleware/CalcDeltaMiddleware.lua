@@ -9,6 +9,8 @@ local Middleware = require 'telem.lib.BaseMiddleware'
 local CalcDeltaMiddleware = o.class(Middleware)
 CalcDeltaMiddleware.type = 'CalcDeltaMiddleware'
 
+CalcDeltaMiddleware.DEFAULT_ADAPTER = '_t_default'
+
 local rateIntervalSourceFactors = { utc = 1000, ingame = 72000 }
 
 function CalcDeltaMiddleware:constructor(windowSize)
@@ -53,34 +55,43 @@ function CalcDeltaMiddleware:handleCollection(collection)
 
   for _, v in ipairs(collection.metrics) do
     if self.forceProcess or v.source ~= 'middleware' then
-      self.history[v.name] = self.history[v.name] or {}
-      self.times[v.name] = self.times[v.name] or {}
+      local adapter = v.adapter or self.DEFAULT_ADAPTER
 
-      t.constrainAppend(self.history[v.name], v.value, self.windowSize)
-      t.constrainAppend(self.times[v.name], timestamp, self.windowSize)
+      self.history[adapter] = self.history[adapter] or {}
+      self.times[adapter] = self.times[adapter] or {}
+
+      self.history[adapter][v.name] = self.history[adapter][v.name] or {}
+      self.times[adapter][v.name] = self.times[adapter][v.name] or {}
+
+      t.constrainAppend(self.history[adapter][v.name], v.value, self.windowSize)
+      t.constrainAppend(self.times[adapter][v.name], timestamp, self.windowSize)
     end
   end
 
-  for k, v in pairs(self.history) do
-    local idelta, delta, irate, rate = 0, 0, 0, 0
+  for ak, av in pairs(self.history) do
+    local undefaultAdapter = ak ~= self.DEFAULT_ADAPTER and ak or nil
 
-    if #v >= 2 then
-      local vt = self.times[k]
+    for mk, mv in pairs(av) do
+      local idelta, delta, irate, rate = 0, 0, 0, 0
 
-      idelta = v[#v] - v[#v - 1]
-      delta = v[#v] - v[1]
+      if #mv >= 2 then
+        local vt = self.times[ak][mk]
 
-      local itimedelta = vt[#vt] - vt[#vt - 1]
-      local timedelta = vt[#vt] - vt[1]
+        idelta = mv[#mv] - mv[#mv - 1]
+        delta = mv[#mv] - mv[1]
 
-      irate = (idelta / itimedelta) * self.rateInterval
-      rate = (delta / timedelta) * self.rateInterval
+        local itimedelta = vt[#vt] - vt[#vt - 1]
+        local timedelta = vt[#vt] - vt[1]
+
+        irate = (idelta / itimedelta) * self.rateInterval
+        rate = (delta / timedelta) * self.rateInterval
+      end
+
+      collection:insert(Metric{ name = mk .. '_idelta', value = idelta, adapter = undefaultAdapter, source = 'middleware' })
+      collection:insert(Metric{ name = mk ..  '_delta', value =  delta, adapter = undefaultAdapter, source = 'middleware' })
+      collection:insert(Metric{ name = mk ..  '_irate', value =  irate, adapter = undefaultAdapter, source = 'middleware' })
+      collection:insert(Metric{ name = mk ..   '_rate', value =   rate, adapter = undefaultAdapter, source = 'middleware' })
     end
-
-    collection:insert(Metric{ name = k .. '_idelta', value = idelta, source = 'middleware' })
-    collection:insert(Metric{ name = k ..  '_delta', value =  delta, source = 'middleware' })
-    collection:insert(Metric{ name = k ..  '_irate', value =  irate, source = 'middleware' })
-    collection:insert(Metric{ name = k ..   '_rate', value =   rate, source = 'middleware' })
   end
   
   return collection

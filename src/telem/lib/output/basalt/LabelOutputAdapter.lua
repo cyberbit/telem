@@ -19,41 +19,41 @@ function LabelOutputAdapter:constructor (frame, filter, bg, fg, fontSize)
 end
 
 function LabelOutputAdapter:register (bg, fg, fontSize)
-    self.bInnerFrame = self.bBaseFrame
+    self.bg = bg or 'black'
+    self.fg = fg or 'white'
+    self.fontSize = fontSize or 2
 
-    -- TODO idk if this inner frame is necessary
-    self.bInnerFrame = self.bBaseFrame:addFrame()
-        :setBackground(bg)
-        :setSize('parent.w', 'parent.h')
+    self.bInnerFrame = self.bBaseFrame
+    self.bInnerFrame:setBackground(self.bg)
 
     self.bLabelValue = self.bInnerFrame
         :addLabel()
         :setText("-----")
-        :setFontSize(fontSize or 2)
-        :setBackground(bg)
-        :setForeground(fg)
-        :setPosition('parent.w/2-self.w/2', 'parent.h/2-self.h/2')
+        :setFontSize(self.fontSize)
+        :setBackground(self.bg)
+        :setForeground(self.fg)
+        :setPosition('parent.w/2-self.w/2+1', 'parent.h/2-self.h/2+1')
     
     self.bLabelName = self.bInnerFrame
         :addLabel()
         :setText(self.nameText)
-        :setBackground(bg)
-        :setForeground(fg)
+        :setBackground(self.bg)
+        :setForeground(self.fg)
         :setPosition(1,1)
     
     self.animThread = self.bInnerFrame:addThread()
-        :start(function ()
-            while true do
-                local goslep = 0.2
-                self.nameScroll = self.nameScroll + 1
-                if self.nameScroll > self.nameText:len() + 3 then
-                    self.nameScroll = 0
-                    goslep = 3
-                end
-                self:refreshLabels()
-                t.sleep(goslep)
+    self.animThread:start(function ()
+        while true do
+            local goslep = 0.2
+            self.nameScroll = self.nameScroll + 1
+            if self.nameScroll > self.nameText:len() + 3 then
+                self.nameScroll = 0
+                goslep = 3
             end
-        end)
+            self:refreshLabels()
+            t.sleep(goslep)
+        end
+    end)
 end
 
 function LabelOutputAdapter:refreshLabels ()
@@ -75,8 +75,11 @@ function LabelOutputAdapter:write (collection)
     local resultMetric = collection:find(self.filter)
 
     assert(resultMetric, 'could not find metric')
+    
+    self.bLabelValue
+        :setText(t.shortnum(resultMetric.value))
+        :setFontSize(self.fontSize)
 
-    self.bLabelValue:setText(t.shortnum(resultMetric.value))
     self.nameText = resultMetric.name
     self:refreshLabels()
 
