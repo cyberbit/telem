@@ -1,5 +1,6 @@
 local function requireInput(target) return require ('telem.lib.input.' .. target) end
 local function requireMek(target) return requireInput('mekanism.' .. target) end
+local function requirePowah(target) return requireInput('powah.' .. target) end
 
 return {
     helloWorld                  = requireInput('HelloWorldInputAdapter'),
@@ -10,6 +11,13 @@ return {
     fluidStorage                = requireInput('FluidStorageInputAdapter'),
     refinedStorage              = requireInput('RefinedStorageInputAdapter'),
     meStorage                   = requireInput('MEStorageInputAdapter'),
+
+    -- communication
+    secureModem                 = requireInput('SecureModemInputAdapter'),
+
+    advancedPeripherals = {
+        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+    },
 
     mekanism = {
         -- machines
@@ -88,10 +96,8 @@ return {
         qioDriveArray           = requireMek('QIODriveArrayInputAdapter'),
     },
 
-    advancedPeripherals = {
-        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
-    },
-
-    -- modem
-    secureModem                 = requireInput('SecureModemInputAdapter'),
+    powah = {
+        energyCell              = requirePowah('EnergyCellInputAdapter'),
+        furnator                = requirePowah('FurnatorInputAdapter'),
+    }
 }
