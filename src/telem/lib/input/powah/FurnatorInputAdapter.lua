@@ -10,7 +10,7 @@ function FurnatorInputAdapter:beforeRegister ()
     self.queries = {
         basic = {
             burning     = fn():call('isBurning'):toFlag(),
-            carbon      = fn():call('getCarbon'),
+            carbon      = fn():call('getCarbon'):with('unit', '%'),
         }
     }
     

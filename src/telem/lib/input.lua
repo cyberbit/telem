@@ -99,5 +99,9 @@ return {
     powah = {
         energyCell              = requirePowah('EnergyCellInputAdapter'),
         furnator                = requirePowah('FurnatorInputAdapter'),
+        magmator                = requirePowah('MagmatorInputAdapter'),
+        reactor                 = requirePowah('ReactorInputAdapter'),
+        solarPanel              = requirePowah('SolarPanelInputAdapter'),
+        thermoGenerator         = requirePowah('ThermoGeneratorInputAdapter'),
     }
 }
