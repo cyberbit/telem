@@ -1,4 +1,5 @@
 local function requireInput(target) return require ('telem.lib.input.' .. target) end
+local function requireBiggerReactors(target) return requireInput('biggerReactors.' .. target) end
 local function requireMek(target) return requireInput('mekanism.' .. target) end
 local function requirePowah(target) return requireInput('powah.' .. target) end
 
@@ -17,6 +18,11 @@ return {
 
     advancedPeripherals = {
         energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+    },
+
+    biggerReactors = {
+        reactor                 = requireBiggerReactors('ReactorInputAdapter'),
+        turbine                 = requireBiggerReactors('TurbineInputAdapter'),
     },
 
     mekanism = {
