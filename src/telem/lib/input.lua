@@ -1,28 +1,29 @@
 local function requireInput(target) return require ('telem.lib.input.' .. target) end
-local function requireBiggerReactors(target) return requireInput('biggerReactors.' .. target) end
+local function requireAP(target) return requireInput('advancedPeripherals.' .. target) end
+local function requireBR(target) return requireInput('biggerReactors.' .. target) end
 local function requireMek(target) return requireInput('mekanism.' .. target) end
 local function requirePowah(target) return requireInput('powah.' .. target) end
 
-return {
+local export = {
     helloWorld                  = requireInput('HelloWorldInputAdapter'),
     custom                      = requireInput('CustomInputAdapter'),
 
     -- storage
     itemStorage                 = requireInput('ItemStorageInputAdapter'),
     fluidStorage                = requireInput('FluidStorageInputAdapter'),
-    refinedStorage              = requireInput('RefinedStorageInputAdapter'),
-    meStorage                   = requireInput('MEStorageInputAdapter'),
 
     -- communication
     secureModem                 = requireInput('SecureModemInputAdapter'),
 
     advancedPeripherals = {
-        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+        energyDetector          = requireAP('EnergyDetectorInputAdapter'),
+        meBridge                = requireAP('MEBridgeInputAdapter'),
+        rsBridge                = requireAP('RSBridgeInputAdapter'),
     },
 
     biggerReactors = {
-        reactor                 = requireBiggerReactors('ReactorInputAdapter'),
-        turbine                 = requireBiggerReactors('TurbineInputAdapter'),
+        reactor                 = requireBR('ReactorInputAdapter'),
+        turbine                 = requireBR('TurbineInputAdapter'),
     },
 
     mekanism = {
@@ -109,5 +110,11 @@ return {
         reactor                 = requirePowah('ReactorInputAdapter'),
         solarPanel              = requirePowah('SolarPanelInputAdapter'),
         thermoGenerator         = requirePowah('ThermoGeneratorInputAdapter'),
-    }
+    },
 }
+
+-- aliases that will be deprecated in the future
+export.refinedStorage              = export.advancedPeripherals.rsBridge
+export.meStorage                   = export.advancedPeripherals.meBridge
+
+return export
