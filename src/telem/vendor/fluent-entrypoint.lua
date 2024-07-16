@@ -28,6 +28,13 @@ function Fluent:joulesToFE ()
   end)
 end
 
+--- Convert the value from Applied Energy to Forge Energy/RF.
+function Fluent:aeToFe ()
+  return self:_enqueue(function (this)
+      this.value = this.value * 2
+  end)
+end
+
 --- Set unit to fluid unit, 'B'.
 function Fluent:fluid()
   return self:with('unit', 'B')
