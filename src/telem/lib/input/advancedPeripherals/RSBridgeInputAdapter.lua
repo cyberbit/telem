@@ -5,7 +5,7 @@ local Metric    = require 'telem.lib.Metric'
 
 local RSBridgeInputAdapter = base.mintAdapter('RSBridgeInputAdapter')
 
-function RSBridgeInputAdapter:beforeRegister ()
+function RSBridgeInputAdapter:beforeRegister (peripheralName, categories)
     self.prefix = 'aprsbridge:'
 
     self.queries = {

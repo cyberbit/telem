@@ -17,7 +17,12 @@ local export = {
 
     advancedPeripherals = {
         energyDetector          = requireAP('EnergyDetectorInputAdapter'),
+        environmentDetector     = requireAP('EnvironmentDetectorInputAdapter'),
+        geoScanner              = requireAP('GeoScannerInputAdapter'),
+        inventoryManager        = requireAP('InventoryManagerInputAdapter'),
         meBridge                = requireAP('MEBridgeInputAdapter'),
+        playerDetector          = requireAP('PlayerDetectorInputAdapter'),
+        redstoneIntegrator      = requireAP('RedstoneIntegratorInputAdapter'),
         rsBridge                = requireAP('RSBridgeInputAdapter'),
     },
 

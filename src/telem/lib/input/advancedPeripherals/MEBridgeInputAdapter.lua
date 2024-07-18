@@ -5,7 +5,7 @@ local Metric    = require 'telem.lib.Metric'
 
 local MEBridgeInputAdapter = base.mintAdapter('MEBridgeInputAdapter')
 
-function MEBridgeInputAdapter:beforeRegister ()
+function MEBridgeInputAdapter:beforeRegister (peripheralName, categories)
     self.prefix = 'apmebridge:'
 
     self.queries = {

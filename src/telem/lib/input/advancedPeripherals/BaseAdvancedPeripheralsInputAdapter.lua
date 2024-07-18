@@ -9,7 +9,7 @@ local MetricCollection  = require 'telem.lib.MetricCollection'
 local BaseAdvancedPeripheralsInputAdapter = o.class(InputAdapter)
 BaseAdvancedPeripheralsInputAdapter.type = 'BaseAdvancedPeripheralsInputAdapter'
 
-function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName, categories)
+function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName, categories, ...)
     self:super('constructor')
 
     self.prefix = 'ap:'
@@ -29,12 +29,12 @@ function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName, catego
         self:addComponentByPeripheralID(peripheralName)
     end)()
 
-    self:beforeRegister()
+    self:beforeRegister(peripheralName, categories, ...)
 
     self:register()
 end
 
-function BaseAdvancedPeripheralsInputAdapter:beforeRegister ()
+function BaseAdvancedPeripheralsInputAdapter:beforeRegister (peripheralName, categories, ...)
     -- nothing by default, should be overridden by subclasses
 end
 
@@ -99,8 +99,8 @@ function BaseAdvancedPeripheralsInputAdapter.mintAdapter (type)
     local adapter = o.class(BaseAdvancedPeripheralsInputAdapter)
     adapter.type = type
 
-    function adapter:constructor (peripheralName, categories)
-        self:super('constructor', peripheralName, categories)
+    function adapter:constructor (peripheralName, categories, ...)
+        self:super('constructor', peripheralName, categories, ...)
     end
 
     return adapter

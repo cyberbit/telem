@@ -4,7 +4,7 @@ local base = require 'telem.lib.input.advancedPeripherals.BaseAdvancedPeripheral
 
 local EnergyDetectorInputAdapter = base.mintAdapter('EnergyDetectorInputAdapter')
 
-function EnergyDetectorInputAdapter:beforeRegister ()
+function EnergyDetectorInputAdapter:beforeRegister (peripheralName, categories)
     self.prefix = 'apenergy:'
 
     self.queries = {
