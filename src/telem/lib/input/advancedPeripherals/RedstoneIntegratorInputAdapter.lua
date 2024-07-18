@@ -33,7 +33,6 @@ function RedstoneIntegratorInputAdapter:beforeRegister (peripheralName, categori
     }
 
     for _, side in ipairs(self.sides) do
-        print('doign side', side)
         self.queries.basic['input_' .. side]            = fn():call('getInput', side):toFlag()
         self.queries.basic['input_analog_' .. side]     = fn():call('getAnalogInput', side)
 
