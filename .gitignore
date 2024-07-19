@@ -1,9 +1,0 @@
-# telem
-src/telem/bin/raw/*
-dist
-src.tar
-
-# vitepress
-node_modules
-docs/.vitepress/dist
-docs/.vitepress/cache
