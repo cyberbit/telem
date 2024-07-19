@@ -1,4 +1,5 @@
 local o = require 'telem.lib.ObjectModel'
+local t = require 'telem.lib.util'
 local fl = require 'telem.vendor'.fluent
 local fn = fl.fn
 
@@ -6,13 +7,13 @@ local InputAdapter      = require 'telem.lib.InputAdapter'
 local Metric            = require 'telem.lib.Metric'
 local MetricCollection  = require 'telem.lib.MetricCollection'
 
-local BaseAdvancedPeripheralsInputAdapter = o.class(InputAdapter)
-BaseAdvancedPeripheralsInputAdapter.type = 'BaseAdvancedPeripheralsInputAdapter'
+local BasePowahInputAdapter = o.class(InputAdapter)
+BasePowahInputAdapter.type = 'BasePowahInputAdapter'
 
-function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName, categories, ...)
+function BasePowahInputAdapter:constructor (peripheralName, categories)
     self:super('constructor')
 
-    self.prefix = 'ap:'
+    self.prefix = 'powah:'
 
     self.categories = categories or { 'basic' }
 
@@ -29,16 +30,16 @@ function BaseAdvancedPeripheralsInputAdapter:constructor (peripheralName, catego
         self:addComponentByPeripheralID(peripheralName)
     end)()
 
-    self:beforeRegister(peripheralName, categories, ...)
+    self:beforeRegister()
 
     self:register()
 end
 
-function BaseAdvancedPeripheralsInputAdapter:beforeRegister (peripheralName, categories, ...)
+function BasePowahInputAdapter:beforeRegister ()
     -- nothing by default, should be overridden by subclasses
 end
 
-function BaseAdvancedPeripheralsInputAdapter:register ()
+function BasePowahInputAdapter:register ()
     local allCategories = fl(self.queries):keys():result()
 
     if self.categories == '*' then
@@ -52,13 +53,25 @@ function BaseAdvancedPeripheralsInputAdapter:register ()
     return self
 end
 
+--- Adds queries for generic machines.
+---
+--- Categories: basic
+function BasePowahInputAdapter:withEnergyQueries ()
+    self.queries.basic = self.queries.basic or {}
+
+    self.queries.basic.energy       = fn():call('getEnergy'):energy()
+    self.queries.basic.max_energy   = fn():call('getMaxEnergy'):energy()
+
+    return self
+end
+
 local function queueHelper (results, index, query)
     return function ()
         results[index] = Metric(query:metricable():result())
     end
 end
 
-function BaseAdvancedPeripheralsInputAdapter:read ()
+function BasePowahInputAdapter:read ()
     self:boot()
     
     local source, component = next(self.components)
@@ -95,15 +108,17 @@ function BaseAdvancedPeripheralsInputAdapter:read ()
     return MetricCollection(table.unpack(tempMetrics))
 end
 
-function BaseAdvancedPeripheralsInputAdapter.mintAdapter (type)
-    local adapter = o.class(BaseAdvancedPeripheralsInputAdapter)
+------ Static Methods ------
+
+function BasePowahInputAdapter.mintAdapter (type)
+    local adapter = o.class(BasePowahInputAdapter)
     adapter.type = type
 
-    function adapter:constructor (peripheralName, categories, ...)
-        self:super('constructor', peripheralName, categories, ...)
+    function adapter:constructor (peripheralName, categories)
+        self:super('constructor', peripheralName, categories)
     end
 
     return adapter
 end
 
-return BaseAdvancedPeripheralsInputAdapter
+return BasePowahInputAdapter

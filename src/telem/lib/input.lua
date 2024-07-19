@@ -1,15 +1,35 @@
 local function requireInput(target) return require ('telem.lib.input.' .. target) end
+local function requireAP(target) return requireInput('advancedPeripherals.' .. target) end
+local function requireBR(target) return requireInput('biggerReactors.' .. target) end
 local function requireMek(target) return requireInput('mekanism.' .. target) end
+local function requirePowah(target) return requireInput('powah.' .. target) end
 
-return {
+local export = {
     helloWorld                  = requireInput('HelloWorldInputAdapter'),
     custom                      = requireInput('CustomInputAdapter'),
 
     -- storage
     itemStorage                 = requireInput('ItemStorageInputAdapter'),
     fluidStorage                = requireInput('FluidStorageInputAdapter'),
-    refinedStorage              = requireInput('RefinedStorageInputAdapter'),
-    meStorage                   = requireInput('MEStorageInputAdapter'),
+
+    -- communication
+    secureModem                 = requireInput('SecureModemInputAdapter'),
+
+    advancedPeripherals = {
+        energyDetector          = requireAP('EnergyDetectorInputAdapter'),
+        environmentDetector     = requireAP('EnvironmentDetectorInputAdapter'),
+        geoScanner              = requireAP('GeoScannerInputAdapter'),
+        inventoryManager        = requireAP('InventoryManagerInputAdapter'),
+        meBridge                = requireAP('MEBridgeInputAdapter'),
+        playerDetector          = requireAP('PlayerDetectorInputAdapter'),
+        redstoneIntegrator      = requireAP('RedstoneIntegratorInputAdapter'),
+        rsBridge                = requireAP('RSBridgeInputAdapter'),
+    },
+
+    biggerReactors = {
+        reactor                 = requireBR('ReactorInputAdapter'),
+        turbine                 = requireBR('TurbineInputAdapter'),
+    },
 
     mekanism = {
         -- machines
@@ -88,10 +108,18 @@ return {
         qioDriveArray           = requireMek('QIODriveArrayInputAdapter'),
     },
 
-    advancedPeripherals = {
-        energyDetector = require 'telem.lib.input.advancedPeripherals.EnergyDetectorInputAdapter',
+    powah = {
+        energyCell              = requirePowah('EnergyCellInputAdapter'),
+        furnator                = requirePowah('FurnatorInputAdapter'),
+        magmator                = requirePowah('MagmatorInputAdapter'),
+        reactor                 = requirePowah('ReactorInputAdapter'),
+        solarPanel              = requirePowah('SolarPanelInputAdapter'),
+        thermoGenerator         = requirePowah('ThermoGeneratorInputAdapter'),
     },
-
-    -- modem
-    secureModem                 = requireInput('SecureModemInputAdapter'),
 }
+
+-- aliases that will be deprecated in the future
+export.refinedStorage              = export.advancedPeripherals.rsBridge
+export.meStorage                   = export.advancedPeripherals.meBridge
+
+return export
