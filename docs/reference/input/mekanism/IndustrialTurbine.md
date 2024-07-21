@@ -1,3 +1,7 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Industrial Turbine Input <RepoLink path="lib/input/mekanism/IndustrialTurbineInputAdapter.lua" />
 
 ```lua
@@ -10,8 +14,6 @@ telem.input.mekanism.industrialTurbine (
 ::: warning Mod Dependencies
 Requires **Mekanism** and **Mekanism Generators**.
 :::
-
-This adapter produces a metric for most of the available information from a Turbine Valve. By default, the metrics are limited to an opinionated basic list, but this can be expanded with the `categories` parameter at initialization. The default `basic` category provides all the information needed to safely monitor the industrial turbine.
 
 See the Usage section for a complete list of the metrics in each category.
 
@@ -42,10 +44,7 @@ List of metric categories to query. The value `"*"` can be used to include all c
 
 ## Usage
 
-```lua
--- LUT for mekturbine:dumping_mode metric
-local DUMPING_MODES = 
-
+```lua{4}
 local telem = require 'telem'
 
 local backplane = telem.backplane()
@@ -58,35 +57,12 @@ Given a Turbine Valve peripheral on the `right` side of the computer, this appen
 ### Basic
 
 <MetricTable
-  all-adapters="my_turbine"
-  all-sources="right"
+  prefix="mekturbine:"
   :metrics="[
-    {
-      name: 'mekturbine:energy_filled_percentage',
-      value: '0.0 - 1.0',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:energy_production_rate',
-      value: '0.0 - inf',
-      unit: 'FE/t',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:energy_max_production',
-      value: '0.0 - inf',
-      unit: 'FE/t',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:steam_filled_percentage',
-      value: '0.0 - 1.0',
-      adapter: 'my_turbine',
-      source: 'right'
-    }
+    ...metrics.genericMachine.basic,
+    { name: 'energy_production_rate',   value: '0.0 - inf', unit: 'FE/t'  },
+    { name: 'energy_max_production',    value: '0.0 - inf', unit: 'FE/t'  },
+    { name: 'steam_filled_percentage',  value: '0.0 - 1.0'                }
   ]"
 />
 
@@ -97,146 +73,47 @@ DUMPING_MODES = { IDLE = 1, DUMPING_EXCESS = 2, DUMPING = 3 }
 ```
 
 <MetricTable
-  all-adapters="my_turbine"
-  all-sources="right"
+  prefix="mekturbine:"
   :metrics="[
-    {
-      name: 'mekturbine:comparator_level',
-      value: '0 - 15',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:dumping_mode',
-      value: 'DUMPING_MODES value',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:flow_rate',
-      value: '0.0 - inf',
-      unit: 'B/t',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:max_flow_rate',
-      value: '0.0 - inf',
-      unit: 'B/t',
-      adapter: 'my_turbine',
-      source: 'right'
-    }
+    ...metrics.genericMachine.advanced,
+    { name: 'dumping_mode',   value: 'DUMPING_MODES value'              },
+    { name: 'flow_rate',      value: '0.0 - inf',           unit: 'B/t' },
+    { name: 'max_flow_rate',  value: '0.0 - inf',           unit: 'B/t' }
   ]"
 />
 
 ### Energy
 
 <MetricTable
-  all-adapters="my_turbine"
-  all-sources="right"
+  prefix="mekturbine:"
   :metrics="[
-    {
-      name: 'mekturbine:energy',
-      value: '0.0 - inf',
-      unit: 'FE',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:max_energy',
-      value: '0.0 - inf',
-      unit: 'FE',
-      adapter: 'my_turbine',
-      source: 'right'
-    },
-    {
-      name: 'mekturbine:energy_needed',
-      value: '0.0 - inf',
-      unit: 'FE',
-      adapter: 'my_turbine',
-      source: 'right'
-    }
+    ...metrics.genericMachine.energy
   ]"
 />
 
 ### Steam
 
 <MetricTable
-  all-adapters="my_turbine"
-  all-sources="right"
+  prefix="mekturbine:"
   :metrics="[
-    {
-      name: 'mekturbine:steam_input_rate',
-      value: '0.0 - inf',
-      unit: 'B/t'
-    },
-    {
-      name: 'mekturbine:steam',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekturbine:steam_capacity',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekturbine:steam_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    }
+    { name: 'steam_input_rate', value: '0.0 - inf', unit: 'B/t' },
+    { name: 'steam',            value: '0.0 - inf', unit: 'B'   },
+    { name: 'steam_capacity',   value: '0.0 - inf', unit: 'B'   },
+    { name: 'steam_needed',     value: '0.0 - inf', unit: 'B'   }
   ]"
 />
 
 ### Formation
 
 <MetricTable
-  all-adapters="my_turbine"
-  all-sources="right"
+  prefix="mekturbine:"
   :metrics="[
-    {
-      name: 'mekturbine:formed',
-      value: '0 or 1'
-    },
-    {
-      name: 'mekturbine:height',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekturbine:length',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekturbine:width',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekturbine:blades',
-      value: '0 - inf'
-    },
-    {
-      name: 'mekturbine:coils',
-      value: '0 - inf'
-    },
-    {
-      name: 'mekturbine:condensers',
-      value: '0 - inf'
-    },
-    {
-      name: 'mekturbine:dispersers',
-      value: '0 - inf'
-    },
-    {
-      name: 'mekturbine:vents',
-      value: '0 - inf'
-    },
-    {
-      name: 'mekturbine:max_water_output',
-      value: '0.0 - inf',
-      unit: 'B/t'
-    }
+    ...metrics.multiblock.formation,
+    { name: 'blades',           value: '0 - inf'                },
+    { name: 'coils',            value: '0 - inf'                },
+    { name: 'condensers',       value: '0 - inf'                },
+    { name: 'dispersers',       value: '0 - inf'                },
+    { name: 'vents',            value: '0 - inf'                },
+    { name: 'max_water_output', value: '0.0 - inf', unit: 'B/t' }
   ]"
 />

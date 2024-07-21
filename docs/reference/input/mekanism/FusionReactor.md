@@ -1,3 +1,7 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Fusion Reactor Input <RepoLink path="lib/input/mekanism/FusionReactorInputAdapter.lua" />
 
 ```lua
@@ -10,8 +14,6 @@ telem.input.mekanism.fusionReactor (
 ::: warning Mod Dependencies
 Requires **Mekanism** and **Mekanism Generators**.
 :::
-
-This adapter produces a metric for most of the available information from a Fusion Reactor Logic Adapter. By default, the metrics are limited to an opinionated basic list, but this can be expanded with the `categories` parameter at initialization. The default `basic` category provides all the information needed to monitor any implemented safety measures for fusion reactors.
 
 See the Usage section for a complete list of the metrics in each category.
 
@@ -55,164 +57,62 @@ Given a Fusion Reactor Logic Adapter peripheral on the `right` side of the compu
 ### Basic
 
 <MetricTable
+  prefix="mekfusion:"
   :metrics="[
+    { name: 'plasma_temperature',           value: '0.0 - inf', unit: 'K'     },
+    { name: 'case_temperature',             value: '0.0 - inf', unit: 'K'     },
+    { name: 'water_filled_percentage',      value: '0.0 - 1.0'                },
+    { name: 'steam_filled_percentage',      value: '0.0 - 1.0'                },
+    { name: 'tritium_filled_percentage',    value: '0.0 - 1.0'                },
+    { name: 'deuterium_filled_percentage',  value: '0.0 - 1.0'                },
+    { name: 'dt_fuel_filled_percentage',    value: '0.0 - 1.0'                },
     {
-      name: 'mekfusion:plasma_temperature',
-      value: '0.0 - inf',
-      unit: 'K'
+      name: 'production_rate',              value: '0.0 - inf', unit: 'FE/t',
+      badge: { type: 'warning', text: 'Mekanism 10.3+' },
     },
-    {
-      name: 'mekfusion:case_temperature',
-      value: '0.0 - inf',
-      unit: 'K'
-    },
-    {
-      name: 'mekfusion:water_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekfusion:steam_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekfusion:tritium_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekfusion:deuterium_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekfusion:dt_fuel_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekfusion:production_rate',
-      value: '0.0 - inf',
-      unit: 'FE/t'
-    },
-    {
-      name: 'mekfusion:injection_rate',
-      value: '0.0 - inf',
-      unit: 'B/t'
-    },
-    {
-      name: 'mekfusion:min_injection_rate',
-      value: '0.0 - inf',
-      unit: 'B/t'
-    },
-    {
-      name: 'mekfusion:max_plasma_temperature',
-      value: '0.0 - inf',
-      unit: 'K'
-    },
-    {
-      name: 'mekfusion:max_casing_temperature',
-      value: '0.0 - inf',
-      unit: 'K'
-    },
-    {
-      name: 'mekfusion:passive_generation_rate',
-      value: '0.0 - inf',
-      unit: 'FE/t'
-    },
-    {
-      name: 'mekfusion:ignition_temperature',
-      value: '0.0 - inf',
-      unit: 'K'
-    }
+    { name: 'injection_rate',               value: '0.0 - inf', unit: 'B/t'   },
+    { name: 'min_injection_rate',           value: '0.0 - inf', unit: 'B/t'   },
+    { name: 'max_plasma_temperature',       value: '0.0 - inf', unit: 'K'     },
+    { name: 'max_casing_temperature',       value: '0.0 - inf', unit: 'K'     },
+    { name: 'passive_generation_rate',      value: '0.0 - inf', unit: 'FE/t'  },
+    { name: 'ignition_temperature',         value: '0.0 - inf', unit: 'K'     }
   ]"
 />
 
 ### Coolant
 
 <MetricTable
+  prefix="mekfusion:"
   :metrics="[
-    {
-      name: 'mekfusion:water_capacity',
-      value: '0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:water_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:steam_capacity',
-      value: '0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:steam_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    }
+    { name: 'water_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'water_needed',   value: '0.0 - inf', unit: 'B' },
+    { name: 'steam_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'steam_needed',   value: '0.0 - inf', unit: 'B' }
   ]"
 />
 
 ### Fuel
 
 <MetricTable
+  prefix="mekfusion:"
   :metrics="[
-    {
-      name: 'mekfusion:tritium_capacity',
-      value: '0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:tritium_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:deuterium_capacity',
-      value: '0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:deuterium_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:dt_fuel_capacity',
-      value: '0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekfusion:dt_fuel_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    }
+    { name: 'tritium_capacity',   value: '0 - inf',   unit: 'B' },
+    { name: 'tritium_needed',     value: '0.0 - inf', unit: 'B' },
+    { name: 'deuterium_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'deuterium_needed',   value: '0.0 - inf', unit: 'B' },
+    { name: 'dt_fuel_capacity',   value: '0 - inf',   unit: 'B' },
+    { name: 'dt_fuel_needed',   value: '0.0 - inf',   unit: 'B' }
   ]"
 />
 
 ### Formation
 
 <MetricTable
+  prefix="mekfusion:"
   :metrics="[
+    ...metrics.multiblock.formation,
     {
-      name: 'mekfusion:formed',
-      value: '0 or 1'
-    },
-    {
-      name: 'mekfusion:height',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekfusion:length',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekfusion:width',
-      value: '0 - inf',
-      unit: 'm'
-    },
-    {
-      name: 'mekfusion:active_cooled_logic',
+      name: 'active_cooled_logic',
       value: '0 or 1'
     }
   ]"

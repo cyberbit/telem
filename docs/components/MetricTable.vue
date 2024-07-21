@@ -15,7 +15,12 @@
             <tbody>
                 <template v-for="(metric, i) in metrics" :key="metric.name">
                     <tr>
-                        <td><code>{{ metric.name }}</code></td>
+                        <td>
+                            <code>{{ prefix + metric.name }}</code>
+                            <template v-if="metric.badge">
+                                <br><Badge class="metric-badge" :type="metric.badge.type" :text="metric.badge.text" />
+                            </template>
+                        </td>
                         <td>{{ metric.value }}</td>
                         <td>{{ metric.unit || '' }}</td>
                         <template v-if="showHeritage">
@@ -57,6 +62,10 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    prefix: {
+        type: String,
+        default: ''
+    },
     showHeritage: {
         type: Boolean,
         default: false
@@ -71,3 +80,9 @@ const props = defineProps({
     }
 });
 </script>
+
+<style>
+.metric-badge {
+    margin-top: 0.5rem;
+}
+</style>

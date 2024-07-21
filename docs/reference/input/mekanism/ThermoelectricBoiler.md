@@ -1,0 +1,118 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
+# Mekanism Thermoelectric Boiler Input <RepoLink path="lib/input/mekanism/ThermoelectricBoilerInputAdapter.lua" />
+
+```lua
+telem.input.mekanism.boiler (
+  peripheralID: string,
+  categories?: string[] | '*'
+)
+```
+
+::: warning Mod Dependencies
+Requires **Mekanism**.
+:::
+
+See the Usage section for a complete list of the metrics in each category.
+
+<PropertiesTable
+  :properties="[
+    {
+      name: 'peripheralID',
+      type: 'string',
+      default: 'nil',
+      description: 'Peripheral ID of the Boiler Valve'
+    },
+    {
+      name: 'categories',
+      type: 'string[] | &quot;*&quot;',
+      default: '{ &quot;basic&quot; }'
+    }
+  ]"
+>
+<template v-slot:categories>
+
+List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
+
+```lua
+{ "basic", "advanced", "water", "steam", "coolant", "formation" }
+```
+</template>
+</PropertiesTable>
+
+## Usage
+
+```lua{4}
+local telem = require 'telem'
+
+local backplane = telem.backplane()
+  :addInput('my_boiler', telem.input.mekanism.boiler('right', '*'))
+  :cycleEvery(5)()
+```
+
+Given a Boiler Valve peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+
+### Basic
+
+<MetricTable
+  prefix="mekboiler:"
+  :metrics="[
+    { name: 'boil_rate',                        value: '0 - inf', unit: 'B/t' },
+    { name: 'max_boil_rate',                    value: '0 - inf', unit: 'B/t' },
+    { name: 'temperature',                      value: '0 - inf', unit: 'K'   },
+    { name: 'water_filled_percentage',          value: '0.0 - 1.0'            },
+    { name: 'steam_filled_percentage',          value: '0.0 - 1.0'            },
+    { name: 'cooled_coolant_filled_percentage', value: '0.0 - 1.0'            },
+    { name: 'heated_coolant_filled_percentage', value: '0.0 - 1.0'            }
+  ]"
+/>
+
+### Advanced
+
+<MetricTable
+  prefix="mekboiler:"
+  :metrics="[
+    {
+      name: 'environmental_loss', value: '0.0 - inf',
+      badge: { type: 'warning', text: 'Mekanism 10.3+' }
+    },
+  ]"
+/>
+
+### Water
+
+<MetricTable
+  prefix="mekboiler:"
+  :metrics="[
+    { name: 'water',          value: '0.0 - inf', unit: 'B' },
+    { name: 'water_capacity', value: '0.0 - inf', unit: 'B' },
+    { name: 'water_needed',   value: '0.0 - inf', unit: 'B' }
+  ]"
+/>
+
+### Coolant
+
+<MetricTable
+  prefix="mekboiler:"
+  :metrics="[
+    { name: 'cooled_coolant',           value: '0.0 - inf', unit: 'B' },
+    { name: 'cooled_coolant_capacity',  value: '0.0 - inf', unit: 'B' },
+    { name: 'cooled_coolant_needed',    value: '0.0 - inf', unit: 'B' },
+    { name: 'heated_coolant',           value: '0.0 - inf', unit: 'B' },
+    { name: 'heated_coolant_capacity',  value: '0.0 - inf', unit: 'B' },
+    { name: 'heated_coolant_needed',    value: '0.0 - inf', unit: 'B' }
+  ]"
+/>
+
+### Formation
+
+<MetricTable
+  prefix="mekboiler:"
+  :metrics="[
+    ...metrics.multiblock.formation,
+    { name: 'boil_capacity',  value: '0.0 - inf', unit: 'B' },
+    { name: 'superheaters',   value: '0 - inf'              }
+  ]"
+/>

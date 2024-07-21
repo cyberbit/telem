@@ -1,3 +1,7 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Induction Matrix Input <RepoLink path="lib/input/mekanism/InductionMatrixInputAdapter.lua" />
 
 ```lua
@@ -55,41 +59,40 @@ Given an Induction Matrix Port peripheral on the `right` side of the computer, t
 ### Basic
 
 <MetricTable
+  prefix="mekinduction:"
   :metrics="[
-    { name: 'mekinduction:energy_filled_percentage', value: '0.0 - 1.0'               },
-    { name: 'mekinduction:energy_input',             value: '0.0 - inf', unit: 'FE/t' },
-    { name: 'mekinduction:energy_output',            value: '0.0 - inf', unit: 'FE/t' },
-    { name: 'mekinduction:energy_transfer_cap',      value: '0 - inf',   unit: 'FE/t' }
+    ...metrics.genericMachine.basic,
+    { name: 'energy_input',             value: '0.0 - inf', unit: 'FE/t' },
+    { name: 'energy_output',            value: '0.0 - inf', unit: 'FE/t' },
+    { name: 'energy_transfer_cap',      value: '0 - inf',   unit: 'FE/t' }
   ]"
 />
 
 ### Advanced
 
 <MetricTable
+  prefix="mekinduction:"
   :metrics="[
-    { name: 'mekinduction:comparator_level', value: '0 - 15' }
+    ...metrics.genericMachine.advanced,
   ]"
 />
 
 ### Energy
 
 <MetricTable
+  prefix="mekinduction:"
   :metrics="[
-    { name: 'mekinduction:energy',        value: '0 - inf', unit: 'FE' },
-    { name: 'mekinduction:max_energy',    value: '0 - inf', unit: 'FE' },
-    { name: 'mekinduction:energy_needed', value: '0 - inf', unit: 'FE' }
+    ...metrics.genericMachine.energy,
   ]"
 />
 
 ### Formation
 
 <MetricTable
+  prefix="mekinduction:"
   :metrics="[
-    { name: 'mekinduction:formed',              value: '0 or 1'             },
-    { name: 'mekinduction:height',              value: '0 - inf', unit: 'm' },
-    { name: 'mekinduction:length',              value: '0 - inf', unit: 'm' },
-    { name: 'mekinduction:width',               value: '0 - inf', unit: 'm' },
-    { name: 'mekinduction:installed_cells',     value: '0 - inf'            },
-    { name: 'mekinduction:installed_providers', value: '0 - inf'            }
+    ...metrics.multiblock.formation,
+    { name: 'installed_cells',     value: '0 - inf' },
+    { name: 'installed_providers', value: '0 - inf' }
   ]"
 />

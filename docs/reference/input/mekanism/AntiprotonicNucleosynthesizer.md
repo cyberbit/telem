@@ -1,3 +1,7 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Antiprotonic Nucleosynthesizer Input <RepoLink path="lib/input/mekanism/AntiprotonicNucleosynthesizerInputAdapter.lua" />
 
 ```lua
@@ -53,101 +57,50 @@ Given an Antiprotonic Nucleosynthesizer peripheral on the `right` side of the co
 ### Basic
 
 <MetricTable
+  prefix="mekapns:"
   :metrics="[
-    {
-      name: 'mekapns:input_chemical_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekapns:input_item_count',
-      value: '0 - inf',
-      unit: 'item'
-    },
-    {
-      name: 'mekapns:output_item_count',
-      value: '0 - inf',
-      unit: 'item'
-    },
-    {
-      name: 'mekapns:energy_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekapns:energy_usage',
-      value: '0.0 - inf',
-      unit: 'FE/t'
-    }
+    { name: 'input_chemical_filled_percentage', value: '0.0 - 1.0'                },
+    { name: 'input_item_count',                 value: '0 - inf',   unit: 'item'  },
+    { name: 'output_item_count',                value: '0 - inf',   unit: 'item'  },
+    { name: 'energy_usage',                     value: '0.0 - inf', unit: 'FE/t'  },
+    ...metrics.genericMachine.basic
   ]"
 />
 
 ### Advanced
 
 <MetricTable
+  prefix="mekapns:"
   :metrics="[
-    {
-      name: 'mekapns:comparator_level',
-      value: '0 - 15'
-    }
+    ...metrics.genericMachine.advanced
   ]"
 />
 
 ### Input
 
 <MetricTable
+  prefix="mekapns:"
   :metrics="[
-    {
-      name: 'mekapns:input_chemical',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekapns:input_chemical_capacity',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekapns:input_chemical_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    }
+    { name: 'input_chemical',           value: '0.0 - inf', unit: 'B' },
+    { name: 'input_chemical_capacity',  value: '0.0 - inf', unit: 'B' },
+    { name: 'input_chemical_needed',    value: '0.0 - inf', unit: 'B' }
   ]"
 />
 
 ### Energy
 
 <MetricTable
+  prefix="mekapns:"
   :metrics="[
-    {
-      name: 'mekapns:energy',
-      value: '0.0 - inf',
-      unit: 'FE'
-    },
-    {
-      name: 'mekapns:max_energy',
-      value: '0.0 - inf',
-      unit: 'FE'
-    },
-    {
-      name: 'mekapns:energy_needed',
-      value: '0.0 - inf',
-      unit: 'FE'
-    }
+    ...metrics.genericMachine.energy
   ]"
 />
 
 ### Recipe
 
 <MetricTable
+  prefix="mekapns:"
   :metrics="[
-    {
-      name: 'mekapns:recipe_progress',
-      value: '0 - inf',
-      unit: 't'
-    },
-    {
-      name: 'mekapns:ticks_required',
-      value: '0 - inf',
-      unit: 't'
-    }
+    ...metrics.recipeProgress.recipe,
   ]"
 />

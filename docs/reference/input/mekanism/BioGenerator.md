@@ -1,3 +1,7 @@
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Bio Generator Input <RepoLink path="lib/input/mekanism/BioGeneratorInputAdapter.lua" />
 
 ```lua
@@ -53,83 +57,41 @@ Given a Bio Generator peripheral on the `right` side of the computer, this appen
 ### Basic
 
 <MetricTable
+  prefix="mekbiogen:"
   :metrics="[
-    {
-      name: 'mekbiogen:production_rate',
-      value: '0.0 - inf',
-      unit: 'FE/t'
-    },
-    {
-      name: 'mekbiogen:energy_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekbiogen:bio_fuel_filled_percentage',
-      value: '0.0 - 1.0'
-    },
-    {
-      name: 'mekbiogen:bio_fuel_item_count',
-      value: '0 - inf'
-    }
+    ...metrics.genericMachine.basic,
+    ...metrics.generator.basic,
+    { name: 'bio_fuel_filled_percentage', value: '0.0 - 1.0'  },
+    { name: 'bio_fuel_item_count',        value: '0 - inf'    }
   ]"
 />
 
 ### Advanced
 
 <MetricTable
+  prefix="mekbiogen:"
   :metrics="[
-    {
-      name: 'mekbiogen:comparator_level',
-      value: '0 - 15'
-    }
+    ...metrics.genericMachine.advanced
   ]"
 />
 
 ### Fuel
 
 <MetricTable
+  prefix="mekbiogen:"
   :metrics="[
-    {
-      name: 'mekbiogen:bio_fuel_capacity',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekbiogen:bio_fuel',
-      value: '0.0 - inf',
-      unit: 'B'
-    },
-    {
-      name: 'mekbiogen:bio_fuel_needed',
-      value: '0.0 - inf',
-      unit: 'B'
-    }
+    { name: 'bio_fuel',           value: '0.0 - inf', unit: 'B' },
+    { name: 'bio_fuel_capacity',  value: '0.0 - inf', unit: 'B' },
+    { name: 'bio_fuel_needed',    value: '0.0 - inf', unit: 'B' }
   ]"
 />
 
 ### Energy
 
 <MetricTable
+  prefix="mekbiogen:"
   :metrics="[
-    {
-      name: 'mekbiogen:max_energy',
-      value: '0.0 - inf',
-      unit: 'FE'
-    },
-    {
-      name: 'mekbiogen:energy_needed',
-      value: '0.0 - inf',
-      unit: 'FE'
-    },
-    {
-      name: 'mekbiogen:energy',
-      value: '0.0 - inf',
-      unit: 'FE'
-    },
-    {
-      name: 'mekbiogen:max_energy_output',
-      value: '0.0 - inf',
-      unit: 'FE/t'
-    }
+    ...metrics.genericMachine.energy,
+    ...metrics.generator.energy
   ]"
 />

@@ -19,7 +19,7 @@ See the Usage section for a complete list of the metrics in each category.
       name: 'peripheralID',
       type: 'string',
       default: 'nil',
-      description: 'Peripheral ID of the Antiprotonic Nucleosynthesizer'
+      description: 'Peripheral ID of the Bin'
     },
 		{
 			name: 'categories',
@@ -53,17 +53,10 @@ Given a Bin peripheral on the `right` side of the computer, this appends the fol
 ### Basic
 
 <MetricTable
+  prefix="mekbin:"
   :metrics="[
-    {
-      name: 'mekbin:stored',
-      value: '0 - inf',
-      unit: 'item'
-    },
-    {
-      name: 'mekbin:capacity',
-      value: '0 - inf',
-      unit: 'item'
-    }
+    { name: 'stored',   value: '0 - inf', unit: 'item' },
+    { name: 'capacity', value: '0 - inf', unit: 'item' }
   ]"
 />
 
@@ -75,11 +68,8 @@ If the bin contains items, a storage metric is added for the item. Given a bin w
 The following metric would be added:
 
 <MetricTable
+  prefix="storage:"
   :metrics="[
-    {
-      name: 'storage:minecraft:lime_concrete_powder',
-      value: '71',
-      unit: 'item'
-    },
+    { name: 'minecraft:lime_concrete_powder', value: '71', unit: 'item' }
   ]"
 />
