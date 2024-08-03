@@ -1,58 +1,18 @@
+---
+telem:
+  adapter:
+    id: 'chemicalInfuser'
+    name: 'Chemical Infuser'
+    categories: '{ "basic", "advanced", "input", "output", "energy" }'
+---
+
 <script setup>
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
 # Mekanism Chemical Infuser Input <RepoLink path="lib/input/mekanism/ChemicalInfuserInputAdapter.lua" />
 
-```lua
-telem.input.mekanism.chemicalInfuser (
-  peripheralID: string,
-  categories?: string[] | '*'
-)
-```
-
-::: warning Mod Dependencies
-Requires **Mekanism**.
-:::
-
-See the Usage section for a complete list of the metrics in each category.
-
-<PropertiesTable
-  :properties="[
-    {
-      name: 'peripheralID',
-      type: 'string',
-      default: 'nil',
-      description: 'Peripheral ID of the Chemical Infuser'
-    },
-    {
-      name: 'categories',
-      type: 'string[] | &quot;*&quot;',
-      default: '{ &quot;basic&quot; }'
-    }
-  ]"
->
-<template v-slot:categories>
-
-List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
-
-```lua
-{ "basic", "advanced", "input", "output", "energy" }
-```
-</template>
-</PropertiesTable>
-
-## Usage
-
-```lua{4}
-local telem = require 'telem'
-
-local backplane = telem.backplane()
-  :addInput('my_infuser', telem.input.mekanism.chemicalInfuser('right', '*'))
-  :cycleEvery(5)()
-```
-
-Given a Chemical Infuser peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+<!--@include: ./common/preamble.md -->
 
 ### Basic
 

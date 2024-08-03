@@ -1,54 +1,18 @@
+---
+telem:
+  adapter:
+    id: 'chemicalTank'
+    name: 'Chemical Tank'
+    categories: '{ "basic", "advanced", "storage" }'
+---
+
+<script setup>
+  import { data as metrics } from './common/metrics.data.ts'
+</script>
+
 # Mekanism Chemical Tank Input <RepoLink path="lib/input/mekanism/ChemicalTankInputAdapter.lua" />
 
-```lua
-telem.input.mekanism.chemicalTank (
-  peripheralID: string,
-  categories?: string[] | '*'
-)
-```
-
-::: warning Mod Dependencies
-Requires **Mekanism**.
-:::
-
-See the Usage section for a complete list of the metrics in each category.
-
-<PropertiesTable
-  :properties="[
-    {
-      name: 'peripheralID',
-      type: 'string',
-      default: 'nil',
-      description: 'Peripheral ID of the Chemical Tank'
-    },
-    {
-      name: 'categories',
-      type: 'string[] | &quot;*&quot;',
-      default: '{ &quot;basic&quot; }'
-    }
-  ]"
->
-<template v-slot:categories>
-
-List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
-
-```lua
-{ "basic", "advanced", "storage" }
-```
-</template>
-</PropertiesTable>
-
-## Usage
-
-```lua{4}
-local telem = require 'telem'
-
-local backplane = telem.backplane()
-  :addInput('my_chemtank', telem.input.mekanism.chemicalTank('right', '*'))
-  :cycleEvery(5)()
-```
-
-Given a Chemical Tank peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+<!--@include: ./common/preamble.md -->
 
 ### Basic
 

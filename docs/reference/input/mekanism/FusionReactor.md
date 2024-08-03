@@ -1,58 +1,19 @@
+---
+telem:
+  adapter:
+    id: 'fusionReactor'
+    name: 'Fusion Reactor'
+    categories: '{ "basic", "coolant", "fuel", "formation" }'
+    requiresMekGen: true
+---
+
 <script setup>
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
 # Mekanism Fusion Reactor Input <RepoLink path="lib/input/mekanism/FusionReactorInputAdapter.lua" />
 
-```lua
-telem.input.mekanism.fusionReactor (
-	peripheralID: string,
-	categories?: string[] | '*'
-)
-```
-
-::: warning Mod Dependencies
-Requires **Mekanism** and **Mekanism Generators**.
-:::
-
-See the Usage section for a complete list of the metrics in each category.
-
-<PropertiesTable
-  :properties="[
-    {
-      name: 'peripheralID',
-      type: 'string',
-      default: 'nil',
-      description: 'Peripheral ID of the Fusion Reactor Logic Adapter'
-    },
-		{
-			name: 'categories',
-			type: 'string[] | &quot;*&quot;',
-			default: '{ &quot;basic&quot; }'
-		}
-  ]"
->
-<template v-slot:categories>
-
-List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
-
-```lua
-{ "basic", "coolant", "fuel", "formation" }
-```
-</template>
-</PropertiesTable>
-
-## Usage
-
-```lua{4}
-local telem = require 'telem'
-
-local backplane = telem.backplane()
-	:addInput('my_fusion', telem.input.mekanism.fusionReactor('right', '*'))
-  :cycleEvery(5)()
-```
-
-Given a Fusion Reactor Logic Adapter peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+<!--@include: ./common/preamble.md -->
 
 ### Basic
 
@@ -84,9 +45,9 @@ Given a Fusion Reactor Logic Adapter peripheral on the `right` side of the compu
 <MetricTable
   prefix="mekfusion:"
   :metrics="[
-    { name: 'water_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'water_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'water_needed',   value: '0.0 - inf', unit: 'B' },
-    { name: 'steam_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'steam_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'steam_needed',   value: '0.0 - inf', unit: 'B' }
   ]"
 />
@@ -96,12 +57,12 @@ Given a Fusion Reactor Logic Adapter peripheral on the `right` side of the compu
 <MetricTable
   prefix="mekfusion:"
   :metrics="[
-    { name: 'tritium_capacity',   value: '0 - inf',   unit: 'B' },
+    { name: 'tritium_capacity',   value: '0.0 - inf', unit: 'B' },
     { name: 'tritium_needed',     value: '0.0 - inf', unit: 'B' },
-    { name: 'deuterium_capacity', value: '0 - inf',   unit: 'B' },
+    { name: 'deuterium_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'deuterium_needed',   value: '0.0 - inf', unit: 'B' },
-    { name: 'dt_fuel_capacity',   value: '0 - inf',   unit: 'B' },
-    { name: 'dt_fuel_needed',   value: '0.0 - inf',   unit: 'B' }
+    { name: 'dt_fuel_capacity',   value: '0.0 - inf', unit: 'B' },
+    { name: 'dt_fuel_needed',     value: '0.0 - inf', unit: 'B' }
   ]"
 />
 

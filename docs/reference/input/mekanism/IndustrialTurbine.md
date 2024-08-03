@@ -1,58 +1,19 @@
+---
+telem:
+  adapter:
+    id: 'industrialTurbine'
+    name: 'Industrial Turbine'
+    categories: '{ "basic", "advanced", "energy", "steam", "formation" }'
+    requiresMekGen: true
+---
+
 <script setup>
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
 # Mekanism Industrial Turbine Input <RepoLink path="lib/input/mekanism/IndustrialTurbineInputAdapter.lua" />
 
-```lua
-telem.input.mekanism.industrialTurbine (
-	peripheralID: string,
-	categories?: string[] | '*'
-)
-```
-
-::: warning Mod Dependencies
-Requires **Mekanism** and **Mekanism Generators**.
-:::
-
-See the Usage section for a complete list of the metrics in each category.
-
-<PropertiesTable
-  :properties="[
-    {
-      name: 'peripheralID',
-      type: 'string',
-      default: 'nil',
-      description: 'Peripheral ID of the Turbine Valve'
-    },
-		{
-			name: 'categories',
-			type: 'string[] | &quot;*&quot;',
-			default: '{ &quot;basic&quot; }'
-		}
-  ]"
->
-<template v-slot:categories>
-
-List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
-
-```lua
-{ "basic", "advanced", "energy", "steam", "formation" }
-```
-</template>
-</PropertiesTable>
-
-## Usage
-
-```lua{4}
-local telem = require 'telem'
-
-local backplane = telem.backplane()
-	:addInput('my_turbine', telem.input.mekanism.industrialTurbine('right', '*'))
-  :cycleEvery(5)()
-```
-
-Given a Turbine Valve peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+<!--@include: ./common/preamble.md -->
 
 ### Basic
 
