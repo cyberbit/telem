@@ -1,12 +1,12 @@
 ```lua-vue
-telem.input.mekanism.{{ $frontmatter.telem.adapter.id || 'ADAPTER.ID' }} (
+telem.input.mekanism.{{ $frontmatter?.telem?.adapter?.id || 'ADAPTER.ID' }} (
   peripheralID: string,
   categories?: string[] | '*'
 )
 ```
 
 ::: warning Mod Dependencies
-<template v-if="$frontmatter.telem.adapter.requiresMekGen">
+<template v-if="$frontmatter?.telem?.adapter?.requiresMekGen">
 
 Requires **Mekanism** and **Mekanism Generators**.
 
@@ -26,7 +26,7 @@ See the Usage section for a complete list of the metrics in each category.
       name: 'peripheralID',
       type: 'string',
       default: 'nil',
-      description: 'Peripheral ID of the ' + ($frontmatter.telem.adapter.name || 'ADAPTER.NAME')
+      description: 'Peripheral ID of the ' + ($frontmatter?.telem?.adapter?.name || 'ADAPTER.NAME')
     },
     {
       name: 'categories',
@@ -40,7 +40,7 @@ See the Usage section for a complete list of the metrics in each category.
 List of metric categories to query. The value `"*"` can be used to include all categories, which are listed below.
 
 ```lua-vue
-{{ $frontmatter.telem.adapter.categories || 'ADAPTER.CATEGORIES' }}
+{{ $frontmatter?.telem?.adapter?.categories || 'ADAPTER.CATEGORIES' }}
 ```
 </template>
 </PropertiesTable>
@@ -51,8 +51,8 @@ List of metric categories to query. The value `"*"` can be used to include all c
 local telem = require 'telem'
 
 local backplane = telem.backplane()
-  :addInput('my_{{ $frontmatter.telem.adapter.id || 'ADAPTER.ID' }}', telem.input.mekanism.{{ $frontmatter.telem.adapter.id || 'ADAPTER.ID' }}('right', '*'))
+  :addInput('my_{{ $frontmatter?.telem?.adapter?.id || 'ADAPTER.ID' }}', telem.input.mekanism.{{ $frontmatter?.telem?.adapter?.id || 'ADAPTER.ID' }}('right', '*'))
   :cycleEvery(5)()
 ```
 
-Given a {{ $frontmatter.telem.adapter.name || 'ADAPTER.NAME' }} peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
+Given a {{ $frontmatter?.telem?.adapter?.name || 'ADAPTER.NAME' }} peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):

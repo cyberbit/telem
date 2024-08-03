@@ -3,6 +3,10 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "Telem",
   description: "Trivial Extract and Load Engine for Minecraft",
+
+  srcDir: '.',
+  srcExclude: ['**/common/*.md'],
+
   cleanUrls: true,
   ignoreDeadLinks: 'localhostLinks',
   markdown: {
