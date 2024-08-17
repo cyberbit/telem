@@ -61,14 +61,9 @@ function FusionReactorInputAdapter:beforeRegister ()
 
     self:withMultiblockQueries()
 
-    -- getDTFuel
     -- getMinPos
     -- getHohlraum
     -- getMaxPos
-    -- getTrititum
-    -- getDeuterium
-    -- getSteam
-    -- getWater
     -- getLogicMode
 end
 
