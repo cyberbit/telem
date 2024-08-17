@@ -45,8 +45,10 @@ telem:
 <MetricTable
   prefix="mekfusion:"
   :metrics="[
+    { name: 'water',          value: '0.0 - inf', unit: 'B' },
     { name: 'water_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'water_needed',   value: '0.0 - inf', unit: 'B' },
+    { name: 'steam',          value: '0.0 - inf', unit: 'B' },
     { name: 'steam_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'steam_needed',   value: '0.0 - inf', unit: 'B' }
   ]"
@@ -57,10 +59,13 @@ telem:
 <MetricTable
   prefix="mekfusion:"
   :metrics="[
+    { name: 'tritium',            value: '0.0 - inf', unit: 'B' },
     { name: 'tritium_capacity',   value: '0.0 - inf', unit: 'B' },
     { name: 'tritium_needed',     value: '0.0 - inf', unit: 'B' },
+    { name: 'deuterium',          value: '0.0 - inf', unit: 'B' },
     { name: 'deuterium_capacity', value: '0.0 - inf', unit: 'B' },
     { name: 'deuterium_needed',   value: '0.0 - inf', unit: 'B' },
+    { name: 'dt_fuel',            value: '0.0 - inf', unit: 'B' },
     { name: 'dt_fuel_capacity',   value: '0.0 - inf', unit: 'B' },
     { name: 'dt_fuel_needed',     value: '0.0 - inf', unit: 'B' }
   ]"
