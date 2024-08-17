@@ -61,7 +61,7 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Mekanism',
+            text: 'Mekanism [🚧 WIP 🚧]',
             collapsed: true,
             items: [
               { text: 'Antiprotonic Nucleosynthesizer', link: '/reference/input/mekanism/AntiprotonicNucleosynthesizer' },
@@ -79,8 +79,8 @@ export default defineConfig({
               // { text: 'Compressing Factory', link: '/reference/input/mekanism/CompressingFactory' },
               { text: 'Crusher', link: '/reference/input/mekanism/Crusher' },
               // { text: 'Crushing Factory', link: '/reference/input/mekanism/CrushingFactory' },
-              // { text: 'Digital Miner', link: '/reference/input/mekanism/DigitalMiner' },
-              // { text: 'Dynamic Tank', link: '/reference/input/mekanism/DynamicTank' },
+              { text: 'Digital Miner', link: '/reference/input/mekanism/DigitalMiner' },
+              { text: 'Dynamic Tank', link: '/reference/input/mekanism/DynamicTank' },
               // { text: 'Electric Pump', link: '/reference/input/mekanism/ElectricPump' },
               // { text: 'Electrolytic Separator', link: '/reference/input/mekanism/ElectrolyticSeparator' },
               // { text: 'Energized Smelter', link: '/reference/input/mekanism/EnergizedSmelter' },

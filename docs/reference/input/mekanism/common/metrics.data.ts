@@ -29,7 +29,7 @@ export default {
 
       multiblock: {
         formation: [
-          { name: 'formed', value: '0 or 1',  unit: 'B' },
+          { name: 'formed', value: '0 or 1',            },
           { name: 'height', value: '0 - inf', unit: 'm' },
           { name: 'length', value: '0 - inf', unit: 'm' },
           { name: 'width',  value: '0 - inf', unit: 'm' }
