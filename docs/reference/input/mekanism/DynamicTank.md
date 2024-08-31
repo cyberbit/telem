@@ -19,9 +19,9 @@ telem:
 <MetricTable
   prefix="mekdyntank:"
   :metrics="[
-    { name: 'filled_percentage', value: '0.0 - 1.0',  unit: 'B' },
-    { name: 'input_item_count',  value: '0 - inf',    unit: 'item' },
-    { name: 'output_item_count', value: '0 - inf',    unit: 'item' }
+    { name: 'filled_percentage', value: '0.0 - 1.0'                 },
+    { name: 'input_item_count',  value: '0 - inf',    unit: 'item'  },
+    { name: 'output_item_count', value: '0 - inf',    unit: 'item'  }
   ]"
 />
 
