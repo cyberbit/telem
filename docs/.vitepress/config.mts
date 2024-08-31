@@ -82,7 +82,7 @@ export default defineConfig({
               { text: 'Digital Miner', link: '/reference/input/mekanism/DigitalMiner' },
               { text: 'Dynamic Tank', link: '/reference/input/mekanism/DynamicTank' },
               { text: 'Electric Pump', link: '/reference/input/mekanism/ElectricPump' },
-              // { text: 'Electrolytic Separator', link: '/reference/input/mekanism/ElectrolyticSeparator' },
+              { text: 'Electrolytic Separator', link: '/reference/input/mekanism/ElectrolyticSeparator' },
               // { text: 'Energized Smelter', link: '/reference/input/mekanism/EnergizedSmelter' },
               // { text: 'Energy Cube', link: '/reference/input/mekanism/EnergyCube' },
               // { text: 'Enriching Factory', link: '/reference/input/mekanism/EnrichingFactory' },
