@@ -86,7 +86,7 @@ export default defineConfig({
               { text: 'Energized Smelter', link: '/reference/input/mekanism/EnergizedSmelter' },
               { text: 'Energy Cube', link: '/reference/input/mekanism/EnergyCube' },
               // { text: 'Enriching Factory', link: '/reference/input/mekanism/EnrichingFactory' },
-              // { text: 'Enrichment Chamber', link: '/reference/input/mekanism/EnrichmentChamber' },
+              { text: 'Enrichment Chamber', link: '/reference/input/mekanism/EnrichmentChamber' },
               { text: 'Fission Reactor', link: '/reference/input/mekanism/FissionReactor' },
               // { text: 'Fluid Tank', link: '/reference/input/mekanism/FluidTank' },
               // { text: 'Fluidic Plenisher', link: '/reference/input/mekanism/FluidicPlenisher' },
