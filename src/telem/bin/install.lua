@@ -36,6 +36,33 @@ local ui = (function ()
     return b
 end)()
 
+-- patch redirect support for CC:T on 1.12 (and earlier?)
+local function httpGetRedirect(url, maxRedirects)
+    maxRedirects = maxRedirects or 5
+    local redirects = 0
+
+    while redirects < maxRedirects do
+        local response = http.get(url)
+        if not response then
+            return nil, 'Failed to get response'
+        end
+
+        local statusCode = response.getResponseCode()
+        if statusCode >= 300 and statusCode < 400 then
+            local location = response.getResponseHeaders()['Location']
+            if not location then
+                return nil, 'Redirect location not provided'
+            end
+            url = location
+            redirects = redirects + 1
+        else
+            return response
+        end
+    end
+
+    return nil, 'Too many redirects'
+end
+
 local termW, termH = term.getSize()
 
 local boxSizing = {
@@ -84,7 +111,7 @@ local youWouldntDownloadATree = function (tree, updateProgress, updateBlob)
             local bloburl = string.gsub(tree.url, '{sha}', tree.sha)
             bloburl = string.gsub(bloburl, '{path}', v.path)
 
-            local blobreq = http.get(bloburl)
+            local blobreq = httpGetRedirect(bloburl)
             
             local fout = fs.open(physicalPath, 'w')
             fout.write(blobreq.readAll())
@@ -127,7 +154,7 @@ local showReleaseSelector = function ()
 
     local releaseUrl = 'https://get.telem.cc/blob/releases'
 
-    local req = http.get(releaseUrl)
+    local req = httpGetRedirect(releaseUrl)
     local jres = textutils.unserialiseJSON(req.readAll())
 
     local nonPreReleases = {}
@@ -283,7 +310,7 @@ local installActions = {
 
             local treeUrl = 'https://get.telem.cc/blob/lib/main'
     
-            local req = http.get(treeUrl)
+            local req = httpGetRedirect(treeUrl)
             local res = textutils.unserialiseJSON(req.readAll())
 
             youWouldntDownloadATree(res, progress, currentBlob)
@@ -292,7 +319,7 @@ local installActions = {
 
             treeUrl = 'https://get.telem.cc/blob/vendor/main'
     
-            req = http.get(treeUrl)
+            req = httpGetRedirect(treeUrl)
             res = textutils.unserialiseJSON(req.readAll())
 
             youWouldntDownloadATree(res, progress, currentBlob)
