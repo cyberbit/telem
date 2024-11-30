@@ -106,7 +106,7 @@ export default defineConfig({
               { text: 'Logistical Sorter', link: '/reference/input/mekanism/LogisticalSorter' },
               { text: 'Mechanical Pipe', link: '/reference/input/mekanism/MechanicalPipe' },
               { text: 'Metallurgic Infuser', link: '/reference/input/mekanism/MetallurgicInfuser' },
-              // { text: 'Nutritional Liquifier', link: '/reference/input/mekanism/NutritionalLiquifier' },
+              { text: 'Nutritional Liquifier', link: '/reference/input/mekanism/NutritionalLiquifier' },
               // { text: 'Oredictionificator', link: '/reference/input/mekanism/Oredictionificator' },
               // { text: 'Osmium Compressor', link: '/reference/input/mekanism/OsmiumCompressor' },
               // { text: 'Painting Machine', link: '/reference/input/mekanism/PaintingMachine' },
