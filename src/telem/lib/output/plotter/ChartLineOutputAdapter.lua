@@ -20,8 +20,16 @@ function ChartLineOutputAdapter:constructor (win, filter, bg, fg, maxEntries)
     self.win = assert(win, 'Window is required')
     self.filter = assert(filter, 'Filter is required')
 
+    for i, metric in ipairs(filter) do
+        assert(metric.name, 'Metric name is required')
+        assert(metric.color, 'Metric color is required')
+    end
+
     self.plotter = nil
     self.plotData = {}
+    for i,v in ipairs(filter) do
+        self.plotData[i] = {}
+    end
     self.gridOffsetX = 0
 
     self.filter = filter
@@ -52,8 +60,10 @@ function ChartLineOutputAdapter:register ()
 
     self:updateLayout()
 
-    for i = 1, self.MAX_ENTRIES do
-        t.constrainAppend(self.plotData, self.plotter.NAN, self.MAX_ENTRIES)
+    for _, plotData in ipairs(self.plotData) do
+        for i = 1, self.MAX_ENTRIES do
+            t.constrainAppend(plotData, self.plotter.NAN, self.MAX_ENTRIES)
+        end
     end
 end
 
@@ -68,22 +78,23 @@ end
 function ChartLineOutputAdapter:write (collection)
     assert(o.instanceof(collection, MetricCollection), 'Collection must be a MetricCollection')
 
-    local resultMetric = collection:find(self.filter)
+    for i, metric in ipairs(self.filter) do
+        local resultMetric = collection:find(metric.name)
+        assert(resultMetric, 'could not find metric')
 
-    assert(resultMetric, 'could not find metric')
+        -- TODO data width setting
+        self.gridOffsetX = self.gridOffsetX - t.constrainAppend(self.plotData[i], resultMetric and resultMetric.value or self.plotter.NAN, self.MAX_ENTRIES)
 
-    -- TODO data width setting
-    self.gridOffsetX = self.gridOffsetX - t.constrainAppend(self.plotData, resultMetric and resultMetric.value or self.plotter.NAN, self.MAX_ENTRIES)
+        -- TODO X_TICK setting
+        if self.gridOffsetX % self.X_TICK == 0 then
+            self.gridOffsetX = 0
+        end
 
-    -- TODO X_TICK setting
-    if self.gridOffsetX % self.X_TICK == 0 then
-        self.gridOffsetX = 0
-    end
-
-    -- lazy layout update
-    local winw, winh = self.win.getSize()
-    if winw ~= self.plotter.box.term_width or winh ~= self.plotter.box.term_height then
-        self:updateLayout(true)
+        -- lazy layout update
+        local winw, winh = self.win.getSize()
+        if winw ~= self.plotter.box.term_width or winh ~= self.plotter.box.term_height then
+            self:updateLayout(true)
+        end
     end
 
     self:render()
@@ -95,7 +106,13 @@ function ChartLineOutputAdapter:getState ()
     local plotData = {}
 
     for k,v in ipairs(self.plotData) do
-        plotData[k] = v
+        local perPlotData = {}
+
+        for kk,vv in ipairs(v) do
+            perPlotData[kk] = vv
+        end
+
+        plotData[k] = perPlotData
     end
 
     return {
@@ -110,15 +127,25 @@ function ChartLineOutputAdapter:loadState (state)
 end
 
 function ChartLineOutputAdapter:render ()
-    local dataw = #{self.plotData}
+    local dataw = 0
+    for _, plotData in ipairs(self.plotData) do
+        dataw = math.max(dataw, #plotData)
+    end
 
     local actualmin, actualmax = math.huge, -math.huge
+    local actualPlotMin = {}
+    local actualPlotMax = {}
+    for i, plotData in ipairs(self.plotData) do
+        for _, v in ipairs(plotData) do
+            if v ~= self.plotter.NAN then
+                if v < actualmin then actualmin = v end
+                if v > actualmax then actualmax = v end
 
-    for _, v in ipairs(self.plotData) do
-        -- skip NAN
-        if v ~= self.plotter.NAN then
-            if v < actualmin then actualmin = v end
-            if v > actualmax then actualmax = v end
+                if actualPlotMin[i] == nil then actualPlotMin[i] = math.huge end
+                if actualPlotMax[i] == nil then actualPlotMax[i] = -math.huge end
+                if v < actualPlotMin[i] then actualPlotMin[i] = v end
+                if v > actualPlotMax[i] then actualPlotMax[i] = v end
+            end
         end
     end
     
@@ -142,6 +169,20 @@ function ChartLineOutputAdapter:render ()
         actualmin = actualmin - minrange / 2
         actualmax = actualmax + minrange / 2
     end
+
+    for i, plotData in ipairs(self.plotData) do
+        local minrange = 0.000001
+        local plotmin = actualPlotMin[i]
+        local plotmax = actualPlotMax[i]
+
+        if plotmin == nil then plotmin = math.huge end
+        if plotmax == nil then plotmax = -math.huge end
+
+        if plotmin == plotmax then
+            plotmin = plotmin - minrange / 2
+            plotmax = plotmax + minrange / 2
+        end
+    end
     
     self.plotter:clear(self.bg)
 
@@ -152,7 +193,9 @@ function ChartLineOutputAdapter:render ()
         -- effective max density = yMinDensity * yBasis
     })
 
-    self.plotter:chartLine(self.plotData, self.MAX_ENTRIES, actualmin, actualmax, self.fg)
+    for i, plotData in ipairs(self.plotData) do
+        self.plotter:chartLine(plotData, self.MAX_ENTRIES, actualPlotMin[i], actualPlotMax[i], self.filter[i].color) 
+    end
 
     local maxString = t.shortnum2(actualmax)
     local minString = t.shortnum2(actualmin)
