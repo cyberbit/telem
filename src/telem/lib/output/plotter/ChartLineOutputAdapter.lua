@@ -178,6 +178,11 @@ function ChartLineOutputAdapter:render ()
         if plotmin == nil then plotmin = math.huge end
         if plotmax == nil then plotmax = -math.huge end
 
+        if plotmin == math.huge then
+            actualPlotMin[i] = 0
+            actualPlotMax[i] = 0
+        end
+
         if plotmin == plotmax then
             plotmin = plotmin - minrange / 2
             plotmax = plotmax + minrange / 2
