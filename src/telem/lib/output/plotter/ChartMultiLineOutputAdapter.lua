@@ -78,23 +78,27 @@ end
 function ChartMultiLineOutputAdapter:write (collection)
     assert(o.instanceof(collection, MetricCollection), 'Collection must be a MetricCollection')
 
+    local maxDataRemoved = 0
+
     for i, metric in ipairs(self.filter) do
         local resultMetric = collection:find(metric.name)
         assert(resultMetric, 'could not find metric')
 
         -- TODO data width setting
-        self.gridOffsetX = self.gridOffsetX - t.constrainAppend(self.plotData[i], resultMetric and resultMetric.value or self.plotter.NAN, self.MAX_ENTRIES)
+        maxDataRemoved = math.max(maxDataRemoved, t.constrainAppend(self.plotData[i], resultMetric and resultMetric.value or self.plotter.NAN, self.MAX_ENTRIES))
+    end
 
-        -- TODO X_TICK setting
-        if self.gridOffsetX % self.X_TICK == 0 then
-            self.gridOffsetX = 0
-        end
+    self.gridOffsetX = self.gridOffsetX - maxDataRemoved
 
-        -- lazy layout update
-        local winw, winh = self.win.getSize()
-        if winw ~= self.plotter.box.term_width or winh ~= self.plotter.box.term_height then
-            self:updateLayout(true)
-        end
+    -- TODO X_TICK setting
+    if self.gridOffsetX % self.X_TICK == 0 then
+        self.gridOffsetX = 0
+    end
+
+    -- lazy layout update
+    local winw, winh = self.win.getSize()
+    if winw ~= self.plotter.box.term_width or winh ~= self.plotter.box.term_height then
+        self:updateLayout(true)
     end
 
     self:render()
