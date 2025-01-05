@@ -120,7 +120,7 @@ export default defineConfig({
               { text: 'QIO Drive Array', link: '/reference/input/mekanism/QIODriveArray' },
               { text: 'Quantum Entangloporter', link: '/reference/input/mekanism/QuantumEntangloporter' },
               { text: 'Radioactive Waste Barrel', link: '/reference/input/mekanism/RadioactiveWasteBarrel' },
-              // { text: 'Resistive Heater', link: '/reference/input/mekanism/ResistiveHeater' },
+              { text: 'Resistive Heater', link: '/reference/input/mekanism/ResistiveHeater' },
               // { text: 'Rotary Condensentrator', link: '/reference/input/mekanism/RotaryCondensentrator' },
               // { text: 'Sawing Factory', link: '/reference/input/mekanism/SawingFactory' },
               // { text: 'Seismic Vibrator', link: '/reference/input/mekanism/SeismicVibrator' },
