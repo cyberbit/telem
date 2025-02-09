@@ -2,9 +2,9 @@ local fn = require 'telem.vendor'.fluent.fn
 
 local base = require 'telem.lib.input.mekanism.BaseMekanismInputAdapter'
 
-local ChemicalWasherInputAdapter = base.mintAdapter('ChemicalWasherInputAdapter')
+local SolarNeutronActivatorInputAdapter = base.mintAdapter('SolarNeutronActivatorInputAdapter')
 
-function ChemicalWasherInputAdapter:beforeRegister ()
+function SolarNeutronActivatorInputAdapter:beforeRegister ()
     self.prefix = 'mekactivator:'
 
     local _, component = next(self.components)
@@ -44,4 +44,4 @@ function ChemicalWasherInputAdapter:beforeRegister ()
     -- getRedstoneMode
 end
 
-return ChemicalWasherInputAdapter
+return SolarNeutronActivatorInputAdapter
