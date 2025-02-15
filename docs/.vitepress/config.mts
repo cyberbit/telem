@@ -131,8 +131,8 @@ export default defineConfig({
               { text: 'Teleporter', link: '/reference/input/mekanism/Teleporter' },
               { text: 'Thermal Evaporation Plant', link: '/reference/input/mekanism/ThermalEvaporationPlant' },
               { text: 'Thermoelectric Boiler', link: '/reference/input/mekanism/ThermoelectricBoiler' },
-              // { text: 'Universal Cable', link: '/reference/input/mekanism/UniversalCable' },
-              // { text: 'Wind Generator', link: '/reference/input/mekanism/WindGenerator' },
+              { text: 'Universal Cable', link: '/reference/input/mekanism/UniversalCable' },
+              { text: 'Wind Generator', link: '/reference/input/mekanism/WindGenerator' },
             ]
           },
           {
