@@ -42,7 +42,10 @@ export default {
           { name: 'ticks_required',   value: '0 - inf', unit: 't' }
         ],
         recipeFactory: [
-          { name: 'recipe_progress_N',  value: '0 - inf', unit: 't' },
+          {
+            name: 'recipe_progress_N',  value: '0 - inf', unit: 't',
+            badge: { type: 'tip', text: 'Indexed per process' }
+          },
           { name: 'ticks_required',     value: '0 - inf', unit: 't' }
         ]
       }

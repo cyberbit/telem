@@ -1,8 +1,8 @@
 ---
 telem:
   adapter:
-    id: 'combiner'
-    name: 'Combiner'
+    id: 'combiningFactory'
+    name: 'Combining Factory'
     categories: '{ "basic", "advanced", "energy", "recipe" }'
 ---
 
@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Combiner Input <RepoLink path="lib/input/mekanism/CombinerInputAdapter.lua" />
+# Mekanism Combining Factory Input <RepoLink path="lib/input/mekanism/CombiningFactoryInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 
@@ -19,9 +19,9 @@ telem:
 <MetricTable
   prefix="mekcombine:"
   :metrics="[
-    { name: 'input_main_count',       value: '0 - inf',   unit: 'item' },
+    { name: 'input_main_count_sum',   value: '0 - inf',   unit: 'item' },
     { name: 'input_secondary_count',  value: '0 - inf',   unit: 'item' },
-    { name: 'output_count',           value: '0 - inf',   unit: 'item' },
+    { name: 'output_count_sum',       value: '0 - inf',   unit: 'item' },
     { name: 'energy_usage',           value: '0.0 - inf', unit: 'FE/t' },
     ...metrics.genericMachine.basic
   ]"
@@ -32,6 +32,7 @@ telem:
 <MetricTable
   prefix="mekcombine:"
   :metrics="[
+    { name: 'auto_sort', value: '0 or 1' },
     ...metrics.genericMachine.advanced
   ]"
 />
@@ -51,6 +52,6 @@ telem:
 <MetricTable
   prefix="mekcombine:"
   :metrics="[
-    ...metrics.recipeProgress.recipe
+    ...metrics.recipeProgress.recipeFactory
   ]"
 />

@@ -1,8 +1,8 @@
 ---
 telem:
   adapter:
-    id: 'crusher'
-    name: 'Crusher'
+    id: 'crushingFactory'
+    name: 'Crushing Factory'
     categories: '{ "basic", "advanced", "energy", "recipe" }'
 ---
 
@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Crusher Input <RepoLink path="lib/input/mekanism/CrusherInputAdapter.lua" />
+# Mekanism Crushing Factory Input <RepoLink path="lib/input/mekanism/CrushingFactoryInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 
@@ -19,9 +19,9 @@ telem:
 <MetricTable
   prefix="mekcrush:"
   :metrics="[
-    { name: 'input_count',  value: '0 - inf',   unit: 'item' },
-    { name: 'output_count', value: '0 - inf',   unit: 'item' },
-    { name: 'energy_usage', value: '0.0 - inf', unit: 'FE/t' },
+    { name: 'input_count_sum',  value: '0 - inf',   unit: 'item' },
+    { name: 'output_count_sum', value: '0 - inf',   unit: 'item' },
+    { name: 'energy_usage',     value: '0.0 - inf', unit: 'FE/t' },
     ...metrics.genericMachine.basic
   ]"
 />
@@ -31,6 +31,7 @@ telem:
 <MetricTable
   prefix="mekcrush:"
   :metrics="[
+    { name: 'auto_sort', value: '0 or 1' },
     ...metrics.genericMachine.advanced
   ]"
 />
@@ -49,6 +50,6 @@ telem:
 <MetricTable
   prefix="mekcrush:"
   :metrics="[
-    ...metrics.recipeProgress.recipe
+    ...metrics.recipeProgress.recipeFactory
   ]"
 />
