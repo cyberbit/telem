@@ -54,16 +54,24 @@ export default defineConfig({
             text: 'Advanced Peripherals',
             collapsed: true,
             items: [
-              { text: 'Energy Detector', link: '/reference/input/advanced-peripherals/EnergyDetector' },
+              { text: 'Energy Detector',      link: '/reference/input/advanced-peripherals/EnergyDetector' },
+              // { text: 'Environment Detector ✨', link: '/reference/input/advanced-peripherals/EnvironmentDetector' },
+              // { text: 'Geo Scanner ✨',          link: '/reference/input/advanced-peripherals/GeoScanner' },
+              // { text: 'Inventory Manager ✨',    link: '/reference/input/advanced-peripherals/InventoryManager' },
+              { text: 'ME Bridge ✨',            link: '/reference/input/advanced-peripherals/MEBridge' },
+              // { text: 'Player Detector ✨',      link: '/reference/input/advanced-peripherals/PlayerDetector' },
+              // { text: 'Redstone Integrator ✨',  link: '/reference/input/advanced-peripherals/RedstoneIntegrator' },
+              // { text: 'RS Bridge ✨',            link: '/reference/input/advanced-peripherals/RSBridge' },
             ]
           },
-          {
-            text: 'Applied Energistics',
-            collapsed: true,
-            items: [
-              { text: 'ME Storage', link: '/reference/input/applied-energistics/MEStorage' },
-            ]
-          },
+          // {
+          //   text: 'Bigger Reactors ✨',
+          //   collapsed: true,
+          //   items: [
+          //     { text: 'Reactor',  link: '/reference/input/bigger-reactors/EnergyDetector' },
+          //     { text: 'Turbine',  link: '/reference/input/bigger-reactors/EnvironmentDetector' },
+          //   ]
+          // },
           {
             text: 'Mekanism',
             collapsed: true,
@@ -139,13 +147,18 @@ export default defineConfig({
               { text: 'Wind Generator',                 link: '/reference/input/mekanism/WindGenerator' },
             ]
           },
-          {
-            text: 'Refined Storage',
-            collapsed: true,
-            items: [
-              { text: 'Refined Storage', link: '/reference/input/refined-storage/RefinedStorage' },
-            ]
-          },
+          // {
+          //   text: 'Powah ✨',
+          //   collapsed: true,
+          //   items: [
+          //     { text: 'Energy Cell',      link: '/reference/input/powah/EnergyCell' },
+          //     { text: 'Furnator',         link: '/reference/input/powah/Furnator' },
+          //     { text: 'Magmator',         link: '/reference/input/powah/Magmator' },
+          //     { text: 'Reactor',          link: '/reference/input/powah/Reactor' },
+          //     { text: 'Solar Panel',      link: '/reference/input/powah/SolarPanel' },
+          //     { text: 'Thermo Generator', link: '/reference/input/powah/ThermoGenerator' },
+          //   ]
+          // },
         ]
       },
       {

@@ -27,6 +27,8 @@ function MEBridgeInputAdapter:beforeRegister (peripheralName, categories)
         },
     }
 
+    -- TODO gas storage metrics?
+
     -- getCraftingCPUs
     -- listCraftableItems
     -- listCraftableFluid
