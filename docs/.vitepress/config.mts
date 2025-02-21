@@ -61,7 +61,7 @@ export default defineConfig({
               { text: 'ME Bridge ✨',            link: '/reference/input/advanced-peripherals/MEBridge' },
               // { text: 'Player Detector ✨',      link: '/reference/input/advanced-peripherals/PlayerDetector' },
               // { text: 'Redstone Integrator ✨',  link: '/reference/input/advanced-peripherals/RedstoneIntegrator' },
-              // { text: 'RS Bridge ✨',            link: '/reference/input/advanced-peripherals/RSBridge' },
+              { text: 'RS Bridge ✨',            link: '/reference/input/advanced-peripherals/RSBridge' },
             ]
           },
           // {
