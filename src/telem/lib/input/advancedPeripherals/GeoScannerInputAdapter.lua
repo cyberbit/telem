@@ -12,6 +12,7 @@ function GeoScannerInputAdapter:beforeRegister (peripheralName, categories)
         basic = {},
     }
 
+    -- TODO no unit? intentional?? meh???
     self.storageQueries = {
         fn():callElse('chunkAnalyze', {})
             :map(function (k, v) return Metric{ name = k, value = v } end)
