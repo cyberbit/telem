@@ -47,22 +47,24 @@ List of metric categories to query. The value `"*"` can be used to include all c
 
 ## Usage
 
-```lua{4}
+```lua{4-8}
 local telem = require 'telem'
 
 local backplane = telem.backplane()
-  :addInput('my_playerDetector', telem.input.advancedPeripherals.playerDetector('right', '*'))
+  :addInput(
+    'my_playerDetector',
+    telem.input.advancedPeripherals.playerDetector('right', '*'),
+    'PlayerName'
+  )
   :cycleEvery(5)()
 ```
 
 Given a Player Detector peripheral on the `right` side of the computer, this appends the following metrics to the backplane (grouped by category here for clarity):
 
-<!--@include: ./common/preamble.md -->
-
 ### Basic
 
 <MetricTable
-  prefix="apinv:"
+  prefix="applayer:"
   :metrics="[
     { name: 'online_player_count',  value: '0 - inf' }
   ]"
@@ -70,4 +72,16 @@ Given a Player Detector peripheral on the `right` side of the computer, this app
 
 ### Player
 
-If `playerName` is provided, the following metrics are appended to the backplane:
+If `playerName` is provided, the following additional metrics are appended to the backplane, tracking the specified player's status:
+
+<MetricTable
+  prefix="applayer:"
+  :metrics="[
+    { name: 'player_eye_height',  value: '0 - inf',     unit: 'm' },
+    { name: 'player_pitch',       value: '-90 - 90',    unit: '°' },
+    { name: 'player_yaw',         value: '-180 - 180',  unit: '°' },
+    { name: 'player_health',      value: '0 - inf'                },
+    { name: 'player_air_supply',  value: '0 - inf'                },
+    { name: 'player_max_health',  value: '0 - inf'                }
+  ]"
+/>

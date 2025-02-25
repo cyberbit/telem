@@ -59,7 +59,7 @@ export default defineConfig({
               { text: 'Geo Scanner ✨',           link: '/reference/input/advanced-peripherals/GeoScanner' },
               { text: 'Inventory Manager ✨',     link: '/reference/input/advanced-peripherals/InventoryManager' },
               { text: 'ME Bridge ✨',            link: '/reference/input/advanced-peripherals/MEBridge' },
-              // { text: 'Player Detector ✨',      link: '/reference/input/advanced-peripherals/PlayerDetector' },
+              { text: 'Player Detector ✨',      link: '/reference/input/advanced-peripherals/PlayerDetector' },
               // { text: 'Redstone Integrator ✨',  link: '/reference/input/advanced-peripherals/RedstoneIntegrator' },
               { text: 'RS Bridge ✨',            link: '/reference/input/advanced-peripherals/RSBridge' },
             ]
