@@ -47,14 +47,13 @@ List of metric categories to query. The value `"*"` can be used to include all c
 
 ## Usage
 
-```lua{4-8}
+```lua{4-7}
 local telem = require 'telem'
 
 local backplane = telem.backplane()
   :addInput(
     'my_playerDetector',
-    telem.input.advancedPeripherals.playerDetector('right', '*'),
-    'PlayerName'
+    telem.input.advancedPeripherals.playerDetector('right', '*', 'PlayerName')
   )
   :cycleEvery(5)()
 ```
