@@ -6,7 +6,7 @@ telem.input.powah.{{ $frontmatter?.telem?.adapter?.id || 'ADAPTER.ID' }} (
 ```
 
 ::: warning Mod Dependencies
-Requires **Advanced Peripherals**.
+Requires **Minecraft 1.19.2** and **Advanced Peripherals**.
 :::
 
 See the Usage section for a complete list of the metrics in each category.

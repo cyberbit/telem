@@ -152,8 +152,8 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: 'Energy Cell',      link: '/reference/input/powah/EnergyCell' },
-              // { text: 'Furnator',         link: '/reference/input/powah/Furnator' },
-              // { text: 'Magmator',         link: '/reference/input/powah/Magmator' },
+              { text: 'Furnator',         link: '/reference/input/powah/Furnator' },
+              { text: 'Magmator',         link: '/reference/input/powah/Magmator' },
               // { text: 'Reactor',          link: '/reference/input/powah/Reactor' },
               // { text: 'Solar Panel',      link: '/reference/input/powah/SolarPanel' },
               // { text: 'Thermo Generator', link: '/reference/input/powah/ThermoGenerator' },
