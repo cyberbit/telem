@@ -64,14 +64,14 @@ export default defineConfig({
               { text: 'RS Bridge',            link: '/reference/input/advanced-peripherals/RSBridge' },
             ]
           },
-          // {
-          //   text: 'Bigger Reactors',
-          //   collapsed: true,
-          //   items: [
-          //     { text: 'Reactor',  link: '/reference/input/bigger-reactors/EnergyDetector' },
-          //     { text: 'Turbine',  link: '/reference/input/bigger-reactors/EnvironmentDetector' },
-          //   ]
-          // },
+          {
+            text: 'Bigger Reactors',
+            collapsed: true,
+            items: [
+              { text: 'Reactor',  link: '/reference/input/bigger-reactors/Reactor' },
+              // { text: 'Turbine',  link: '/reference/input/bigger-reactors/Turbine' },
+            ]
+          },
           {
             text: 'Mekanism',
             collapsed: true,
