@@ -24,11 +24,15 @@ telem:
     { name: 'casing_temperature',       value: '0.0 - inf', unit: 'K'   },
     { name: 'fuel_temperature',         value: '0.0 - inf', unit: 'K'   },
     { name: 'fuel_reactivity',          value: '0.0 - inf'              },
+    ...metrics.genericMachine.basic,
     {
       name: 'coolant_transition_rate',  value: '0.0 - inf', unit: 'B/t',
       badge: { type: 'warning', text: 'Active reactor only' }
     },
-    ...metrics.genericMachine.basic
+    {
+      name: 'production_rate',          value: '0.0 - inf', unit: 'FE/t',
+      badge: { type: 'warning', text: 'Passive reactor only' }
+    },
   ]"
 />
 
@@ -47,7 +51,7 @@ telem:
 ### Coolant
 
 ::: warning Active reactor only
-The coolant metrics are only available for active reactors.
+Coolant metrics are only available for active reactors.
 :::
 
 <MetricTable
@@ -63,7 +67,7 @@ The coolant metrics are only available for active reactors.
 ### Energy
 
 ::: warning Passive reactor only
-The energy metrics are only available for passive reactors.
+Energy metrics are only available for passive reactors.
 :::
 
 <MetricTable

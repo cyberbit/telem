@@ -69,7 +69,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               { text: 'Reactor',  link: '/reference/input/bigger-reactors/Reactor' },
-              // { text: 'Turbine',  link: '/reference/input/bigger-reactors/Turbine' },
+              { text: 'Turbine',  link: '/reference/input/bigger-reactors/Turbine' },
             ]
           },
           {
