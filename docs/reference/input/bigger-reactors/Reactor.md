@@ -19,12 +19,15 @@ telem:
 <MetricTable
   prefix="brreactor:"
   :metrics="[
-    { name: 'burn_rate',                        value: '0.0 - inf', unit: 'B/t' },
-    { name: 'ambient_temperature',              value: '0.0 - inf', unit: 'K'   },
-    { name: 'casing_temperature',               value: '0.0 - inf', unit: 'K'   },
-    { name: 'fuel_temperature',                 value: '0.0 - inf', unit: 'K'   },
-    { name: 'fuel_reactivity',                  value: '0.0 - inf'              },
-    { name: 'coolant_transition_rate',          value: '0.0 - inf', unit: 'B/t' }, // TODO: badge
+    { name: 'burn_rate',                value: '0.0 - inf', unit: 'B/t' },
+    { name: 'ambient_temperature',      value: '0.0 - inf', unit: 'K'   },
+    { name: 'casing_temperature',       value: '0.0 - inf', unit: 'K'   },
+    { name: 'fuel_temperature',         value: '0.0 - inf', unit: 'K'   },
+    { name: 'fuel_reactivity',          value: '0.0 - inf'              },
+    {
+      name: 'coolant_transition_rate',  value: '0.0 - inf', unit: 'B/t',
+      badge: { type: 'warning', text: 'Active reactor only' }
+    },
     ...metrics.genericMachine.basic
   ]"
 />
@@ -43,7 +46,10 @@ telem:
 
 ### Coolant
 
-<!-- TODO: badge -->
+::: warning Active reactor only
+The coolant metrics are only available for active reactors.
+:::
+
 <MetricTable
   prefix="brreactor:"
   :metrics="[
@@ -54,8 +60,11 @@ telem:
   ]"
 />
 
-<!-- TODO: badge -->
 ### Energy
+
+::: warning Passive reactor only
+The energy metrics are only available for passive reactors.
+:::
 
 <MetricTable
   prefix="brreactor:"
