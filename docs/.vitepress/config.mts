@@ -54,14 +54,22 @@ export default defineConfig({
             text: 'Advanced Peripherals',
             collapsed: true,
             items: [
-              { text: 'Energy Detector', link: '/reference/input/advanced-peripherals/EnergyDetector' },
+              { text: 'Energy Detector',      link: '/reference/input/advanced-peripherals/EnergyDetector' },
+              { text: 'Environment Detector', link: '/reference/input/advanced-peripherals/EnvironmentDetector' },
+              { text: 'Geo Scanner',          link: '/reference/input/advanced-peripherals/GeoScanner' },
+              { text: 'Inventory Manager',    link: '/reference/input/advanced-peripherals/InventoryManager' },
+              { text: 'ME Bridge',            link: '/reference/input/advanced-peripherals/MEBridge' },
+              { text: 'Player Detector',      link: '/reference/input/advanced-peripherals/PlayerDetector' },
+              { text: 'Redstone Integrator',  link: '/reference/input/advanced-peripherals/RedstoneIntegrator' },
+              { text: 'RS Bridge',            link: '/reference/input/advanced-peripherals/RSBridge' },
             ]
           },
           {
-            text: 'Applied Energistics',
+            text: 'Bigger Reactors',
             collapsed: true,
             items: [
-              { text: 'ME Storage', link: '/reference/input/applied-energistics/MEStorage' },
+              { text: 'Reactor',  link: '/reference/input/bigger-reactors/Reactor' },
+              { text: 'Turbine',  link: '/reference/input/bigger-reactors/Turbine' },
             ]
           },
           {
@@ -140,10 +148,15 @@ export default defineConfig({
             ]
           },
           {
-            text: 'Refined Storage',
+            text: 'Powah',
             collapsed: true,
             items: [
-              { text: 'Refined Storage', link: '/reference/input/refined-storage/RefinedStorage' },
+              { text: 'Energy Cell',      link: '/reference/input/powah/EnergyCell' },
+              { text: 'Furnator',         link: '/reference/input/powah/Furnator' },
+              { text: 'Magmator',         link: '/reference/input/powah/Magmator' },
+              { text: 'Reactor',          link: '/reference/input/powah/Reactor' },
+              { text: 'Solar Panel',      link: '/reference/input/powah/SolarPanel' },
+              { text: 'Thermo Generator', link: '/reference/input/powah/ThermoGenerator' },
             ]
           },
         ]
