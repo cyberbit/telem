@@ -34,7 +34,11 @@ end
 -- TODO allow auto-named inputs based on type
 function Backplane:addInput (name, input)
     assert(type(name) == 'string', 'name must be a string')
-    assert(o.instanceof(input, InputAdapter), 'Input must be an InputAdapter')
+    assert(o.instanceof(input, InputAdapter) or type(input) == 'function', 'Input must be an InputAdapter or function')
+
+    if type(input) == 'function' then
+        input = (require 'telem.lib.input.CustomInputAdapter')(input)
+    end
 
     -- propagate debug state
     if self.debugState then
@@ -53,7 +57,11 @@ end
 
 function Backplane:addOutput (name, output)
     assert(type(name) == 'string', 'name must be a string')
-    assert(o.instanceof(output, OutputAdapter), 'Output must be an OutputAdapter')
+    assert(o.instanceof(output, OutputAdapter) or type(output) == 'function', 'Output must be an OutputAdapter or function')
+
+    if type(output) == 'function' then
+        output = (require 'telem.lib.output.CustomOutputAdapter')(output)
+    end
 
     self:dlog('Backplane:addOutput :: adding output: ' .. name)
 
@@ -94,7 +102,11 @@ function Backplane:middleware (...)
 end
 
 function Backplane:addMiddleware (middleware)
-    assert(o.instanceof(middleware, Middleware), 'middleware must be a Middleware')
+    assert(o.instanceof(middleware, Middleware) or type(middleware) == 'function', 'middleware must be a Middleware or function')
+
+    if type(middleware) == 'function' then
+        middleware = (require 'telem.lib.middleware.CustomMiddleware')(middleware)
+    end
 
     table.insert(self.middlewares, middleware)
 
