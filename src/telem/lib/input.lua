@@ -119,8 +119,9 @@ local export = {
     },
 
     create = {
-        stressometerInputAdapter = requireCreate('StressometerInputAdapter'),
-        speedometerInputAdapter  = requireCreate('SpeedometerInputAdapter'),
+        stressometerInput       = requireCreate('StressometerInputAdapter'),
+        speedometerInput        = requireCreate('SpeedometerInputAdapter'),
+        rotationSpeedController = requireCreate('RotationSpeedControllerInputAdapter')
     }
 }
 
