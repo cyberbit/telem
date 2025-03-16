@@ -10,6 +10,10 @@ telem.middleware.custom (
 )
 ```
 
+::: tip
+Since `v0.10.0`, using this adapter through `telem.middleware.custom` is not required. Passing a function to the `middleware` method of a [Backplane](/reference/Backplane) instance will automatically wrap it with this adapter.
+:::
+
 This middleware wraps a user-provided function for custom middleware implementations. Need to calculate the ratio between two metrics? Count the total number of items from an adapter? Measure a metric relative to an in-game day? Anything is possible!
 
 <PropertiesTable
@@ -27,8 +31,6 @@ This middleware wraps a user-provided function for custom middleware implementat
 
 ```lua{25-41}
 local telem = require 'telem'
-local mw = telem.middleware
-
 local fluent = require('telem.vendor').fluent
 
 local backplane = telem.backplane()
@@ -50,7 +52,9 @@ local backplane = telem.backplane()
   end))
 
   -- calculate the sum of all metrics from the rare_elements adapter
-  :middleware(mw.custom(function (collection)
+
+  -- v0.10.0 and newer
+  :middleware(function (collection)
     local sum = 0
     
     for _, metric in ipairs(collection) do
@@ -64,6 +68,13 @@ local backplane = telem.backplane()
       value = sum,
       source = 'middleware'
     })
+
+    return collection
+  end)
+
+  -- v0.9.x and older
+  :middleware(telem.middleware.custom(function (collection)
+    -- stuff here
 
     return collection
   end))
