@@ -12,8 +12,14 @@ local _Telem = {
     -- API
     backplane = require 'telem.lib.Backplane',
     metric = require 'telem.lib.Metric',
-    metricCollection = require 'telem.lib.MetricCollection'
+    metricCollection = require 'telem.lib.MetricCollection',
+
+    -- Modules
+    module = require 'telem.lib.module'
 }
+
+-- autoload modules
+_Telem.module.autoload(_Telem)
 
 local args = {...}
 
