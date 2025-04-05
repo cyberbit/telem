@@ -23,4 +23,7 @@ rm -rf .luatmp
 
 # install luamin
 # no sudo for local dev container?
-sudo yarn global add https://github.com/cyberbit/luamin
+yarn global add https://github.com/cyberbit/luamin
+
+# add yarn global bin to PATH
+echo 'export PATH="$PATH:$(yarn global bin)"' >> ~/.bashrc
