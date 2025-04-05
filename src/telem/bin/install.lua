@@ -152,7 +152,7 @@ local showReleaseSelector = function ()
     ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Reading releases...')
     ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
 
-    local releaseUrl = 'https://get.telem.cc/blob/releases'
+    local releaseUrl = 'https://telem-get.cyberbit.dev/blob/releases'
 
     local req = httpGetRedirect(releaseUrl)
     local jres = textutils.unserialiseJSON(req.readAll())
@@ -233,7 +233,7 @@ local installActions = {
 
         local fakeTree = {
             sha = releaseName,
-            url = 'https://get.telem.cc/blob/asset/{sha}/{path}',
+            url = 'https://telem-get.cyberbit.dev/blob/asset/{sha}/{path}',
             sources = {
                 { path = 'telem', type = 'tree' }
             }
@@ -271,7 +271,7 @@ local installActions = {
 
         local fakeTree = {
             sha = releaseName,
-            url = 'https://get.telem.cc/blob/asset/{sha}/{path}',
+            url = 'https://telem-get.cyberbit.dev/blob/asset/{sha}/{path}',
             sources = {
                 { path = 'telem', type = 'tree' }
             }
@@ -308,7 +308,7 @@ local installActions = {
         ui.addTask(function ()
             currentStep('Step 1 of 2: Modules')
 
-            local treeUrl = 'https://get.telem.cc/blob/lib/main'
+            local treeUrl = 'https://telem-get.cyberbit.dev/blob/lib/main'
     
             local req = httpGetRedirect(treeUrl)
             local res = textutils.unserialiseJSON(req.readAll())
@@ -317,7 +317,7 @@ local installActions = {
 
             currentStep('Step 2 of 2: Vendors')
 
-            treeUrl = 'https://get.telem.cc/blob/vendor/main'
+            treeUrl = 'https://telem-get.cyberbit.dev/blob/vendor/main'
     
             req = httpGetRedirect(treeUrl)
             res = textutils.unserialiseJSON(req.readAll())
