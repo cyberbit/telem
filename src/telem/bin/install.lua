@@ -1,6 +1,6 @@
 -- Telem Installer by cyberbit
 -- MIT License
--- Version 2024-11-04
+-- Version 2025-04-04
 
 local ui = (function ()
     -- PrimeUI by JackMacWindows
