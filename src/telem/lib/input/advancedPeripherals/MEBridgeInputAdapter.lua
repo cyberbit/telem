@@ -8,12 +8,14 @@ local MEBridgeInputAdapter = base.mintAdapter('MEBridgeInputAdapter')
 function MEBridgeInputAdapter:beforeRegister (peripheralName, categories)
     self.prefix = 'apmebridge:'
 
+    local _, component = next(self.components)
+    local listCellsSupported = pcall(component.listCells) and true or false
+
     self.queries = {
         basic = {
             energy_usage                = fn():call('getEnergyUsage'):aeToFe():energyRate(),
             item_storage_used           = fn():call('getUsedItemStorage'):with('unit', 'bytes'),
             fluid_storage_used          = fn():call('getUsedFluidStorage'):with('unit', 'bytes'),
-            cell_count                  = fn():call('listCells'):count(),
         },
         energy = {
             energy                      = fn():call('getEnergyStorage'):aeToFe():energy(),
@@ -26,6 +28,13 @@ function MEBridgeInputAdapter:beforeRegister (peripheralName, categories)
             fluid_storage_available     = fn():call('getAvailableFluidStorage'):with('unit', 'bytes'),
         },
     }
+
+    if listCellsSupported then
+        self.queries.basic.cell_count = fn():call('listCells'):count()
+    else
+        -- TODO debug logs aren't supported in adapter constructors yet
+        self:dlog('MEBridgeInput:beforeRegister :: cell_count is not supported on this network, upgrade to Advanced Peripherals 0.7.41r or newer')
+    end
 
     -- TODO gas storage metrics?
 
