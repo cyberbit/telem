@@ -4,6 +4,7 @@ return {
 
     -- HTTP
     grafana = require 'telem.lib.output.GrafanaOutputAdapter',
+    graphite = require 'telem.lib.output.GraphiteOutputAdapter',
 
     -- Basalt
     basalt = {
