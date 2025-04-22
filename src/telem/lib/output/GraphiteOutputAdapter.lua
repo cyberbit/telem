@@ -58,8 +58,6 @@ function GraphiteOutputAdapter:write(collection)
             ['Content-Type']  = 'application/json',
         }
     }
-
-    return res
 end
 
 return GraphiteOutputAdapter
