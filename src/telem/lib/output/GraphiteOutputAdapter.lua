@@ -1,7 +1,9 @@
-local o                   = require 'telem.lib.ObjectModel'
-local OutputAdapter      = require 'telem.lib.OutputAdapter'
-local MetricCollection   = require 'telem.lib.MetricCollection'
-t
+local o = require 'telem.lib.ObjectModel'
+local t = require 'telem.lib.util'
+
+local OutputAdapter     = require 'telem.lib.OutputAdapter'
+local MetricCollection  = require 'telem.lib.MetricCollection'
+
 local GraphiteOutputAdapter = o.class(OutputAdapter)
 GraphiteOutputAdapter.type = 'GraphiteOutputAdapter'
 
