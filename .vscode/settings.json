@@ -2,7 +2,8 @@
     // "autobuild": true,
     "triggerTaskOnSave.tasks": {
         "build": [
-            "src/telem/**/*.lua"
+            "src/telem/lib/**/*.lua",
+            "src/telem/vendor/**/*.lua",
         ]
     }
 }
