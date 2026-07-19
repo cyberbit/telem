@@ -61,9 +61,11 @@ local loadModule = function (module)
     local loadable = mode == 2 and vendor.luz.decompress(data) or data
 
     local loadedModule = assert((pcall(load, "") and load or loadstring)(loadable, "@" .. module, "t", _ENV))()(moduleApi)
+
+    return loadedModule
 end
 
-local autoload = function (telem)
+local autoloadModules = function (telem)
     if package.path:find('telem/modules') == nil then package.path = package.path .. ';telem/modules/?;telem/modules/?.lua;telem/modules/?.luz;telem/modules/?/init.lua' end
 
     local modules = {}
@@ -77,7 +79,7 @@ local autoload = function (telem)
     for _, mod in ipairs(modlist) do
         local name = fs.isDir('telem/modules/' .. mod) and mod or (mod:match('(.+)%..+'))
 
-        print('autoloading ' .. name)
+        -- print('autoloading ' .. name)
 
         modules[name] = loadModule(name)
     end
@@ -119,6 +121,6 @@ end
 
 return {
     load = loadModule,
-    autoload = autoload,
+    autoloadModules = autoloadModules,
     api = moduleApi,
 }

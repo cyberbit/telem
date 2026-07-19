@@ -19,7 +19,7 @@ local _Telem = {
 }
 
 -- autoload modules
-_Telem.module.autoload(_Telem)
+_Telem.module.autoloadModules(_Telem)
 
 local args = {...}
 
