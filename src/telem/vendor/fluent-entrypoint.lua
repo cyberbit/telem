@@ -94,6 +94,16 @@ function Fluent:callElse (method, elseValue, ...)
   end)
 end
 
+--- Set the value to `elseValue` if the current value is `nil`.
+---@param elseValue any Value to set if the current value is `nil`
+function Fluent:orElse (elseValue)
+  return self:_enqueue(function (this)
+      if this.value == nil then
+          this.value = elseValue
+      end
+  end)
+end
+
 --- Return the length of the value using `#value`.
 function Fluent:count ()
   return self:_enqueue(function (this)
