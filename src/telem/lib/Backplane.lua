@@ -11,6 +11,8 @@ Backplane.type = 'Backplane'
 
 function Backplane:constructor ()
     self.debugState = false
+
+    self.cycleInterval = nil
     
     self.loaded = false
     self.cacheState = false
@@ -299,6 +301,8 @@ end
 
 -- return a function to cycle this Backplane on a set interval
 function Backplane:cycleEvery(seconds)
+    self.cycleInterval = seconds
+    
     local selfCycle = function()
         while true do
             self:cycle()
