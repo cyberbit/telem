@@ -36,7 +36,11 @@ end
 -- TODO allow auto-named inputs based on type
 function Backplane:addInput (name, input)
     assert(type(name) == 'string', 'name must be a string')
-    assert(o.instanceof(input, InputAdapter), 'Input must be an InputAdapter')
+    assert(o.instanceof(input, InputAdapter) or type(input) == 'function', 'Input must be an InputAdapter or function')
+
+    if type(input) == 'function' then
+        input = (require 'telem.lib.input.CustomInputAdapter')(input)
+    end
 
     -- propagate debug state
     if self.debugState then
@@ -55,7 +59,11 @@ end
 
 function Backplane:addOutput (name, output)
     assert(type(name) == 'string', 'name must be a string')
-    assert(o.instanceof(output, OutputAdapter), 'Output must be an OutputAdapter')
+    assert(o.instanceof(output, OutputAdapter) or type(output) == 'function', 'Output must be an OutputAdapter or function')
+
+    if type(output) == 'function' then
+        output = (require 'telem.lib.output.CustomOutputAdapter')(output)
+    end
 
     self:dlog('Backplane:addOutput :: adding output: ' .. name)
 
@@ -96,7 +104,11 @@ function Backplane:middleware (...)
 end
 
 function Backplane:addMiddleware (middleware)
-    assert(o.instanceof(middleware, Middleware), 'middleware must be a Middleware')
+    assert(o.instanceof(middleware, Middleware) or type(middleware) == 'function', 'middleware must be a Middleware or function')
+
+    if type(middleware) == 'function' then
+        middleware = (require 'telem.lib.middleware.CustomMiddleware')(middleware)
+    end
 
     table.insert(self.middlewares, middleware)
 
@@ -162,13 +174,38 @@ function Backplane:cycle()
 
     self:dlog('Backplane:cycle :: reading inputs...')
 
-    -- read inputs
+    -- queue all input read requests
+    local inputResults = {}
+    local inputTasks = {}
+
     for _, key in ipairs(self.inputKeys) do
         local input = self.inputs[key]
 
-        self:dlog('Backplane:cycle ::  - ' .. key)
+        table.insert(inputTasks, function ()
+            self:dlog('Backplane:cycle ::  - ' .. key)
 
-        local results = {pcall(input.read, input)}
+            inputResults[key] = {pcall(input.read, input)}
+        end)
+    end
+
+    -- TODO determine appropriate chunk size
+    -- 8 Mekanism Fusion Reactor inputs generate up to 34*8 = 272 peripheral calls
+    local chunkSize = 8
+
+    -- TODO create chunks in previous loop
+    for i = 1, #inputTasks, chunkSize do
+        local chunk = {}
+
+        for j = i, math.min(i + chunkSize - 1, #inputTasks) do
+            table.insert(chunk, inputTasks[j])
+        end
+        
+        parallel.waitForAll(table.unpack(chunk))
+    end
+
+    -- process results in original order
+    for _, key in ipairs(self.inputKeys) do
+        local results = inputResults[key]
 
         if not table.remove(results, 1) then
             t.log('Input fault for "' .. key .. '":')
@@ -177,7 +214,7 @@ function Backplane:cycle()
             local inputCollection = table.remove(results, 1)
 
             -- process input middleware
-            local processedInputCollection = self:processMiddleware(input.middlewares, inputCollection)
+            local processedInputCollection = self:processMiddleware(self.inputs[key].middlewares, inputCollection)
 
             for _,v in ipairs(processedInputCollection.metrics) do
                 -- attach adapter name

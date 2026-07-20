@@ -1,6 +1,6 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
-local vendor
+local vendor = require 'telem.vendor'
 local ecnet2
 local random
 local lualzw
@@ -30,14 +30,6 @@ function SecureModemOutputAdapter:constructor (peripheralName)
         self.components = {}
 
         self:addComponentByPeripheralID(peripheralName)
-
-        if not vendor then
-            self:dlog('SecureModemOutput:boot :: Loading vendor modules...')
-
-            vendor = require 'telem.vendor'
-
-            self:dlog('SecureModemOutput:boot :: Vendor modules ready.')
-        end
 
         if not random then
             self:dlog('SecureModemOutput:boot :: Loading ccryptolib.random...')

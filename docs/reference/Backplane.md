@@ -86,10 +86,12 @@ Create a new Backplane.
 ### `addInput`
 
 ```lua
-Backplane:addInput (name: string, input: InputAdapter): self
+Backplane:addInput (name: string, input: InputAdapter | fun()): self
 ```
 
 Assigns an [InputAdapter](InputAdapter) with the specified name to this Backplane. The input name will be used as an adapter label on each [Metric](Metric) during a cycle.
+
+If `input` is a function, it will be converted into a Custom input first. See [Custom Input](input/Custom) for details on supported function signatures.
 
 ::: warning
 It is recommended to have unique input names. While not strictly prohibited, behavior of `cycle()` with duplicate input names is undefined. This will be enforced in a future update.
@@ -98,10 +100,15 @@ It is recommended to have unique input names. While not strictly prohibited, beh
 ### `addOutput`
 
 ```lua
-Backplane:addOutput (name: string, output: OutputAdapter): self
+Backplane:addOutput (
+  name: string,
+  output: OutputAdapter | fun(collection: MetricCollection)
+): self
 ```
 
 Assigns an [OutputAdapter](OutputAdapter) with the specified name to this Backplane. If the adapter has set an async cycle handler, the handler will also be registered in this Backplane.
+
+If `output` is a function, it will be converted into a Custom output first. See [Custom Output](output/Custom) for details.
 
 ### `addAsyncCycleHandler`
 
@@ -148,7 +155,7 @@ Returns a function that runs `cycle()`, sleeps for `n` seconds, and repeats. If 
 Backplane:updateLayouts (): self
 ```
 
-Trigger eager layout updates on all attached outputs with `updateLayout` functions, such as [ChartLineOutputAdapter](output/ChartLine) and other graphical adapters. Note that "eager" means the outputs will be re-rendered immediately after the layout is updated.
+Trigger eager layout updates on all attached outputs with `updateLayout` functions, such as [Line Chart](output/ChartLine) and other graphical adapters. Note that "eager" means the outputs will be re-rendered immediately after the layout is updated.
 
 ### `debug`
 
@@ -169,10 +176,12 @@ Set output cache state. When `state` is `true`, Backplane will save the data his
 ### `middleware`
 
 ```lua
-Backplane:middleware (middleware1: Middleware, middleware2?: Middleware, ...): self
+Backplane:middleware (mw1: Middleware | fun(), mw2?: Middleware | fun(), ...): self
 ```
 
 Set the middleware stack for this Backplane. Middleware will be executed in the order they are passed to this function. Middleware can be any class that inherits from [Middleware](Middleware).
+
+If a function is passed, it will be converted into a Custom middleware first. See [Custom Middleware](middleware/Custom) for details on supported function signatures.
 
 ## Usage
 

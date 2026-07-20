@@ -1,7 +1,6 @@
 local o = require 'telem.lib.ObjectModel'
 local t = require 'telem.lib.util'
-local vendor
-local plotterFactory
+local vendor = require 'telem.vendor'
 
 local OutputAdapter     = require 'telem.lib.OutputAdapter'
 local MetricCollection  = require 'telem.lib.MetricCollection'
@@ -42,22 +41,6 @@ function ChartMultiLineOutputAdapter:constructor (win, filter, bg, fg, maxEntrie
 end
 
 function ChartMultiLineOutputAdapter:register ()
-    if not vendor then
-        self:dlog('ChartMultiLineOutputAdapter:boot :: Loading vendor modules...')
-
-        vendor = require 'telem.vendor'
-
-        self:dlog('ChartMultiLineOutputAdapter:boot :: Vendor modules ready.')
-    end
-
-    if not plotterFactory then
-        self:dlog('ChartMultiLineOutputAdapter:boot :: Loading plotter...')
-
-        plotterFactory = vendor.plotter
-
-        self:dlog('ChartMultiLineOutputAdapter:boot :: plotter ready.')
-    end
-
     self:updateLayout()
 
     for i=1, #self.plotData do
@@ -68,7 +51,7 @@ function ChartMultiLineOutputAdapter:register ()
 end
 
 function ChartMultiLineOutputAdapter:updateLayout (bypassRender)
-    self.plotter = plotterFactory(self.win)
+    self.plotter = vendor.plotter(self.win)
 
     if not bypassRender then
         self:render()

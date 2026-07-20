@@ -9,23 +9,28 @@ telem.input.custom (func: fun(): { [string]: number })
 telem.input.custom (func: fun(): Metric, Metric?, ...)
 ```
 
+::: tip
+Since `v0.10.0`, using this adapter through `telem.input.custom` is not required. Passing a function to the `addInput` method of a [Backplane](/reference/Backplane) instance will automatically wrap it with this adapter.
+:::
+
 This adapter wraps a user-provided function for custom input implementations. Need to read a specific file? Query a network of mining turtles? Generate random numbers? Anything is possible!
 
 ## Usage
 
 Internally, the provided function is wrapped in a [MetricCollection](/reference/MetricCollection) constructor, so anything that works with a MetricCollection constructor should work as a return value.
 
-```lua{4-20}
+```lua{5-21}
 local telem = require 'telem'
 
 local backplane = telem.backplane()
-  :addInput('custom_short', telem.input.custom(function ()
+  -- v0.10.0 and newer
+  :addInput('custom_short', function ()
     return {
       custom_short_1 = 929,
       custom_short_2 = 424.2
     }
-  end))
-  :addInput('custom_long', telem.input.custom(function ()
+  end)
+  :addInput('custom_long', function ()
     return
       telem.metric('custom_long_1', 456),
       telem.metric('custom_long_2', 503.123),
@@ -35,6 +40,14 @@ local backplane = telem.backplane()
         unit = 'randoms',
         source = 'lua:math.random'
       })
+  end)
+
+  -- v0.9.x and older
+  :addInput('custom_short_old', telem.input.custom(function ()
+    return {
+      custom_short_1 = 929,
+      custom_short_2 = 424.2
+    }
   end))
   :cycleEvery(1)()
 ```

@@ -1,6 +1,109 @@
 -- Telem Installer by cyberbit
 -- MIT License
--- Version 2025-04-04
+-- Version 2026-07-19
+
+local pretty = require 'cc.pretty'
+local pprint = pretty.pretty_print
+local prender = function (data)
+    return pretty.render(pretty.pretty(data))
+end
+
+local dryRun = false
+
+local termW, termH = term.getSize()
+
+local boxSizing = {
+    mainPadding = 2
+}
+
+boxSizing.contentBox = termW - boxSizing.mainPadding * 2 + 1
+boxSizing.borderBox = boxSizing.contentBox - 1
+
+local curt = term.current
+
+local ObjectModel = (function ()
+    ---@diagnostic disable: deprecated
+    --
+    -- Lua object model implementation
+    --
+    -- By Shira-3749
+    -- Source: https://github.com/Shira-3749/lua-object-model
+    --
+
+    local a='Lua 5.1'==_VERSION;local unpack=unpack or table.unpack;local function b(c,...)local d={}setmetatable(d,c)if c.constructor then c.constructor(d,...)end;return d end;local function e(d,f,...)if nil==d.___superScope then d.___superScope={}end;local g=d.___superScope[f]local h;if nil~=g then h=g.__parent else h=d.__parent end;d.___superScope[f]=h;local i={pcall(h[f],d,...)}local j=table.remove(i,1)d.___superScope[f]=g;if not j then error(i[1])end;return unpack(i)end;local function k(d,l)local c=getmetatable(d)while c do if c==l then return true end;c=c.__parent end;return false end;local function m(d)if d.destructor then d:destructor()end end;local function c(n)local c={}if n then for o,p in pairs(n)do c[o]=p end;c.__parent=n end;c.__index=c;if not n and not a then c.__gc=m end;if n then c.super=e end;local q={__call=b}setmetatable(c,q)return c end;return{class=c,instanceof=k,new=b,super=e}
+end)()
+
+local function httpGetRedirect(url, headers, binary)
+    local maxRedirects = 5
+    local redirects = 0
+
+    while redirects < maxRedirects do
+        local res, err, errRes = http.get(url, headers, binary)
+
+        if not res then
+            return nil, err, errRes
+        end
+
+        local statusCode = res.getResponseCode()
+
+        if statusCode >= 300 and statusCode < 400 then
+            local location = res.getResponseHeaders()['Location']
+
+            if not location then
+                return nil, 'Redirect location not provided'
+            end
+
+            url = location
+            redirects = redirects + 1
+        else
+            return res
+        end
+    end
+
+    return nil, 'Too many redirects'
+end
+
+local REST = (function ()
+    local REST = ObjectModel.class()
+    
+    function REST:constructor()
+        self.headers = {}
+        self.baseURL = nil
+    end
+    
+    function REST:setBaseURL(url)
+        self.baseURL = url
+
+        return self
+    end
+    
+    function REST:setHeaders(headers)
+        for k,v in pairs(headers) do
+            self.headers[k] = v
+        end
+
+        return self
+    end
+    
+    function REST:get(url, headers)
+        if headers then
+            self:setHeaders(headers)
+        end
+    
+        local res, err, errRes = httpGetRedirect(self.baseURL .. url, self.headers, true)
+    
+        if not res then
+            return res, err, errRes
+        end
+    
+        local body = res.readAll()
+        res.close()
+
+        return textutils.unserializeJSON(body)
+    end
+    
+    return REST
+end)()
 
 local ui = (function ()
     -- PrimeUI by JackMacWindows
@@ -36,175 +139,179 @@ local ui = (function ()
     return b
 end)()
 
--- patch redirect support for CC:T on 1.12 (and earlier?)
-local function httpGetRedirect(url, maxRedirects)
-    maxRedirects = maxRedirects or 5
-    local redirects = 0
-
-    while redirects < maxRedirects do
-        local response = http.get(url)
-        if not response then
-            return nil, 'Failed to get response'
-        end
-
-        local statusCode = response.getResponseCode()
-        if statusCode >= 300 and statusCode < 400 then
-            local location = response.getResponseHeaders()['Location']
-            if not location then
-                return nil, 'Redirect location not provided'
+local atom = {
+    fs = {
+        makeDir = function (path)
+            if dryRun then
+                print('** mkdir ' .. path)
+            else
+                fs.makeDir(path)
             end
-            url = location
-            redirects = redirects + 1
-        else
-            return response
+        end,
+
+        open = function (path, mode)
+            if dryRun then
+                -- print('** open ' .. mode .. ' ' .. path)
+
+                return {
+                    write = function (data)
+                        print('** write ' .. path)
+                    end,
+                    flush = function () end,
+                    close = function () end,
+                }
+            else
+                return fs.open(path, mode)
+            end
         end
-    end
-
-    return nil, 'Too many redirects'
-end
-
-local termW, termH = term.getSize()
-
-local boxSizing = {
-    mainPadding = 2
-}
-
-boxSizing.contentBox = termW - boxSizing.mainPadding * 2 + 1
-boxSizing.borderBox = boxSizing.contentBox - 1
-
-local curt = function () return term.current() end
-
-ui.clear()
-ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Select install')
-
-local installEntries = {
-    "Release (minified)",
-    "Release",
-    "Source"
-}
-
-local installDescriptions = {
-    'Minified module + dependencies. Choose "Release" for a debug-friendly build.',
-    "Packaged module + dependencies.",
-    "Full module and dependency sources. Recommended for development."
-}
-
-function string:overlay(overlay)
-    return overlay .. self:sub(#overlay + 1)
-end
-
-local youWouldntDownloadATree = function (tree, updateProgress, updateBlob)
-    local sourceCount = 0
-    for _,_ in ipairs(tree.sources) do sourceCount = sourceCount + 1 end
-
-    updateProgress(0)
-
-    for i,v in ipairs(tree.sources) do
-        local logicalPath = v.target or string.gsub(v.path, 'src/', '')
-        local physicalPath = shell.resolve(logicalPath)
-
-        updateBlob(string.gsub(logicalPath, 'telem/', ''))
-        
-        if v.type == 'tree' then
-            fs.makeDir(physicalPath)
-        elseif v.type == 'blob' then
-            local bloburl = string.gsub(tree.url, '{sha}', tree.sha)
-            bloburl = string.gsub(bloburl, '{path}', v.path)
-
-            local blobreq = httpGetRedirect(bloburl)
-            
-            local fout = fs.open(physicalPath, 'w')
-            fout.write(blobreq.readAll())
-            fout.flush()
-            fout.close()
-        end
-
-        updateProgress(i / sourceCount)
-    end
-end
-
-local parseAssets = function (assets)
-    local parsed = {
-        min = { size = 0 },
-        max = { size = 0 }
     }
-    for i,v in ipairs(assets) do
-        if v.name == 'telem.lua' then
-            parsed.max.lib = v.name
-            parsed.max.size = parsed.max.size + v.size
-        elseif v.name == 'telem.min.lua' then
-            parsed.min.lib = v.name
-            parsed.min.size = parsed.min.size + v.size
-        elseif v.name == 'vendor.lua' then
-            parsed.max.vendor = v.name
-            parsed.max.size = parsed.max.size + v.size
-        elseif v.name == 'vendor.min.lua' then
-            parsed.min.vendor = v.name
-            parsed.min.size = parsed.min.size + v.size
-        end
+}
+
+local endpoint = function (url)
+    return function (...)
+        return url:format(...)
     end
-    return parsed
 end
 
-local showReleaseSelector = function ()
-    ui.clear()
+local client = REST()
+    :setBaseURL('https://api.github.com/')
+    :setHeaders({ ['X-GitHub-Api-Version'] = '2022-11-28' })
 
-    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Reading releases...')
-    ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
+local api = {
+    contents = endpoint('repos/%s/contents/%s?ref=%s'),
+    tree = endpoint('repos/%s/git/trees/%s'),
+    treeRecursive = endpoint('repos/%s/git/trees/%s?recursive=true'),
+    raw = endpoint('https://raw.githubusercontent.com/%s/%s/%s'),
+    releaseLatest = endpoint('repos/%s/releases/latest')
+}
 
-    local releaseUrl = 'https://telem-get.cyberbit.dev/blob/releases'
+local downloadTree = function (targetRoot, blobs, updateBlob, updateBlobInfo)
+    targetRoot = shell.resolve(targetRoot) .. '/'
 
-    local req = httpGetRedirect(releaseUrl)
-    local jres = textutils.unserialiseJSON(req.readAll())
+    local totalTasks = #blobs
+    local completedTasks = 0
+    local totalBytes = 0
+    local completedBytes = 0
 
-    local nonPreReleases = {}
-    for i,v in ipairs(jres.releases) do
-        if not v.prerelease then
-            table.insert(nonPreReleases, v)
+    updateBlobInfo('Downloading blobs...')
+
+    local blobChunks = {}
+    local chunkSize = 25
+    local currentChunk = 1
+
+    local downloadState = {}
+
+    for i,v in ipairs(blobs) do
+        blobChunks[currentChunk] = blobChunks[currentChunk] or {}
+
+        table.insert(blobChunks[currentChunk], v)
+        table.insert(downloadState, i, 0)
+
+        if i % chunkSize == 0 then
+            currentChunk = currentChunk + 1
         end
+
+        totalBytes = totalBytes + v.size
     end
 
-    local releaseLabels = {}
-    local releaseNames = {}
-    local releaseAssets = {}
-    local releaseDescriptions = {}
-    for i,v in ipairs(nonPreReleases) do
-        local annotation = ''
+    for chunkidx,chunk in ipairs(blobChunks) do
+        local rawChunks = {}
 
-        if v.latest then
-            annotation = '[latest]'
-        elseif v.prerelease then
-            annotation = '[pre]'
+        for i,blob in ipairs(chunk) do
+            local blobidx = (chunkidx - 1) * chunkSize + i
+            
+            table.insert(rawChunks, function ()
+                downloadState[blobidx] = 1
+                
+                local res, err, errRes = httpGetRedirect(blob.url)
+
+                if not res then
+                    print('Failed to get ' .. blob.path .. ': ' .. err)
+                    print('URL: ' .. blob.url)
+                    pprint(errRes.readAll())
+                    return
+                end
+
+                local data = res.readAll()
+                res.close()
+
+                local blobOut = atom.fs.open(targetRoot .. blob.path, 'w')
+                blobOut.write(data)
+                blobOut.flush()
+                blobOut.close()
+
+                completedTasks = completedTasks + 1
+                completedBytes = completedBytes + blob.size
+
+                downloadState[blobidx] = 2
+
+                -- generate state string
+                local symbols = { ' ', '\x88', '\x8f' }
+                local scaledState = {}
+
+                for sidx=1, boxSizing.contentBox do
+                    scaledState[sidx] = symbols[downloadState[math.ceil(sidx * #downloadState / boxSizing.contentBox)] + 1]
+                end
+
+                updateBlob(table.concat(scaledState))
+                updateBlobInfo(('%.2f%% (%s/%s)'):format(completedTasks / totalTasks * 100, completedBytes, totalBytes))
+            end)
         end
 
-        annotation = string.format(('%%%is'):format(boxSizing.contentBox - 2), annotation)
-
-        releaseLabels[i] = annotation:overlay(v.name)
-        releaseNames[i] = v.name
-        releaseAssets[i] = parseAssets(v.assets)
-        releaseDescriptions[i] = ('%u bytes (%u bytes minified)'):format(releaseAssets[i].max.size, releaseAssets[i].min.size)
+        parallel.waitForAll(table.unpack(rawChunks))
     end
+end
 
-    ui.clear()
-    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Select a release')
+local downloadRepoTree = function (repo, sha, sourceRoot, targetRoot, updateBlob, updateBlobInfo)
+    updateBlobInfo('Getting root tree...')
 
-    ui.borderBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.borderBox, 8)
-    local descriptionBox = ui.textBox(curt(), boxSizing.mainPadding, 15, boxSizing.contentBox, 5, releaseDescriptions[1])
-    ui.selectionBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.contentBox, 8, releaseLabels, 'done', function (opt) descriptionBox(releaseDescriptions[opt]) end)
+    local pathParent = sourceRoot:match('(.*/)(.*)') or sourceRoot
 
-    local _, _, selection = ui.run()
+    local parentContents = client:get(api.contents(repo, pathParent, sha))
 
-    local releaseName
-    local releaseAssetsParsed
-    for i,v in ipairs(releaseLabels) do
-        if v == selection then
-            releaseName = releaseNames[i]
-            releaseAssetsParsed = releaseAssets[i]
+    local subrootTreeHash
+    for _,v in ipairs(parentContents) do
+        if v.path == sourceRoot then
+            subrootTreeHash = v.sha
             break
         end
     end
 
-    return releaseName, releaseAssetsParsed
+    if not subrootTreeHash then
+        error('root tree ' .. sourceRoot .. ' not found')
+    end
+
+    updateBlobInfo('Expanding "' .. sourceRoot .. '" tree...')
+
+    local srcTree = client:get(api.treeRecursive(repo, subrootTreeHash))
+
+    local blobs = {}
+
+    for _,v in ipairs(srcTree.tree) do
+        if v.type == 'blob' then
+            table.insert(blobs, {
+                url = api.raw(repo, sha, sourceRoot .. '/' .. v.path),
+                path = v.path,
+                size = v.size
+            })
+        end
+    end
+
+    return downloadTree(targetRoot, blobs, updateBlob, updateBlobInfo)
+end
+
+local showConfirm = function (installName, targetRoot)
+    ui.clear()
+    
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Confirm')
+    ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, ('Install %s into %s? Press Enter to confirm, or Q to abort.'):format(installName, targetRoot))
+
+    ui.button(curt(), boxSizing.mainPadding, 18, "Confirm", "done")
+    ui.button(curt(), boxSizing.mainPadding + 10, 18, "Abort", "abort")
+    ui.keyAction(keys.enter, "done")
+    ui.keyAction(keys.q, "abort")
+
+    return ui.run()
 end
 
 local showComplete = function (installName)
@@ -219,129 +326,62 @@ local showComplete = function (installName)
     ui.run()
 end
 
-local installActions = {
-    -- Release (minified)
-    function ()
-        local releaseName, releaseAssetsParsed = showReleaseSelector()
+local getLatestReleaseBlobs = function (repo, assetMap)
+    -- get latest core release
+    local release, err, errRes = client:get(api.releaseLatest(repo))
 
-        ui.clear()
-    
-        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
-        ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, 'Downloading minified release ' .. releaseName)
-        local progress = ui.progressBar(curt(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, '-----')
-
-        local fakeTree = {
-            sha = releaseName,
-            url = 'https://telem-get.cyberbit.dev/blob/asset/{sha}/{path}',
-            sources = {
-                { path = 'telem', type = 'tree' }
-            }
-        }
-    
-        ui.addTask(function ()
-            if releaseAssetsParsed.min.lib then
-                table.insert(fakeTree.sources, { path = 'telem.min.lua', target = 'telem/init.lua', type = 'blob' })
-            end
-
-            if releaseAssetsParsed.min.vendor then
-                table.insert(fakeTree.sources, { path = 'vendor.min.lua', target = 'telem/vendor.lua', type = 'blob' })
-            end
-
-            youWouldntDownloadATree(fakeTree, progress, currentBlob)
-    
-            ui.resolve()
-        end)
-    
-        ui.run()
-
-        showComplete('Minified release')
-    end,
-
-    -- Release
-    function ()
-        local releaseName, releaseAssetsParsed = showReleaseSelector()
-
-        ui.clear()
-    
-        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
-        ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, 'Downloading release ' .. releaseName)
-        local progress = ui.progressBar(curt(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, '-----')
-
-        local fakeTree = {
-            sha = releaseName,
-            url = 'https://telem-get.cyberbit.dev/blob/asset/{sha}/{path}',
-            sources = {
-                { path = 'telem', type = 'tree' }
-            }
-        }
-    
-        ui.addTask(function ()
-            if releaseAssetsParsed.min.lib then
-                table.insert(fakeTree.sources, { path = 'telem.lua', target = 'telem/init.lua', type = 'blob' })
-            end
-
-            if releaseAssetsParsed.min.vendor then
-                table.insert(fakeTree.sources, { path = 'vendor.lua', target = 'telem/vendor.lua', type = 'blob' })
-            end
-
-            youWouldntDownloadATree(fakeTree, progress, currentBlob)
-    
-            ui.resolve()
-        end)
-    
-        ui.run()
-
-        showComplete('Release')
-    end,
-
-    -- Source
-    function ()
-        ui.clear()
-
-        ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
-        local currentStep = ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, '')
-        local progress = ui.progressBar(term.current(), boxSizing.mainPadding, 8, boxSizing.contentBox, nil, nil, true)
-        local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, 'reading source tree...')
-    
-        ui.addTask(function ()
-            currentStep('Step 1 of 2: Modules')
-
-            local treeUrl = 'https://telem-get.cyberbit.dev/blob/lib/main'
-    
-            local req = httpGetRedirect(treeUrl)
-            local res = textutils.unserialiseJSON(req.readAll())
-
-            youWouldntDownloadATree(res, progress, currentBlob)
-
-            currentStep('Step 2 of 2: Vendors')
-
-            treeUrl = 'https://telem-get.cyberbit.dev/blob/vendor/main'
-    
-            req = httpGetRedirect(treeUrl)
-            res = textutils.unserialiseJSON(req.readAll())
-
-            youWouldntDownloadATree(res, progress, currentBlob)
-    
-            ui.resolve()
-        end)
-
-        ui.run()
-        
-        showComplete('Source')
+    if not release then
+        print('Failed to get latest ' .. repo .. ' release: ' .. err)
+        pprint(errRes.readAll())
+        return
     end
-}
 
-local runInstallAction = function (releaseEntry)
-    for i,v in ipairs(installEntries) do
-        if v == releaseEntry then
-            return installActions[i]()
+    -- example assetMap
+    -- {
+    --     map = {
+    --         ['telem.lua'] = 'init.lua',
+    --         ['vendor.lua'] = 'vendor.lua',
+    --     },
+    --     match = {
+    --         ['%.luz$'] = 'modules/%s',
+    --     },
+    -- }
+
+    local blobs = {}
+
+    for _,v in ipairs(release.assets) do
+        -- direct mapping from asset name to path
+        if assetMap.map and assetMap.map[v.name] then
+            table.insert(blobs, { url = v.browser_download_url, path = assetMap.map[v.name], size = v.size })
+        
+        -- pattern mapping from matched asset name to path template
+        elseif assetMap.match then
+            for pattern, format in pairs(assetMap.match) do
+                if string.match(v.name, pattern) then
+                    table.insert(blobs, { url = v.browser_download_url, path = format:format(v.name), size = v.size })
+                    break
+                end
+            end
         end
     end
 
-    error('undefined release, aborting')
+    return blobs
 end
+
+ui.clear()
+ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Select install')
+
+local installEntries = {
+    "Release (compact)",
+    "Release",
+    "Source"
+}
+
+local installDescriptions = {
+    'Compact core API package + Luz modules. Smallest footprint.',
+    "Debug-friendly core API package + modules.",
+    "Full sources of core API + modules. Recommended for development."
+}
 
 local descriptionBox = ui.textBox(curt(), boxSizing.mainPadding, 15, boxSizing.contentBox, 5, installDescriptions[1])
 
@@ -350,6 +390,96 @@ ui.selectionBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.contentBox, 8, i
 
 local _, _, selection = ui.run()
 
-runInstallAction(selection)
+local _, action = showConfirm(selection, '/' .. shell.resolve('telem'))
+
+if action == 'abort' then
+    ui.clear()
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Aborted')
+    ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, 'Installation aborted. You may now close this installer.')
+
+    ui.button(curt(), boxSizing.mainPadding, 18, "Finish", "done")
+    ui.keyAction(keys.enter, "done")
+
+    ui.run()
+elseif selection then
+    ui.clear()
+
+    ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Installing...')
+    local currentStep = ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, '')
+    local currentBlob = ui.textBox(curt(), boxSizing.mainPadding, 8, boxSizing.contentBox, 2, '', colors.white)
+    local currentBlobInfo = ui.textBox(curt(), boxSizing.mainPadding, 10, boxSizing.contentBox, 2, 'reading tree...', colors.lightGray)
+
+    if selection == 'Release (compact)' then
+        ui.addTask(function ()
+            currentStep('Step 1 of 2: Core')
+
+            local coreBlobs = getLatestReleaseBlobs('cyberbit/telem', {
+                map = {
+                    ['telem.min.lua'] = 'init.lua',
+                    ['vendor.min.lua'] = 'vendor.lua',
+                }
+            })
+
+            downloadTree('telem', coreBlobs, currentBlob, currentBlobInfo)
+
+            currentStep('Step 2 of 2: Modules')
+
+            local moduleBlobs = getLatestReleaseBlobs('cyberbit/telem-modules', {
+                match = {
+                    ['%.luz$'] = 'modules/%s',
+                }
+            })
+
+            downloadTree('telem', moduleBlobs, currentBlob, currentBlobInfo)
+
+            ui.resolve()
+        end)
+
+        ui.run()
+    elseif selection == 'Release' then
+        ui.addTask(function ()
+            currentStep('Step 1 of 2: Core')
+
+            local coreBlobs = getLatestReleaseBlobs('cyberbit/telem', {
+                map = {
+                    ['telem.lua'] = 'init.lua',
+                    ['vendor.lua'] = 'vendor.lua',
+                }
+            })
+    
+            downloadTree('telem', coreBlobs, currentBlob, currentBlobInfo)
+    
+            currentStep('Step 2 of 2: Modules')
+
+            local moduleBlobs = getLatestReleaseBlobs('cyberbit/telem-modules', {
+                match = {
+                    ['%.lua$'] = 'modules/%s',
+                }
+            })
+    
+            downloadTree('telem', moduleBlobs, currentBlob, currentBlobInfo)
+    
+            ui.resolve()
+        end)
+    
+        ui.run()
+    elseif selection == 'Source' then
+        ui.addTask(function ()
+            currentStep('Step 1 of 2: Core')
+
+            downloadRepoTree('cyberbit/telem', 'main', 'src/telem', 'telem', currentBlob, currentBlobInfo)
+
+            currentStep('Step 2 of 2: Modules')
+
+            downloadRepoTree('cyberbit/telem-modules', 'main', 'src/telem/modules', 'telem/modules', currentBlob, currentBlobInfo)
+
+            ui.resolve()
+        end)
+
+        ui.run()
+    end
+
+    showComplete(selection)
+end
 
 ui.clear()
