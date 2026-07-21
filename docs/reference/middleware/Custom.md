@@ -31,7 +31,6 @@ This middleware wraps a user-provided function for custom middleware implementat
 
 ```lua{25-41}
 local telem = require 'telem'
-local fluent = require('telem.vendor').fluent
 
 local backplane = telem.backplane()
   :addInput('elements', telem.input.custom(function ()

@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Telem"
   text: "Turn your items into insights"
-  tagline: Trivial ETL Engine for Minecraft
+  tagline: Trivial ETL Engine in Minecraft
   actions:
     - theme: brand
       text: Get Started
@@ -25,18 +25,18 @@ features:
 Are you tired of creating complex logic to monitor inventory or production? Want something more modern, modular, and scalable? Want something that can empower live dashboards, both in-game and out? You have come to the right place.
 
 ### Extract
-* Connect to item and fluid storage, with specialized support for Refined Storage and Applied Energistics.
-* Monitor Mekanism reactors, turbines, and multiblock energy systems.
-* Write custom adapters to support any block, system, or event that you want to integrate.
+* Connect to item and fluid storage, with specialized support for [Refined Storage](/reference/input/advanced-peripherals/RSBridge) and [Applied Energistics](/reference/input/advanced-peripherals/MEBridge).
+* Monitor Mekanism [reactors](/reference/input/mekanism/FissionReactor), [turbines](/reference/input/mekanism/IndustrialTurbine), and multiblock energy systems.
+* Write [custom adapters](/reference/input/Custom) to support any block, system, or event that you want to integrate.
 
 ### Transform
 * Attach middleware to calculate deltas, rates, and averages of your resources over time.
-* Use custom middleware to apply your own measures, on an input-by-input basis or across the entire data stream.
+* Use [custom middleware](/reference/middleware/Custom) to apply your own measures, on an input-by-input basis or across the entire data stream.
 
 ### Load
-* Graph your resources over time using Plotter outputs to visually analyze changes in your resource economy.
-* Supports direct output to a Grafana dashboard for historical analysis and real-time monitoring.
-* Use Secure Modem to transmit to a central monitoring hub through encrypted tunnels.
+* Graph your resources over time using [chart outputs](/reference/output/ChartLine) to visually analyze changes in your resource economy.
+* Supports direct output to a [Grafana](/reference/output/Grafana) dashboard for advanced historical analysis and real-time monitoring.
+* Use [Secure Modem](/reference/input/SecureModem) to aggregate data at a central monitoring hub through encrypted tunnels.
 
 ## Quick Start
 
