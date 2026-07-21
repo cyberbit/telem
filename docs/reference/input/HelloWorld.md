@@ -2,11 +2,15 @@
 outline: deep
 ---
 
-# Hello World Input <RepoLink path="lib/input/HelloWorldInputAdapter.lua" />
+# Hello World Input <Badge type="danger" text="deprecated" /> <RepoLink path="lib/input/HelloWorldInputAdapter.lua" />
 
 ```lua
 telem.input.helloWorld (checkval: number)
 ```
+
+::: danger Deprecated
+This adapter is deprecated and will be removed in a future release. Use [Custom Input](/reference/input/Custom) instead.
+:::
 
 This adapter produces a single metric with a specified static value, primarily serving as a reference implementation of [InputAdapter](/reference/InputAdapter).
 

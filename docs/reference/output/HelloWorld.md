@@ -2,11 +2,15 @@
 outline: deep
 ---
 
-# Hello World Output <RepoLink path="lib/output/HelloWorldOutputAdapter.lua" />
+# Hello World Output <Badge type="danger" text="deprecated" /> <RepoLink path="lib/output/HelloWorldOutputAdapter.lua" />
 
 ```lua
 telem.output.helloWorld ()
 ```
+
+::: danger Deprecated
+This adapter is deprecated and will be removed in a future release. Use [Custom Output](/reference/output/Custom) instead.
+:::
 
 Writes all metrics out in a reduced format to the terminal, primarily serving as a reference implementation for [OutputAdapter](/reference/OutputAdapter) and a simple metric logger.
 
