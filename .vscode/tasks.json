@@ -13,6 +13,18 @@
                 "reveal": "silent",
                 "panel": "shared"
             }
+        },
+        {
+            "label": "docs:dev",
+            "type": "shell",
+            "command": "npm run docs:dev",
+            "isBackground": true,
+            "presentation": {
+                "close": false,
+                "focus": false,
+                "reveal": "silent",
+                "panel": "shared"
+            }
         }
     ]
 }
