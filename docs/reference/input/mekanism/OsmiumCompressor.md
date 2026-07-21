@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Osmium Compressor Input <RepoLink path="lib/input/mekanism/OsmiumCompressorInputAdapter.lua" />
+# Mekanism Osmium Compressor Input <RepoLink module path="modules/mekanism/OsmiumCompressorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

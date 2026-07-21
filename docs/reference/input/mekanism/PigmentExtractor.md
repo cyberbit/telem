@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Pigment Extractor Input <RepoLink path="lib/input/mekanism/PigmentExtractorInputAdapter.lua" />
+# Mekanism Pigment Extractor Input <RepoLink module path="modules/mekanism/PigmentExtractorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

@@ -7,7 +7,7 @@ telem:
     requiresMod: 'Refined Storage'
 ---
 
-# Advanced Peripherals RS Bridge Input <RepoLink path="lib/input/advancedPeripherals/RSBridgeInputAdapter.lua" />
+# Advanced Peripherals RS Bridge Input <RepoLink module path="modules/advancedPeripherals/RSBridgeInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

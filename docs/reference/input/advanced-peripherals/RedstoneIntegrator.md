@@ -1,4 +1,4 @@
-# Advanced Peripherals Redstone Integrator Input <RepoLink path="lib/input/advancedPeripherals/RedstoneIntegratorInputAdapter.lua" />
+# Advanced Peripherals Redstone Integrator Input <RepoLink module path="modules/advancedPeripherals/RedstoneIntegratorInputAdapter.lua" />
 
 ```lua
 telem.input.advancedPeripherals.redstoneIntegrator (

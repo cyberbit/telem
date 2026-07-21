@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Pigment Mixer Input <RepoLink path="lib/input/mekanism/PigmentMixerInputAdapter.lua" />
+# Mekanism Pigment Mixer Input <RepoLink module path="modules/mekanism/PigmentMixerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

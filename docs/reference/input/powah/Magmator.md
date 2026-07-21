@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Powah Magmator Input <RepoLink path="lib/input/powah/MagmatorInputAdapter.lua" />
+# Powah Magmator Input <RepoLink module path="modules/powah/MagmatorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

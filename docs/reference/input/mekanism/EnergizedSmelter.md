@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Energized Smelter Input <RepoLink path="lib/input/mekanism/EnergizedSmelterInputAdapter.lua" />
+# Mekanism Energized Smelter Input <RepoLink module path="modules/mekanism/EnergizedSmelterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

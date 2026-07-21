@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Energy Cube Input <RepoLink path="lib/input/mekanism/EnergyCubeInputAdapter.lua" />
+# Mekanism Energy Cube Input <RepoLink module path="modules/mekanism/EnergyCubeInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

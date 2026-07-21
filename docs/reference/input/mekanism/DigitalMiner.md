@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Digital Miner Input <RepoLink path="lib/input/mekanism/DigitalMinerInputAdapter.lua" />
+# Mekanism Digital Miner Input <RepoLink module path="modules/mekanism/DigitalMinerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

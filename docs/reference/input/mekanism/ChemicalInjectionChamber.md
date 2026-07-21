@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Chemical Injection Chamber Input <RepoLink path="lib/input/mekanism/ChemicalInjectionChamberInputAdapter.lua" />
+# Mekanism Chemical Injection Chamber Input <RepoLink module path="modules/mekanism/ChemicalInjectionChamberInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

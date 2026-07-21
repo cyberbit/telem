@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic", "advanced", "storage" }'
 ---
 
-# Mekanism QIO Drive Array Input <RepoLink path="lib/input/mekanism/QIODriveArrayInputAdapter.lua" />
+# Mekanism QIO Drive Array Input <RepoLink module path="modules/mekanism/QIODriveArrayInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

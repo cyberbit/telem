@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Powah Solar Panel Input <RepoLink path="lib/input/powah/SolarPanelInputAdapter.lua" />
+# Powah Solar Panel Input <RepoLink module path="modules/powah/SolarPanelInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

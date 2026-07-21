@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic" }'
 ---
 
-# Advanced Peripherals Energy Detector <RepoLink path="lib/input/advancedPeripherals/EnergyDetectorInputAdapter.lua" />
+# Advanced Peripherals Energy Detector <RepoLink module path="modules/advancedPeripherals/EnergyDetectorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

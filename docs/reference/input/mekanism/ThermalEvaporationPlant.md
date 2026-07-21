@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Thermal Evaporation Plant Input <RepoLink path="lib/input/mekanism/ThermalEvaporationPlantInputAdapter.lua" />
+# Mekanism Thermal Evaporation Plant Input <RepoLink module path="modules/mekanism/ThermalEvaporationPlantInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Universal Cable Input <RepoLink path="lib/input/mekanism/UniversalCableInputAdapter.lua" />
+# Mekanism Universal Cable Input <RepoLink module path="modules/mekanism/UniversalCableInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

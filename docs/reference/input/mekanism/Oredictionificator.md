@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Oredictionificator Input <RepoLink path="lib/input/mekanism/OredictionificatorInputAdapter.lua" />
+# Mekanism Oredictionificator Input <RepoLink module path="modules/mekanism/OredictionificatorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Nutritional Liquifier Input <RepoLink path="lib/input/mekanism/NutritionalLiquifierInputAdapter.lua" />
+# Mekanism Nutritional Liquifier Input <RepoLink module path="modules/mekanism/NutritionalLiquifierInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

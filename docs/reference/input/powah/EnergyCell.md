@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Powah Energy Cell Input <RepoLink path="lib/input/powah/EnergyCellInputAdapter.lua" />
+# Powah Energy Cell Input <RepoLink module path="modules/powah/EnergyCellInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

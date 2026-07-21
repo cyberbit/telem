@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Powah Thermo Generator Input <RepoLink path="lib/input/powah/ThermoGeneratorInputAdapter.lua" />
+# Powah Thermo Generator Input <RepoLink module path="modules/powah/ThermoGeneratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

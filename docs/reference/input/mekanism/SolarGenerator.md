@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Solar Generator Input <RepoLink path="lib/input/mekanism/SolarGeneratorInputAdapter.lua" />
+# Mekanism Solar Generator Input <RepoLink module path="modules/mekanism/SolarGeneratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

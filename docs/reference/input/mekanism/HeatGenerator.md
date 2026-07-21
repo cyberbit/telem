@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Heat Generator Input <RepoLink path="lib/input/mekanism/HeatGeneratorInputAdapter.lua" />
+# Mekanism Heat Generator Input <RepoLink module path="modules/mekanism/HeatGeneratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

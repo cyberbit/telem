@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Electric Pump Input <RepoLink path="lib/input/mekanism/ElectricPumpInputAdapter.lua" />
+# Mekanism Electric Pump Input <RepoLink module path="modules/mekanism/ElectricPumpInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

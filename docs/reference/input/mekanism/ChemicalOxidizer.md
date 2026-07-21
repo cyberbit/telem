@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Chemical Oxidizer Input <RepoLink path="lib/input/mekanism/ChemicalOxidizerInputAdapter.lua" />
+# Mekanism Chemical Oxidizer Input <RepoLink module path="modules/mekanism/ChemicalOxidizerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

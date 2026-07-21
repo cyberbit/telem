@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Combining Factory Input <RepoLink path="lib/input/mekanism/CombiningFactoryInputAdapter.lua" />
+# Mekanism Combining Factory Input <RepoLink module path="modules/mekanism/CombiningFactoryInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

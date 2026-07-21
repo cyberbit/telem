@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Thermoelectric Boiler Input <RepoLink path="lib/input/mekanism/ThermoelectricBoilerInputAdapter.lua" />
+# Mekanism Thermoelectric Boiler Input <RepoLink module path="modules/mekanism/ThermoelectricBoilerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

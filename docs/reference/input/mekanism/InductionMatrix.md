@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Induction Matrix Input <RepoLink path="lib/input/mekanism/InductionMatrixInputAdapter.lua" />
+# Mekanism Induction Matrix Input <RepoLink module path="modules/mekanism/InductionMatrixInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

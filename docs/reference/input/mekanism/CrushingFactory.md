@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Crushing Factory Input <RepoLink path="lib/input/mekanism/CrushingFactoryInputAdapter.lua" />
+# Mekanism Crushing Factory Input <RepoLink module path="modules/mekanism/CrushingFactoryInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

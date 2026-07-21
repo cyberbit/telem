@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Logistical Sorter Input <RepoLink path="lib/input/mekanism/LogisticalSorterInputAdapter.lua" />
+# Mekanism Logistical Sorter Input <RepoLink module path="modules/mekanism/LogisticalSorterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 
