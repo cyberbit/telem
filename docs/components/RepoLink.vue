@@ -23,6 +23,8 @@ const props = defineProps({
 });
 
 const repoUrl = computed(() => {
-    return `https://github.com/cyberbit/${props.module ? 'telem-modules' : 'telem'}/blob/main/src/telem/${props.path}`;
+    const repo = props.module ? 'telem-modules' : 'telem';
+    
+    return `https://github.com/cyberbit/${repo}/blob/main/src/telem/${props.path}`;
 });
 </script>

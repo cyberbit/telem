@@ -12,7 +12,7 @@ This runs the installer. You can choose between a compact release (smallest file
 wget run https://pinestore.cc/d/14
 ```
 
-Resources will be installed to a `telem` folder in the current directory. A typical installation will look like this:
+The core library will be installed to `telem.lua` in the current directory. Modules will be installed to `.telem/modules`. A typical installation will look like this:
 
 ```
 telem.lua
