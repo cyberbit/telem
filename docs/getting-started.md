@@ -15,9 +15,8 @@ wget run https://pinestore.cc/d/14
 Resources will be installed to a `telem` folder in the current directory. A typical installation will look like this:
 
 ```
-telem/
-  init.lua
-  vendor.lua
+telem.lua
+.telem/
   modules/
     module1.lua
     module2.lua
@@ -26,10 +25,13 @@ telem/
 
 If you installed a compact release, the module files will have a `.luz` extension. They are compressed with [Luz](https://github.com/MCJack123/Luz) to save disk space and will be unreadable.
 
-A simple `require()` will load the library and any modules present in `modules` subfolder.
+A simple `require()` will load the library and any modules present in `.telem/modules`.
 
 ```lua
 local telem = require 'telem'
+
+-- optionally, autoload directory of custom modules
+telem.module.autoload('lib/my-modules')
 ```
 
 ## Concepts
