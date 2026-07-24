@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Gas Generator Input <RepoLink path="lib/input/mekanism/GasGeneratorInputAdapter.lua" />
+# Mekanism Gas Generator Input <RepoLink module path="modules/mekanism/GasGeneratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

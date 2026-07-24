@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Rotary Condensentrator Input <RepoLink path="lib/input/mekanism/RotaryCondensentratorInputAdapter.lua" />
+# Mekanism Rotary Condensentrator Input <RepoLink module path="modules/mekanism/RotaryCondensentratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

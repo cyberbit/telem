@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Painting Machine Input <RepoLink path="lib/input/mekanism/PaintingMachineInputAdapter.lua" />
+# Mekanism Painting Machine Input <RepoLink module path="modules/mekanism/PaintingMachineInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

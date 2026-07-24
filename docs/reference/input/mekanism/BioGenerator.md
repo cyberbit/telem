@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Bio Generator Input <RepoLink path="lib/input/mekanism/BioGeneratorInputAdapter.lua" />
+# Mekanism Bio Generator Input <RepoLink module path="modules/mekanism/BioGeneratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

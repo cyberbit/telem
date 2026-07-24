@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Fission Reactor Input <RepoLink path="lib/input/mekanism/FissionReactorInputAdapter.lua" />
+# Mekanism Fission Reactor Input <RepoLink module path="modules/mekanism/FissionReactorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

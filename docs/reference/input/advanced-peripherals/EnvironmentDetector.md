@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic" }'
 ---
 
-# Advanced Peripherals Environment Detector Input <RepoLink path="lib/input/advancedPeripherals/EnvironmentDetectorInputAdapter.lua" />
+# Advanced Peripherals Environment Detector Input <RepoLink module path="modules/advancedPeripherals/EnvironmentDetectorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

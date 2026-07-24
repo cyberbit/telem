@@ -11,7 +11,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Industrial Turbine Input <RepoLink path="lib/input/mekanism/IndustrialTurbineInputAdapter.lua" />
+# Mekanism Industrial Turbine Input <RepoLink module path="modules/mekanism/IndustrialTurbineInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

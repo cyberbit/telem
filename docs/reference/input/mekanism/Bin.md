@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic" }'
 ---
 
-# Mekanism Bin Input <RepoLink path="lib/input/mekanism/BinInputAdapter.lua" />
+# Mekanism Bin Input <RepoLink module path="modules/mekanism/BinInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

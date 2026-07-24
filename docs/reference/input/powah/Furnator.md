@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Powah Furnator Input <RepoLink path="lib/input/powah/FurnatorInputAdapter.lua" />
+# Powah Furnator Input <RepoLink module path="modules/powah/FurnatorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

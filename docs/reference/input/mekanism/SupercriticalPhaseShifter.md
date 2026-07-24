@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Supercritical Phase Shifter Input <RepoLink path="lib/input/mekanism/SupercriticalPhaseShifterInputAdapter.lua" />
+# Mekanism Supercritical Phase Shifter Input <RepoLink module path="modules/mekanism/SupercriticalPhaseShifterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

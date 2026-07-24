@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Laser Input <RepoLink path="lib/input/mekanism/LaserInputAdapter.lua" />
+# Mekanism Laser Input <RepoLink module path="modules/mekanism/LaserInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

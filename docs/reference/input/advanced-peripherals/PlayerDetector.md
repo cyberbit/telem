@@ -1,4 +1,4 @@
-# Advanced Peripherals Player Detector Input <RepoLink path="lib/input/advancedPeripherals/PlayerDetectorInputAdapter.lua" />
+# Advanced Peripherals Player Detector Input <RepoLink module path="modules/advancedPeripherals/PlayerDetectorInputAdapter.lua" />
 
 ```lua
 telem.input.advancedPeripherals.playerDetector (

@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Purification Chamber Input <RepoLink path="lib/input/mekanism/PurificationChamberInputAdapter.lua" />
+# Mekanism Purification Chamber Input <RepoLink module path="modules/mekanism/PurificationChamberInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

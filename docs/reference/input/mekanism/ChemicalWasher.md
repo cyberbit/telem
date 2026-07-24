@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Chemical Washer Input <RepoLink path="lib/input/mekanism/ChemicalWasherInputAdapter.lua" />
+# Mekanism Chemical Washer Input <RepoLink module path="modules/mekanism/ChemicalWasherInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

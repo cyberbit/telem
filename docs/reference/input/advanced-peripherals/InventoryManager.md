@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic" }'
 ---
 
-# Advanced Peripherals Inventory Manager Input <RepoLink path="lib/input/advancedPeripherals/InventoryManagerInputAdapter.lua" />
+# Advanced Peripherals Inventory Manager Input <RepoLink module path="modules/advancedPeripherals/InventoryManagerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

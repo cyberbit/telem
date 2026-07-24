@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Chemical Dissolution Chamber Input <RepoLink path="lib/input/mekanism/ChemicalDissolutionChamberInputAdapter.lua" />
+# Mekanism Chemical Dissolution Chamber Input <RepoLink module path="modules/mekanism/ChemicalDissolutionChamberInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

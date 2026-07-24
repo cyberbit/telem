@@ -1,4 +1,4 @@
-# Advanced Peripherals Geo Scanner Input <RepoLink path="lib/input/advancedPeripherals/GeoScannerInputAdapter.lua" />
+# Advanced Peripherals Geo Scanner Input <RepoLink module path="modules/advancedPeripherals/GeoScannerInputAdapter.lua" />
 
 ```lua
 telem.input.advancedPeripherals.geoScanner (

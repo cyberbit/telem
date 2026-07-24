@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Precision Sawmill Input <RepoLink path="lib/input/mekanism/PrecisionSawmillInputAdapter.lua" />
+# Mekanism Precision Sawmill Input <RepoLink module path="modules/mekanism/PrecisionSawmillInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

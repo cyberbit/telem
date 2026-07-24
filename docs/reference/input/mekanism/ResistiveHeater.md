@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Resistive Heater Input <RepoLink path="lib/input/mekanism/ResistiveHeaterInputAdapter.lua" />
+# Mekanism Resistive Heater Input <RepoLink module path="modules/mekanism/ResistiveHeaterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Formulaic Assemblicator Input <RepoLink path="lib/input/mekanism/FormulaicAssemblicatorInputAdapter.lua" />
+# Mekanism Formulaic Assemblicator Input <RepoLink module path="modules/mekanism/FormulaicAssemblicatorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

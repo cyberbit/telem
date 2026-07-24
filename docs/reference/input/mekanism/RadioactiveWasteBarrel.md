@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Radioactive Waste Barrel Input <RepoLink path="lib/input/mekanism/RadioactiveWasteBarrelInputAdapter.lua" />
+# Mekanism Radioactive Waste Barrel Input <RepoLink module path="modules/mekanism/RadioactiveWasteBarrelInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

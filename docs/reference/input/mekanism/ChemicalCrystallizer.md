@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Chemical Crystallizer Input <RepoLink path="lib/input/mekanism/ChemicalCrystallizerInputAdapter.lua" />
+# Mekanism Chemical Crystallizer Input <RepoLink module path="modules/mekanism/ChemicalCrystallizerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

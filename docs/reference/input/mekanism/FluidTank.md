@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Fluid Tank Input <RepoLink path="lib/input/mekanism/FluidTankInputAdapter.lua" />
+# Mekanism Fluid Tank Input <RepoLink module path="modules/mekanism/FluidTankInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

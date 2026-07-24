@@ -1,6 +1,7 @@
 local function requireInput(target) return require ('telem.lib.input.' .. target) end
 
 local export = {
+    helloWorld                  = requireInput('HelloWorldInputAdapter'),
     custom                      = requireInput('CustomInputAdapter'),
 
     -- storage

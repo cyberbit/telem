@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Fluidic Plenisher Input <RepoLink path="lib/input/mekanism/FluidicPlenisherInputAdapter.lua" />
+# Mekanism Fluidic Plenisher Input <RepoLink module path="modules/mekanism/FluidicPlenisherInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

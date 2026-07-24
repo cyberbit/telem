@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic", "advanced", "fluid", "gas", "infuse", "item", "pigment", "slurry", "energy" }'
 ---
 
-# Mekanism Quantum Entangloporter Input <RepoLink path="lib/input/mekanism/QuantumEntangloporterInputAdapter.lua" />
+# Mekanism Quantum Entangloporter Input <RepoLink module path="modules/mekanism/QuantumEntangloporterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

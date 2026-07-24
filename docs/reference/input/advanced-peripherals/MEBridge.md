@@ -7,7 +7,7 @@ telem:
     requiresMod: 'Applied Energistics 2'
 ---
 
-# Advanced Peripherals ME Bridge Input <RepoLink path="lib/input/advancedPeripherals/MEBridgeInputAdapter.lua" />
+# Advanced Peripherals ME Bridge Input <RepoLink module path="modules/advancedPeripherals/MEBridgeInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

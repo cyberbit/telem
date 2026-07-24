@@ -6,7 +6,7 @@ telem:
     categories: '{ "basic", "energy" }'
 ---
 
-# Mekanism Seismic Vibrator Input <RepoLink path="lib/input/mekanism/SeismicVibratorInputAdapter.lua" />
+# Mekanism Seismic Vibrator Input <RepoLink module path="modules/mekanism/SeismicVibratorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

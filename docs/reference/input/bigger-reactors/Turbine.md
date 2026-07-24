@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Bigger Reactors Turbine Input <RepoLink path="lib/input/biggerReactors/TurbineInputAdapter.lua" />
+# Bigger Reactors Turbine Input <RepoLink module path="modules/biggerReactors/TurbineInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

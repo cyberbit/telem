@@ -127,17 +127,20 @@ Backplane:cycle (): self
 At a high level, this function simply reads all the inputs and writes the collections to all the outputs. Below is a more detailed structure of this procedure:
 
 - Initialize a temporary [MetricCollection](MetricCollection) `tempCollection`
-- Loop over `self.inputs` in assignment order. For each [InputAdapter](InputAdapter) :
-  - Call `input.read()`  in protected mode
-  - If call fails, log an input fault to terminal and skip to next input
+- Create an empty task queue `inputTasks`
+- Loop over `self.inputs` in assignment order. For each [InputAdapter](InputAdapter), add a task to `inputTasks`:
+  - Call `input:read()` in protected mode
+  - If call fails, pass error to results
+- Group tasks into chunks and execute in parallel
+- Loop over task results in input assignment order:
+  - If the input task failed, log an input fault to terminal and skip to next input
+  - Process input middleware
   - For each [Metric](Metric) in the results, set `metric.adapter` to the name of the input. If `metric.adapter` is already set, prefix with the name of the input plus `:`.
-- Sort `tempCollection` alphabetically by ascending metric name
-  ::: warning
-  This step will eventually be implemented as an optional Middleware step.
-  :::
 - Set `self.collection` to `tempCollection`
-- Loop over `self.outputs` in assignment order. For each [OutputAdapter](OutputAdapter) :
-  - Call `output.write(tempCollection)` in protected mode
+- Cache output states
+- Process backplane middleware
+- Loop over `self.outputs` in assignment order. For each [OutputAdapter](OutputAdapter):
+  - Call `output:write(tempCollection)` in protected mode
   - If call fails, log an output fault to terminal and skip to next output
 - Return `self`
 

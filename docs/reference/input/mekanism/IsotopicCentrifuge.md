@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Isotopic Centrifuge Input <RepoLink path="lib/input/mekanism/IsotopicCentrifugeInputAdapter.lua" />
+# Mekanism Isotopic Centrifuge Input <RepoLink module path="modules/mekanism/IsotopicCentrifugeInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

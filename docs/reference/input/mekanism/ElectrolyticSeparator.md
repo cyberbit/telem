@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Electrolytic Separator Input <RepoLink path="lib/input/mekanism/ElectrolyticSeparatorInputAdapter.lua" />
+# Mekanism Electrolytic Separator Input <RepoLink module path="modules/mekanism/ElectrolyticSeparatorInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

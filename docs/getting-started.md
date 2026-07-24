@@ -6,16 +6,32 @@ outline: deep
 
 ## Install
 
-This runs the installer. You can choose between a minified release (two smallest files), a packaged release (two readable files), or a full source release (many readable files).
+This runs the installer. You can choose between a compact release (smallest files), a standard release (readable files), or a source release (many readable files).
 
 ```bash
 wget run https://pinestore.cc/d/14
 ```
 
-Resources will be installed to a `telem` folder in the current directory. A simple `require()` will load the library.
+The core library will be installed to `telem.lua` in the current directory. Modules will be installed to `.telem/modules`. A typical installation will look like this:
+
+```
+telem.lua
+.telem/
+  modules/
+    module1.lua
+    module2.lua
+    ...
+```
+
+If you installed a compact release, the module files will have a `.luz` extension. They are compressed with [Luz](https://github.com/MCJack123/Luz) to save disk space and will be unreadable.
+
+A simple `require()` will load the library and any modules present in `.telem/modules`.
 
 ```lua
 local telem = require 'telem'
+
+-- optionally, autoload directory of custom modules
+telem.module.autoload('lib/my-modules')
 ```
 
 ## Concepts

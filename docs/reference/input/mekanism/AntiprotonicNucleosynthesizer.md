@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Antiprotonic Nucleosynthesizer Input <RepoLink path="lib/input/mekanism/AntiprotonicNucleosynthesizerInputAdapter.lua" />
+# Mekanism Antiprotonic Nucleosynthesizer Input <RepoLink module path="modules/mekanism/AntiprotonicNucleosynthesizerInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 

@@ -10,7 +10,7 @@ telem:
   import { data as metrics } from './common/metrics.data.ts'
 </script>
 
-# Mekanism Fuelwood Heater Input <RepoLink path="lib/input/mekanism/FuelwoodHeaterInputAdapter.lua" />
+# Mekanism Fuelwood Heater Input <RepoLink module path="modules/mekanism/FuelwoodHeaterInputAdapter.lua" />
 
 <!--@include: ./common/preamble.md -->
 
