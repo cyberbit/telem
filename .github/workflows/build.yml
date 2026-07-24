@@ -45,14 +45,14 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dev
+          name: release
           path: dist/*.lua
       
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: release
-          path: dist/release/*.lua
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: release
+      #     path: dist/release/*.lua
       
       # via https://github.com/softprops/action-gh-release/issues/270
       - name: Create tag
@@ -74,6 +74,4 @@ jobs:
           tag_name: ${{ steps.tag.outputs.tag }}
           files: |
             dist/telem.lua
-            dist/vendor.lua
-            dist/release/telem.min.lua
-            dist/release/vendor.min.lua
+            dist/telem.min.lua

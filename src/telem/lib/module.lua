@@ -65,53 +65,59 @@ local loadModule = function (module)
     return loadedModule
 end
 
-local autoloadModules = function (telem)
-    if package.path:find('telem/modules') == nil then package.path = package.path .. ';telem/modules/?;telem/modules/?.lua;telem/modules/?.luz;telem/modules/?/init.lua' end
+local autoloadModules = function (telem, path)
+    if package.path:find(';' .. path .. '/?;') == nil then
+        package.path = package.path .. ';'
+            .. path .. '/?;'
+            .. path .. '/?.lua;'
+            .. path .. '/?.luz;'
+            .. path .. '/?/init.lua'
+    end
 
     local modules = {}
 
-    if not fs.isDir('telem/modules') then
-        fs.makeDir('telem/modules')
-    end
-    
-    local modlist = fs.list('telem/modules')
+    if not fs.isDir(path) then
+        -- fs.makeDir(path)
+    else
+        local modlist = fs.list(path)
 
-    for _, mod in ipairs(modlist) do
-        local name = fs.isDir('telem/modules/' .. mod) and mod or (mod:match('(.+)%..+'))
+        for _, mod in ipairs(modlist) do
+            local name = fs.isDir(path .. '/' .. mod) and mod or (mod:match('(.+)%..+'))
 
-        -- print('autoloading ' .. name)
+            -- print('autoloading ' .. name)
 
-        modules[name] = loadModule(name)
-    end
-
-    -- apply autoloaded modules to telem namespaces
-    for modname,mod in pairs(modules) do
-        -- TODO error if namespace is already used
-        -- if telem.input[modname] or telem.output[modname] or telem.middleware[modname] then
-        --     error('Module loading failed, namespace ' .. modname .. ' already exists')
-        -- end
-
-        if mod.input and #mod.input then
-            telem.input[modname] = {}
-
-            for k,v in pairs(mod.input) do
-                telem.input[modname][k] = v
-            end
+            modules[name] = loadModule(name)
         end
 
-        if mod.output and #mod.output then
-            telem.output[modname] = {}
+        -- apply autoloaded modules to telem namespaces
+        for modname,mod in pairs(modules) do
+            -- TODO error if namespace is already used
+            -- if telem.input[modname] or telem.output[modname] or telem.middleware[modname] then
+            --     error('Module loading failed, namespace ' .. modname .. ' already exists')
+            -- end
 
-            for k,v in pairs(mod.output) do
-                telem.output[modname][k] = v
+            if mod.input and #mod.input then
+                telem.input[modname] = {}
+
+                for k,v in pairs(mod.input) do
+                    telem.input[modname][k] = v
+                end
             end
-        end
 
-        if mod.middleware and #mod.middleware then
-            telem.middleware[modname] = {}
+            if mod.output and #mod.output then
+                telem.output[modname] = {}
 
-            for k,v in pairs(mod.middleware) do
-                telem.middleware[modname][k] = v
+                for k,v in pairs(mod.output) do
+                    telem.output[modname][k] = v
+                end
+            end
+
+            if mod.middleware and #mod.middleware then
+                telem.middleware[modname] = {}
+
+                for k,v in pairs(mod.middleware) do
+                    telem.middleware[modname][k] = v
+                end
             end
         end
     end
@@ -123,4 +129,7 @@ return {
     load = loadModule,
     autoloadModules = autoloadModules,
     api = moduleApi,
+
+    -- this is bootstrapped in init.lua because core API needs to be passed
+    -- audoload = autoload
 }

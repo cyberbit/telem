@@ -415,22 +415,22 @@ elseif selection then
 
             local coreBlobs = getLatestReleaseBlobs('cyberbit/telem', {
                 map = {
-                    ['telem.min.lua'] = 'init.lua',
-                    ['vendor.min.lua'] = 'vendor.lua',
+                    ['telem.min.lua'] = 'telem.lua',
+                    -- ['vendor.min.lua'] = 'vendor.lua',
                 }
             })
 
-            downloadTree('telem', coreBlobs, currentBlob, currentBlobInfo)
+            downloadTree('', coreBlobs, currentBlob, currentBlobInfo)
 
             currentStep('Step 2 of 2: Modules')
 
             local moduleBlobs = getLatestReleaseBlobs('cyberbit/telem-modules', {
                 match = {
-                    ['%.luz$'] = 'modules/%s',
+                    ['%.luz$'] = '.telem/modules/%s',
                 }
             })
 
-            downloadTree('telem', moduleBlobs, currentBlob, currentBlobInfo)
+            downloadTree('', moduleBlobs, currentBlob, currentBlobInfo)
 
             ui.resolve()
         end)
@@ -442,22 +442,22 @@ elseif selection then
 
             local coreBlobs = getLatestReleaseBlobs('cyberbit/telem', {
                 map = {
-                    ['telem.lua'] = 'init.lua',
-                    ['vendor.lua'] = 'vendor.lua',
+                    ['telem.lua'] = 'telem.lua',
+                    -- ['vendor.lua'] = 'vendor.lua',
                 }
             })
     
-            downloadTree('telem', coreBlobs, currentBlob, currentBlobInfo)
+            downloadTree('', coreBlobs, currentBlob, currentBlobInfo)
     
             currentStep('Step 2 of 2: Modules')
 
             local moduleBlobs = getLatestReleaseBlobs('cyberbit/telem-modules', {
                 match = {
-                    ['%.lua$'] = 'modules/%s',
+                    ['%.lua$'] = '.telem/modules/%s',
                 }
             })
     
-            downloadTree('telem', moduleBlobs, currentBlob, currentBlobInfo)
+            downloadTree('', moduleBlobs, currentBlob, currentBlobInfo)
     
             ui.resolve()
         end)
@@ -471,7 +471,7 @@ elseif selection then
 
             currentStep('Step 2 of 2: Modules')
 
-            downloadRepoTree('cyberbit/telem-modules', 'main', 'src/telem/modules', 'telem/modules', currentBlob, currentBlobInfo)
+            downloadRepoTree('cyberbit/telem-modules', 'main', 'src/telem/modules', '.telem/modules', currentBlob, currentBlobInfo)
 
             ui.resolve()
         end)
