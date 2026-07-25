@@ -304,7 +304,7 @@ local showConfirm = function (installName, targetRoot)
     ui.clear()
     
     ui.textBox(curt(), boxSizing.mainPadding, 2, boxSizing.contentBox, 5, 'Telem Installer - Confirm')
-    ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, ('Install %s into %s? Press Enter to confirm, or Q to abort.'):format(installName, targetRoot))
+    ui.textBox(curt(), boxSizing.mainPadding, 6, boxSizing.contentBox, 8, ('Install %s into "%s"? Press Enter to confirm, or Q to abort.'):format(installName, targetRoot))
 
     ui.button(curt(), boxSizing.mainPadding, 18, "Confirm", "done")
     ui.button(curt(), boxSizing.mainPadding + 10, 18, "Abort", "abort")
@@ -390,7 +390,7 @@ ui.selectionBox(curt(), boxSizing.mainPadding + 1, 6, boxSizing.contentBox, 8, i
 
 local _, _, selection = ui.run()
 
-local _, action = showConfirm(selection, '/' .. shell.resolve('telem'))
+local _, action = showConfirm(selection, '/' .. shell.resolve(''))
 
 if action == 'abort' then
     ui.clear()
