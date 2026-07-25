@@ -43,7 +43,8 @@ parallel.waitForAny(
 ```
 
 ## Input Adapters
-> Mod integration source code has moved to the [telem-modules](https://github.com/cyberbit/telem-modules) repo!
+> [!INFO]
+> Mod integrations have moved to the [telem-modules](https://github.com/cyberbit/telem-modules) repo!
 * Item and Fluid Storage
 * Modded Storage (AE2, Refined Storage)
 * Modded Machines (Mekanism)
